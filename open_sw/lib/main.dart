@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/login_page.dart';
+import 'package:open_sw/login/signup_page.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
@@ -10,6 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginPage());
+    return MaterialApp(home: SignupPage());
   }
 }
