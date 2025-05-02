@@ -4,6 +4,14 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+		<string>사용자의 현재 위치는 사용자 근처의 정보를 가져오는데 반드시 필요합니다!</string>
+		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+		<string>사용자의 현재 위치는 사용자 근처의 정보를 가져오는데 반드시 필요합니다!</string>
+		<key>NSLocationAlwaysUsageDescription</key>
+		<string>사용자의 현재 위치는 사용자 근처의 정보를 가져오는데 반드시 필요합니다!</string>
+
+
 	<key>CFBundleDisplayName</key>
 	<string>Open Sw</string>
 	<key>CFBundleExecutable</key>
