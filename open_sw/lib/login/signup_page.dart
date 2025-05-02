@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-//import 'package:flutter/foundation.dart';
-=======
->>>>>>> a37df9393d75ad4b41f0467cbef9b379b456691c
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/input_box.dart';
 import 'package:open_sw/login/questions_page.dart';
