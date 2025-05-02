@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 //import 'package:flutter/foundation.dart';
+=======
+>>>>>>> a37df9393d75ad4b41f0467cbef9b379b456691c
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/input_box.dart';
+import 'package:open_sw/login/questions_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -21,7 +25,7 @@ class SignupPageState extends State<SignupPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.white, Color(0x3f9E9E9E)], // 그래디언트 색상 설정
+          colors: [Colors.white, Color(0x9fFAF6F6)], // 그래디언트 색상 설정
         ),
       ),
       child: Scaffold(
@@ -31,8 +35,8 @@ class SignupPageState extends State<SignupPage> {
           child: Padding(
             padding: EdgeInsets.only(
               top: screenHeight * 0.2,
-              left: screenWidth * 0.2,
-              right: screenWidth * 0.2,
+              left: screenWidth * 0.15,
+              right: screenWidth * 0.15,
               bottom: 80,
             ),
             child: Column(
@@ -41,20 +45,21 @@ class SignupPageState extends State<SignupPage> {
                   "처음이신가요?",
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
                 ),
+                SizedBox(height: 40),
                 Row(
                   children: [
                     Expanded(
                       flex: 2,
                       child: Padding(
                         padding: EdgeInsets.all(3),
-                        child: InputBox(hintext: "이름"),
+                        child: InputBox(hintext: "이름", type: 0),
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Padding(
                         padding: EdgeInsets.all(3),
-                        child: InputBox(hintext: "나이"),
+                        child: InputBox(hintext: "나이", type: 1),
                       ),
                     ),
                     Expanded(
@@ -69,7 +74,7 @@ class SignupPageState extends State<SignupPage> {
                                 Radius.circular(15),
                               ),
                               borderSide: BorderSide(
-                                color: Colors.grey[350]!,
+                                color: Colors.grey[500]!,
                                 width: 1,
                                 style: BorderStyle.solid,
                               ),
@@ -93,12 +98,27 @@ class SignupPageState extends State<SignupPage> {
                             hintText: '성별',
                           ),
                           value: selectedGender,
+                          dropdownColor: Color.fromARGB(62, 199, 196, 196),
+
+                          //itemHeight: 16,
                           items:
                               ['남', '여']
                                   .map(
                                     (gender) => DropdownMenuItem<String>(
                                       value: gender,
-                                      child: Text(gender),
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amberAccent,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        child: Text(gender),
+                                      ),
                                     ),
                                   )
                                   .toList(),
@@ -114,23 +134,24 @@ class SignupPageState extends State<SignupPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(6),
-                  child: InputBox(hintext: "ID"),
+                  child: InputBox(hintext: "ID", type: 2),
                 ),
                 Padding(
                   padding: EdgeInsets.all(6),
-                  child: InputBox(hintext: "Password"),
+                  child: InputBox(hintext: "Password", type: 3),
                 ),
                 Padding(
                   padding: EdgeInsets.all(6),
-                  child: InputBox(hintext: "Password 확인"),
+                  child: InputBox(hintext: "Password 확인", type: 4),
                 ),
+                SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.all(6),
                   child: Row(
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: 40,
+                          height: 50,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               gradient: LinearGradient(
@@ -146,7 +167,18 @@ class SignupPageState extends State<SignupPage> {
                               ), // 버튼 모서리 둥글게
                             ),
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => QuestionsPage(
+                                          number: 1,
+                                          progress: 0.33,
+                                        ),
+                                  ),
+                                );
+                              },
                               style: ButtonStyle(
                                 enableFeedback: false,
                                 overlayColor: WidgetStateProperty.all<Color>(
