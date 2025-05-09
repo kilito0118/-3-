@@ -1,8 +1,9 @@
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:open_sw/login/password_field.dart';
+import 'package:open_sw/mainPage/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,13 +15,13 @@ class LoginPage extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class LoginPageState extends State<LoginPage> {
-  //final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
   final buttonFocus = FocusNode();
-  /*
+
   Future<void> login() async {
     try {
       // ignore: unused_local_variable
@@ -32,11 +33,11 @@ class LoginPageState extends State<LoginPage> {
 
       if (mounted) {
         // 로그인 성공 시 처리
-        /*
+
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-            (route) => false);
-            */
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (route) => false,
+        );
       }
     } on FirebaseAuthException catch (e) {
       String message;
@@ -63,7 +64,7 @@ class LoginPageState extends State<LoginPage> {
         );
       }
     }
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +143,7 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 40, left: 40, bottom: 20),
-                      child: Passwordfield(
-                        controller: _passwordController,
-                        emailcontroller: _emailController,
-                        focusNode: _passwordFocus,
-                        nextFocusNode: buttonFocus,
-                        isLoginPage: true,
-                      ),
+                      child: TextFormField(),
                     ),
                     TextButton(
                       onPressed: () {
