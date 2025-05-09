@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/naver_directions_button.dart';
+import 'package:open_sw/mainPage/home_screen.dart';
+//import 'package:open_sw/naver_directions_button.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
 
@@ -10,8 +15,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var baseStyle = TextStyle(fontFamily: '둘기마요고딕', color: Colors.black);
     return MaterialApp(
-      home: Scaffold(body: Row(children: [NaverDirectionsButton()])),
+      theme: ThemeData(
+        fontFamily: '둘기마요고딕',
+        textTheme: TextTheme(
+          displayLarge: baseStyle.copyWith(fontSize: 18),
+          displayMedium: baseStyle.copyWith(fontSize: 13),
+          bodyLarge: baseStyle.copyWith(fontSize: 32),
+          bodyMedium: baseStyle.copyWith(fontSize: 28),
+          bodySmall: baseStyle.copyWith(fontSize: 22),
+          titleLarge: baseStyle.copyWith(fontSize: 76),
+          titleMedium: baseStyle.copyWith(fontSize: 36),
+        ),
+      ),
+      home: HomeScreen(),
     );
   }
 }
