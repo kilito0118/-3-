@@ -17,7 +17,7 @@ class FriendTile extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            print(friend.name); // 친구 버튼 클릭하면 이름 출력 (나중에는 상세탭으로 이동)
+            //(friend.name); // 친구 버튼 클릭하면 이름 출력 (나중에는 상세탭으로 이동)
           },
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

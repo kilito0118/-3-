@@ -16,7 +16,7 @@ class FriendPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300], // 배경색 설정
+      backgroundColor: Colors.transparent, // 배경색 설정
       appBar: PreferredSize(
         // '친구' 부분 (appbar)
         preferredSize: Size.fromHeight(130),

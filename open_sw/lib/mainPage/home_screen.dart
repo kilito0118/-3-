@@ -1,9 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
-import 'package:open_sw/mainPage/group_page.dart';
-
-import 'my_page.dart';
+import 'package:open_sw/mainPage/groupPage/group_page.dart';
+import 'package:open_sw/recommendPage/recommended_places_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,8 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: [
               FriendPage(),
-              GroupPage(userName: '이름이어디까지길어질까요?몇글자까지 할까요?'), //로그인 할 때 받아오도록 함.
-              MyPage(),
+              GroupPage(userName: '이름이어디까지길어질'), //로그인 할 때 받아오도록 함.
+              RecommendedPlacesScreen(),
             ], // 각 탭의 화면
           ),
           bottomNavigationBar: BottomNavigationBar(

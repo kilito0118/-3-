@@ -15,10 +15,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var baseStyle = TextStyle(fontFamily: '둘기마요고딕', color: Colors.black);
+    //var baseStyle = TextStyle(fontFamily: '힘찬체', color: Colors.black);
     return MaterialApp(
+      /*
       theme: ThemeData(
-        fontFamily: '둘기마요고딕',
+        fontFamily: '힘찬체',
         textTheme: TextTheme(
           displayLarge: baseStyle.copyWith(fontSize: 18),
           displayMedium: baseStyle.copyWith(fontSize: 13),
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
           titleMedium: baseStyle.copyWith(fontSize: 36),
         ),
       ),
+      */
       home: HomeScreen(),
     );
   }
