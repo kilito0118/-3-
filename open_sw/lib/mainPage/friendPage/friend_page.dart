@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'friend_tile.dart';
 
-class FriendScreen extends StatelessWidget {
+class FriendPage extends StatelessWidget {
   final List<Friend> friends = [
     // 친구 목록 예시 데이터 (나중에 DB에서 받아오기)
     Friend(name: '오정인'),
@@ -11,7 +11,7 @@ class FriendScreen extends StatelessWidget {
     Friend(name: '이진용'),
   ];
 
-  FriendScreen({super.key});
+  FriendPage({super.key});
 
   @override
   Widget build(BuildContext context) {

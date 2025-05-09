@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:open_sw/naver_directions_button.dart';
-import 'friend_list_screen.dart';
+import 'friend_page.dart';
 import 'group_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -12,7 +12,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _screens = [GroupScreen(), FriendScreen()];
+  final List<Widget> _screens = [GroupScreen(), FriendPage()];
 
   @override
   Widget build(BuildContext context) {

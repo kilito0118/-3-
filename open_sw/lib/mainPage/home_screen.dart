@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/group_page.dart';
 
 import 'my_page.dart';
@@ -50,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
             controller: _pageController,
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: [
-              MyPage(),
+              FriendPage(),
               GroupPage(userName: '이름이어디까지길어질까요?몇글자까지 할까요?'), //로그인 할 때 받아오도록 함.
               MyPage(),
             ], // 각 탭의 화면
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.join_full_outlined),
-                label: '어떤 메뉴?',
+                label: '친구목록',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.sports_esports),
