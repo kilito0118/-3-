@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/login/login_screen.dart';
+import 'package:open_sw/naver_directions_button.dart';
 
-//import 'package:open_sw/naver_directions_button.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+void main() {
   runApp(MyApp());
 }
 
@@ -16,8 +10,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //var baseStyle = TextStyle(fontFamily: '힘찬체', color: Colors.black);
     return MaterialApp(
+
       //test
       /*
       theme: ThemeData(
@@ -34,6 +28,9 @@ class MyApp extends StatelessWidget {
       ),
       */
       home: LoginPage(),
+
+      
+
     );
   }
 }
