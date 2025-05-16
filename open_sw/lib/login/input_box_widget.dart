@@ -36,7 +36,7 @@ class InputBoxWidget extends StatelessWidget {
         keyboardType: TextInputType.emailAddress,
         controller: controller,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 18),
+          contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 14),
           hintText: hintext,
 
           hintStyle: TextStyle(color: Color(0xffffffff), fontSize: 16),

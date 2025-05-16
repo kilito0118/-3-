@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/input_box_widget.dart';
 import 'package:open_sw/login/signup_screen.dart';
+import 'package:open_sw/login/theme_button_white_widget.dart';
 import 'package:open_sw/mainPage/home_screen.dart';
+import 'package:open_sw/useful_widget/theme_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -120,39 +122,18 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(bottom: 60),
-                      child: TextButton(
-                        focusNode: buttonFocus,
+                      child: ThemeButtonWhiteWidget(
+                        text: '로그인',
                         onPressed: () {
                           login();
                           TextInput.finishAutofillContext();
                         },
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all(
-                            Color(0xffffffff),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: [
-                            Flexible(
-                              child: SizedBox(
-                                height: 44,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 12),
-                                  child: Text(
-                                    "로그인",
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        focusNode: buttonFocus,
                       ),
                     ),
 
-                    TextButton(
+                    ThemeButtonWhiteWidget(
+                      text: '회원가입 하러 가기',
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -161,10 +142,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         );
                       },
-                      child: Text(
-                        '회원가입 하러 가기',
-                        style: Theme.of(context).textTheme.displayLarge,
-                      ),
+                      focusNode: FocusNode(),
                     ),
                   ],
                 ),
