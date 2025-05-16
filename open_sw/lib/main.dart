@@ -11,7 +11,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(body: Row(children: [NaverDirectionsButton()])),
+
+      //test
+      /*
+      theme: ThemeData(
+        fontFamily: '힘찬체',
+        textTheme: TextTheme(
+          displayLarge: baseStyle.copyWith(fontSize: 18),
+          displayMedium: baseStyle.copyWith(fontSize: 13),
+          bodyLarge: baseStyle.copyWith(fontSize: 32),
+          bodyMedium: baseStyle.copyWith(fontSize: 28),
+          bodySmall: baseStyle.copyWith(fontSize: 22),
+          titleLarge: baseStyle.copyWith(fontSize: 76),
+          titleMedium: baseStyle.copyWith(fontSize: 36),
+        ),
+      ),
+      */
+      home: LoginPage(),
+
+      
+
     );
   }
 }
