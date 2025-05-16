@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/login/login_page.dart';
+import 'package:open_sw/login/login_screen.dart';
 
 Future<void> performLogout(context) async {
   try {

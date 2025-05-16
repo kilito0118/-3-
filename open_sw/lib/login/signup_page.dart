@@ -21,7 +21,7 @@ class SignupPageState extends State<SignupPage> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
+          colors: [Colors.white, Color(0x9fFAF6F6)], // 그래디언트 색상 설정
         ),
       ),
       child: Scaffold(
