@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/home_screen.dart';
+import 'package:open_sw/login/login_screen.dart';
+
 //import 'package:open_sw/naver_directions_button.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       */
-      home: HomeScreen(),
+      home: LoginPage(),
     );
   }
 }

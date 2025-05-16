@@ -1,5 +1,8 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/login/login_screen.dart';
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/groupPage/group_page.dart';
 import 'package:open_sw/recommendPage/recommended_places_screen.dart';
@@ -15,8 +18,37 @@ class _HomeScreenState extends State<HomeScreen> {
     initialPage: 1,
   ); // 페이지 컨트롤러
   int _currentIndex = 1;
+  DocumentSnapshot? userInfo;
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+
+      setState(() {
+        userInfo = doc;
+      });
+      // ignore: unused_catch_clause
+    } on FirebaseException catch (e) {
+      //print('Firestore Error: ${e.code}');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userData = userInfo!.data() as Map<String, dynamic>;
     void handleNavTap(int index) {
       _pageController.animateToPage(
         index,
@@ -51,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: [
               FriendPage(),
-              GroupPage(userName: '이름이어디까지길어질'), //로그인 할 때 받아오도록 함.
+              GroupPage(userName: userData['nickName']), //로그인 할 때 받아오도록 함.
               RecommendedPlacesScreen(),
             ], // 각 탭의 화면
           ),
