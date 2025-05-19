@@ -6,18 +6,17 @@ import 'package:open_sw/login/input_box_widget.dart';
 import 'package:open_sw/login/signup_screen.dart';
 import 'package:open_sw/login/theme_button_white_widget.dart';
 import 'package:open_sw/mainPage/home_screen.dart';
-import 'package:open_sw/useful_widget/theme_button.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  LoginPageState createState() => LoginPageState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
 final _formKey = GlobalKey<FormState>();
 
-class LoginPageState extends State<LoginPage> {
+class LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

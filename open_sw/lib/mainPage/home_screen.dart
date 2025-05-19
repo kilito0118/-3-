@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/login/login_screen.dart';
+
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/groupPage/group_page.dart';
 import 'package:open_sw/recommendPage/recommended_places_screen.dart';
@@ -46,9 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadUserData();
   }
 
+  Map<String, dynamic>? userData;
   @override
   Widget build(BuildContext context) {
-    final userData = userInfo!.data() as Map<String, dynamic>;
+    if (userInfo != null) {
+      userData = userInfo!.data() as Map<String, dynamic>;
+    }
     void handleNavTap(int index) {
       _pageController.animateToPage(
         index,
@@ -83,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPageChanged: (index) => setState(() => _currentIndex = index),
             children: [
               FriendPage(),
-              GroupPage(userName: userData['nickName']), //로그인 할 때 받아오도록 함.
+              GroupPage(
+                userName: userData?['nickName'] ?? "로그인되지 않음",
+              ), //로그인 할 때 받아오도록 함.
               RecommendedPlacesScreen(),
             ], // 각 탭의 화면
           ),

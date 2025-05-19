@@ -11,7 +11,7 @@ Future<void> performLogout(context) async {
     //print('로그아웃 실패: ${e.code}');
   }
   Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => LoginPage()),
+    MaterialPageRoute(builder: (context) => LoginScreen()),
     (route) => false,
   );
 }
