@@ -43,6 +43,7 @@ dependencies:
   flutter_tts: ^4.2.2
   audioplayers: ^6.4.0
   cloud_firestore: ^5.6.7
+  dotted_border: ^3.0.1
 
 dev_dependencies:
   flutter_test:
