@@ -130,9 +130,34 @@ class LoginScreenState extends State<LoginScreen> {
                         focusNode: buttonFocus,
                       ),
                     ),
-
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
+                            endIndent: 10,
+                          ),
+                        ),
+                        Text(
+                          '혹은',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 2,
+                            indent: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 60),
                     ThemeButtonWhiteWidget(
-                      text: '회원가입 하러 가기',
+                      text: '회원가입',
                       onPressed: () {
                         Navigator.push(
                           context,
