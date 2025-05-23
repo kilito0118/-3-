@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/input_box_widget.dart';
-import 'package:open_sw/login/questions_page.dart';
+import 'package:open_sw/login/questions_page1.dart';
 import 'package:open_sw/login/regist_users.dart';
 import 'package:open_sw/useful_widget/theme_button.dart';
 
@@ -69,9 +69,7 @@ class SignupScreenState extends State<SignupScreen> {
             Navigator.pushReplacement(
               // ignore: use_build_context_synchronously
               context,
-              MaterialPageRoute(
-                builder: (context) => QuestionsPage(number: 1, progress: 30),
-              ),
+              MaterialPageRoute(builder: (context) => QuestionsPage1()),
             );
           }
         } on FirebaseAuthException catch (e) {
