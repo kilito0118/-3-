@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/login/input_box_widget.dart';
+import 'package:open_sw/login/widget/input_box_widget.dart';
 import 'package:open_sw/login/questions_page1.dart';
-import 'package:open_sw/login/regist_users.dart';
+import 'package:open_sw/login/logic/regist_users.dart';
 import 'package:open_sw/useful_widget/theme_button.dart';
 
 Future<bool> isNicknameAvailable(String nickname) async {

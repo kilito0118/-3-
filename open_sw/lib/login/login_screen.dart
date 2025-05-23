@@ -2,9 +2,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:open_sw/login/input_box_widget.dart';
+import 'package:open_sw/login/widget/input_box_widget.dart';
 import 'package:open_sw/login/signup_screen.dart';
-import 'package:open_sw/login/theme_button_white_widget.dart';
+import 'package:open_sw/login/widget/theme_button_white_widget.dart';
 import 'package:open_sw/mainPage/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {

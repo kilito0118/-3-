@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:open_sw/mainPage/home_screen.dart';
 
 final Map<int, String> activityNumberMap =
     (() {
@@ -126,6 +130,32 @@ class QuestionsPage2 extends StatefulWidget {
 
   @override
   State<QuestionsPage2> createState() => _QuestionsPage2State();
+}
+
+Future<int> getCollectionCount(String collectionName) async {
+  QuerySnapshot snapshot =
+      await FirebaseFirestore.instance.collection(collectionName).get();
+
+  return snapshot.docs.length;
+}
+
+List<Map<String, dynamic>> createActivityListFromSet(Set<int> intSet) {
+  return intSet.map((e) => {"activity": e, "like": 5.0, "count": 5}).toList();
+}
+
+Future<List<String>> updateLikes(List likes) async {
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  int number = await getCollectionCount("users") + 10000;
+  List<Map<String, dynamic>> data = createActivityListFromSet(
+    likes.toSet().cast<int>(),
+  );
+
+  final docSnapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .update({"likes": data, "number": number});
+
+  return [];
 }
 
 class _QuestionsPage2State extends State<QuestionsPage2> {
@@ -268,7 +298,14 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
                           selectedActivities.length == 5
                               ? () {
                                 // 다음 페이지로 이동
-                                print(selectedActivities);
+                                updateLikes(selectedActivities.toList());
+
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                );
                               }
                               : null,
                       label: const Text(

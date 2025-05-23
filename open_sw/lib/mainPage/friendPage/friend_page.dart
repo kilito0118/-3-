@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/groupPage/friend_plus_widget.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_widget.dart';
 import 'friend_tile.dart';
 
 class FriendPage extends StatelessWidget {
