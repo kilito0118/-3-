@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_widget.dart';
-import 'friend_tile.dart';
+import 'package:open_sw/mainPage/friendPage/widget/friend_plus_widget.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
+import 'widget/friend_tile.dart';
 
 class FriendPage extends StatelessWidget {
+  TextEditingController controller = TextEditingController();
+
   final List<Friend> friends = [
     // 친구 목록 예시 데이터 (나중에 DB에서 받아오기)
     Friend(name: '오정인'),
@@ -84,7 +87,13 @@ class FriendPage extends StatelessWidget {
                       barrierColor: Colors.transparent,
 
                       builder: (context) {
-                        return SizedBox(height: 200, child: FriendPlusWidget());
+                        return SizedBox(
+                          height: 200,
+                          child: FriendPlusWidget(
+                            controller: controller,
+                            onAddFriend: () {},
+                          ),
+                        );
                         // 원하는 위젯 추가
                       },
                     );

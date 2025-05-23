@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_widget.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 
 class GroupDetailPage extends StatefulWidget {
@@ -173,7 +173,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         builder: (context) {
                           return SizedBox(
                             height: 200,
-                            child: FriendPlusWidget(),
+                            child: FriendPlusAtGroupWidget(),
                           );
                         },
                       );
