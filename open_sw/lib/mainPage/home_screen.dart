@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/groupPage/group_page.dart';
+import 'package:open_sw/mypage/my_page.dart';
 import 'package:open_sw/recommendPage/recommended_places_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
               GroupPage(
                 userName: userData?['nickName'] ?? "로그인되지 않음",
               ), //로그인 할 때 받아오도록 함.
-              RecommendedPlacesScreen(),
+              MyPage(),
             ], // 각 탭의 화면
           ),
           bottomNavigationBar: BottomNavigationBar(
