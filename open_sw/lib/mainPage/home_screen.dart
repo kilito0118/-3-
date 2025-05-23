@@ -101,10 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentIndex: _currentIndex,
             onTap: handleNavTap,
             items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.join_full_outlined),
-                label: '친구목록',
-              ),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: '친구목록'),
               BottomNavigationBarItem(
                 icon: Icon(Icons.sports_esports),
                 label: '그룹 목록',

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:open_sw/mainPage/groupPage/group_detail_page.dart';
+import 'package:open_sw/mainPage/groupPage/regist_group.dart';
 
 class GroupPlusTileWidget extends StatelessWidget {
   const GroupPlusTileWidget({super.key});
@@ -9,8 +11,14 @@ class GroupPlusTileWidget extends StatelessWidget {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            print(1);
+          onTap: () async {
+            String groupId = await registGroup();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroupDetailPage(groupId: groupId),
+              ),
+            );
           },
           child: DottedBorder(
             options: RoundedRectDottedBorderOptions(

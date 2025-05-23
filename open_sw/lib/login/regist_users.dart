@@ -14,6 +14,7 @@ Future<void> registUsers(
     "nickName": nickName,
     "uid": uid,
     "friends": [],
+    "groups": [],
     "likes": [],
     "email": email,
     "age": age,

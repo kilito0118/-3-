@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Group {
@@ -16,11 +17,21 @@ class Group {
 }
 
 class GroupTileWidget extends StatelessWidget {
-  final Group group;
+  final DocumentSnapshot group;
   const GroupTileWidget({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic>? data;
+    if (group.exists) {
+      data = group.data() as Map<String, dynamic>?;
+      if (data == null) {
+        return Text("");
+      }
+
+      // 활동 정보 리스트
+    }
+
     return Column(
       children: [
         GestureDetector(
@@ -53,7 +64,7 @@ class GroupTileWidget extends StatelessWidget {
                               width: 40,
                               height: 40,*/
                               child: Text(
-                                group.name[0],
+                                data!["groupName"][0],
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -66,7 +77,7 @@ class GroupTileWidget extends StatelessWidget {
 
                             // 친구 이름
                             Text(
-                              group.name,
+                              group["groupName"],
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
