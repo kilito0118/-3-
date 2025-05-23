@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/friendPage/friend_plus_widget.dart';
 import 'friend_tile.dart';
 
 class FriendPage extends StatelessWidget {
@@ -76,7 +77,18 @@ class FriendPage extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      barrierColor: Colors.transparent,
+
+                      builder: (context) {
+                        return SizedBox(height: 200, child: FriendPlusWidget());
+                        // 원하는 위젯 추가
+                      },
+                    );
+                  },
                 ),
               ),
             ),
