@@ -19,10 +19,21 @@ class QuestionsPage1State extends State<QuestionsPage1> {
     '🛋️ 집콕 장인',
     '🤝 사교 활동 만렙러',
   ];
+  final List<(int, int, String)> ranges = [
+    (1, 8, '1'),
+    (9, 15, '2'),
+    (16, 19, '3'),
+    (20, 37, '4'),
+    (38, 48, '5'),
+    (49, 70, '6'),
+    (71, 79, '7'),
+    (80, 91, '8'),
+  ];
 
-  final Set<int> selectedIndexes = {};
+  Set<int> selectedIndexes = {};
+  List<int> selectedActivityNumbers = [];
 
-  void toggleSelection(int index) {
+  void _toggleSelection(int index) {
     setState(() {
       if (selectedIndexes.contains(index)) {
         selectedIndexes.remove(index);
@@ -75,7 +86,7 @@ class QuestionsPage1State extends State<QuestionsPage1> {
                   itemBuilder: (context, index) {
                     bool isSelected = selectedIndexes.contains(index);
                     return GestureDetector(
-                      onTap: () => toggleSelection(index),
+                      onTap: () => _toggleSelection(index),
                       child: Row(
                         children: [
                           Icon(
@@ -111,15 +122,26 @@ class QuestionsPage1State extends State<QuestionsPage1> {
                       selectedIndexes.length == 2
                           ? () {
                             // 다음 페이지로 이동 로직
+
+                            selectedActivityNumbers.clear();
+                            for (var index in selectedIndexes) {
+                              var (start, end, _) = ranges[index];
+                              selectedActivityNumbers.addAll(
+                                List.generate(
+                                  end - start + 1,
+                                  (i) => start + i,
+                                ),
+                              );
+                            }
+                            print(selectedActivityNumbers);
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
                                     (context) => QuestionsPage2(
-                                      selectedCategories:
-                                          selectedIndexes
-                                              .map((i) => categories[i])
-                                              .toList(),
+                                      selectedActivityNumbers:
+                                          selectedActivityNumbers,
                                     ),
                               ),
                             );
