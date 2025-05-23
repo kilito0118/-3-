@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:open_sw/mainPage/friendPage/add_from_friend_list_page.dart';
+import 'package:open_sw/mainPage/groupPage/manual_add_page.dart';
 
 class FriendPlusWidget extends StatelessWidget {
   const FriendPlusWidget({super.key});
@@ -43,7 +44,10 @@ class FriendPlusWidget extends StatelessWidget {
               icon: Icons.edit_outlined,
               label: '직접 추가하기',
               onTap: () {
-                // 두 번째 버튼 동작
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ManualAddPage()),
+                );
               },
             ),
           ],

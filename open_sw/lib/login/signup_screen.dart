@@ -95,9 +95,9 @@ class SignupScreenState extends State<SignupScreen> {
           child: Padding(
             padding: EdgeInsets.only(
               top: screenHeight * 0.2,
-              left: screenWidth * 0.15,
-              right: screenWidth * 0.15,
-              bottom: 80,
+              left: screenWidth * 0.1,
+              right: screenWidth * 0.1,
+              bottom: 60,
             ),
             child: Form(
               key: _formKey,
@@ -128,15 +128,13 @@ class SignupScreenState extends State<SignupScreen> {
                         flex: 1,
                         child: Padding(
                           padding: EdgeInsets.all(5),
-                          child: SizedBox(
-                            height: 44,
-                            child: InputBoxWidget(
-                              hintext: "20",
-                              controller: agecontroller,
-                              labelText: "나이",
-                              nowfocus: agefocus,
-                              nextfocus: genderfocus,
-                            ),
+
+                          child: InputBoxWidget(
+                            hintext: "20",
+                            controller: agecontroller,
+                            labelText: "나이",
+                            nowfocus: agefocus,
+                            nextfocus: genderfocus,
                           ),
                         ),
                       ),
@@ -214,7 +212,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "이메일 형식으로 적어주세요.",
                         controller: idcontroller,
@@ -227,7 +225,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "Password",
                         nowfocus: passwordfocus,
@@ -240,7 +238,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "Password 확인",
                         controller: passwordcheckcontroller,

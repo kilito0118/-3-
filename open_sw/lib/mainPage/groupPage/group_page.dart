@@ -22,6 +22,7 @@ class _GroupPageState extends State<GroupPage> {
               .get();
         }).toList();
     // 모든 Future가 끝나면 결과 리스트 반환
+
     return await Future.wait(futures);
   }
 
@@ -31,6 +32,7 @@ class _GroupPageState extends State<GroupPage> {
     final docSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     List<dynamic> groups = docSnapshot['groups'] ?? [];
+    //print(groups);
     return List<String>.from(groups);
   }
 
@@ -39,51 +41,13 @@ class _GroupPageState extends State<GroupPage> {
     List<String> groupIds = await getGroupIds();
 
     // 2. 그룹 아이디로 그룹 문서들 가져오기
-    if (groupIds.isEmpty) {
+    if (groupIds.isNotEmpty) {
       List<DocumentSnapshot> groupDocs = await getGroupsByIds(groupIds);
       return groupDocs;
     } else {
       return [];
     }
   }
-
-  final List<Group> exampleGroups = [
-    Group(
-      id: "Qweeafs",
-      name: 'Flutter Developers',
-      leader: 'Alice',
-      members: ['Alice', 'Bob', 'Charlie', 'Diana'],
-      memberCount: 4,
-    ),
-    Group(
-      id: "Qwe",
-      name: 'AI Study Club',
-      leader: 'Eve',
-      members: ['Eve', 'Frank', 'Grace'],
-      memberCount: 3,
-    ),
-    Group(
-      id: "Qwe5",
-      name: 'Running Team',
-      leader: 'Henry',
-      members: ['Henry', 'Ivy', 'Jack', 'Kelly', 'Leo'],
-      memberCount: 5,
-    ),
-    Group(
-      id: "Qwe3",
-      name: 'Book Lovers',
-      leader: 'Mona',
-      members: ['Mona', 'Nate'],
-      memberCount: 2,
-    ),
-    Group(
-      id: "Qwe2",
-      name: 'Music Band',
-      leader: 'Oscar',
-      members: ['Oscar', 'Paul', 'Quinn', 'Rita'],
-      memberCount: 4,
-    ),
-  ];
 
   //List<Group> groups;
   final List<int> colorCodes = <int>[600, 500, 100];
@@ -103,8 +67,9 @@ class _GroupPageState extends State<GroupPage> {
             body: Center(child: Text('Error: ${snapshot.error}')),
           );
         } else if (snapshot.hasData) {
-          print(20);
           final groups = snapshot.data ?? [];
+
+          //print(snapshot);
           final groupCounts = groups.length;
           return SingleChildScrollView(
             child: Column(
