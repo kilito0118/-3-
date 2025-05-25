@@ -53,6 +53,7 @@ class LoginScreenState extends State<LoginScreen> {
         default:
           message = 'An error occurred. Please try again.';
       }
+      print('Login Error: ${e.code}');
       // 에러 메시지를 스낵바로 출력
       if (mounted) {
         ScaffoldMessenger.of(
@@ -70,110 +71,113 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xffFF9933), Color(0xffFF6600)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xffFF9933), Color(0xffFF6600)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.only(left: 26, right: 26, bottom: 80),
 
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(left: 26, right: 26, bottom: 80),
-
-            child: AutofillGroup(
-              child: Form(
-                key: _formKey, // GlobalKey<FormState>() 필요
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 143.87,
-                        right: 125.12,
-                        left: 125.12,
+              child: AutofillGroup(
+                child: Form(
+                  key: _formKey, // GlobalKey<FormState>() 필요
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 143.87,
+                          right: 125.12,
+                          left: 125.12,
+                        ),
+                        child: Image.asset("assets/Logo.png"),
                       ),
-                      child: Image.asset("assets/Logo.png"),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 60, bottom: 10),
-                      child: InputBoxWidget(
-                        hintext: "or_not_offical@naver.com",
-                        nowfocus: _emailFocus,
-                        nextfocus: _passwordFocus,
-                        controller: _emailController,
-                        labelText: "ID",
+                      Padding(
+                        padding: EdgeInsets.only(top: 60, bottom: 10),
+                        child: InputBoxWidget(
+                          hintext: "or_not_offical@naver.com",
+                          nowfocus: _emailFocus,
+                          nextfocus: _passwordFocus,
+                          controller: _emailController,
+                          labelText: "ID",
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: InputBoxWidget(
-                        hintext: "비밀번호",
-                        labelText: "Password",
-                        nowfocus: _passwordFocus,
-                        nextfocus: buttonFocus,
-                        controller: _passwordController,
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: InputBoxWidget(
+                          hintext: "비밀번호",
+                          labelText: "Password",
+                          nowfocus: _passwordFocus,
+                          nextfocus: buttonFocus,
+                          controller: _passwordController,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 60),
-                      child: ThemeButtonWhiteWidget(
-                        text: '로그인',
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 60),
+                        child: ThemeButtonWhiteWidget(
+                          text: '로그인',
+                          onPressed: () {
+                            login();
+                            TextInput.finishAutofillContext();
+                          },
+                          focusNode: buttonFocus,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              color: Colors.white,
+                              thickness: 2,
+                              endIndent: 10,
+                            ),
+                          ),
+                          Text(
+                            '혹은',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              color: Colors.white,
+                              thickness: 2,
+                              indent: 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 60),
+                      ThemeButtonWhiteWidget(
+                        text: '회원가입',
                         onPressed: () {
-                          login();
-                          TextInput.finishAutofillContext();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignupScreen(),
+                            ),
+                          );
                         },
-                        focusNode: buttonFocus,
+                        focusNode: FocusNode(),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: Colors.white,
-                            thickness: 2,
-                            endIndent: 10,
-                          ),
-                        ),
-                        Text(
-                          '혹은',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: Colors.white,
-                            thickness: 2,
-                            indent: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 60),
-                    ThemeButtonWhiteWidget(
-                      text: '회원가입',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => SignupScreen(),
-                          ),
-                        );
-                      },
-                      focusNode: FocusNode(),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
