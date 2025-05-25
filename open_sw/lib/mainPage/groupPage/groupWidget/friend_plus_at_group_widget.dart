@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/add_from_friend_list_page.dart';
 import 'package:open_sw/mainPage/groupPage/manual_add_page.dart';
 
-class FriendPlusWidget extends StatelessWidget {
-  const FriendPlusWidget({super.key});
+class FriendPlusAtGroupWidget extends StatelessWidget {
+  const FriendPlusAtGroupWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
