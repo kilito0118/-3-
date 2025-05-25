@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:open_sw/recommendActivityPage/recommend_act_page.dart';
 //void main() => runApp(MaterialApp(home: Scaffold(body: Center(child: SearchButton()))));
 
 class SearchButton extends StatelessWidget {
@@ -27,6 +27,10 @@ class SearchButton extends StatelessWidget {
         child: GestureDetector(
           onTap: () {
             print("찾아보기 클릭됨");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const RecommendActPage()),
+            );
           },
           child: Container(
             decoration: BoxDecoration(

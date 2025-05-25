@@ -90,7 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
               GroupPage(
                 userName: userData?['nickName'] ?? "로그인되지 않음",
               ), //로그인 할 때 받아오도록 함.
-              MyPage(),
+              MyPage(
+                name: userData?['nickName'] ?? '정보 찾기 실패',
+                age: userData?['age'] ?? 0,
+                gender: userData?['gender'] ?? '정보 찾기 실패',
+              ),
             ], // 각 탭의 화면
           ),
           bottomNavigationBar: BottomNavigationBar(
@@ -98,13 +102,16 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedItemColor: Colors.black,
             //mouseCursor: MouseCursor.defer,
             selectedFontSize: 20,
-            selectedIconTheme: IconThemeData(size: 38, color: Colors.black),
+            selectedIconTheme: IconThemeData(size: 35, color: Colors.black),
             currentIndex: _currentIndex,
             onTap: handleNavTap,
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: '친구목록'),
               BottomNavigationBarItem(
-                icon: Icon(Icons.sports_esports),
+                icon: Icon(Icons.contacts),
+                label: '친구목록',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.diversity_3),
                 label: '그룹 목록',
                 //activeIcon: Text("하이라이트"),
               ),
