@@ -140,7 +140,7 @@ Future<int> getCollectionCount(String collectionName) async {
 }
 
 List<Map<String, dynamic>> createActivityListFromSet(Set<int> intSet) {
-  return intSet.map((e) => {"activity": e, "like": 5.0, "count": 5}).toList();
+  return intSet.map((e) => {"activity": e, "like": 6.0, "count": 5}).toList();
 }
 
 Future<List<String>> updateLikes(List likes) async {
