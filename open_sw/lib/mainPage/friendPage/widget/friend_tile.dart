@@ -35,16 +35,22 @@ class FriendTile extends StatelessWidget {
                       child: Row(
                         children: [
                           // 친구 프로필 (지금은 그냥 이름 첫글자로 해둠)
-                          CircleAvatar(
-                            backgroundColor: Colors.black,
-                            child: Text(
-                              friend.name[0],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
+                          if (friend.name == "친구가 없어요.")
+                            CircleAvatar(
+                              backgroundColor: Colors.black,
+                              child: Icon(Icons.person, color: Colors.white),
+                            )
+                          else
+                            CircleAvatar(
+                              backgroundColor: Colors.black,
+                              child: Text(
+                                friend.name[0],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
                           SizedBox(width: 10),
                           // 친구 이름
                           Text(
@@ -57,10 +63,11 @@ class FriendTile extends StatelessWidget {
                         ],
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.more_vert),
-                    ), // 상세 버튼 (점3개 아이콘)
+                    if (friend.name != "친구가 없어요.")
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.more_vert),
+                      ), // 상세 버튼 (점3개 아이콘)
                   ],
                 ),
               ],
