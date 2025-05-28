@@ -131,6 +131,7 @@ class _GroupPageState extends State<GroupPage> {
                               padding: const EdgeInsets.only(bottom: 10),
                               itemCount: groupCounts + 1,
                               itemBuilder: (BuildContext context, int index) {
+                                print(groupCounts);
                                 if (index < groupCounts) {
                                   return GroupTileWidget(group: groups[index]);
                                 } else {

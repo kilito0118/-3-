@@ -30,7 +30,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
     setState(() {
       _loadGroupData();
-      getName(data!["leader"], 0);
     });
   }
 
@@ -61,11 +60,14 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
               .collection('groups')
               .doc(widget.groupId)
               .get();
+
+      data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
         data = docSnapshot!.data() as Map<String, dynamic>?;
       }
     }
     if (data != null) {
+      getName(data!["leader"], 0);
       List<dynamic> members = data?['members'] ?? [];
       List<Map> details = await fetchMemberDetails(members);
       setState(() {
@@ -103,20 +105,17 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (groupData == null || isLoading) {
       return Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-    if (groupData == null) {
-      return Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: Center(child: Text('그룹 정보를 찾을 수 없습니다.')),
+        body: Center(child: Text('데이터를 불러올 수 없습니다.')),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _loadGroupData, // 새로고침
+          child: Icon(Icons.refresh),
+        ),
       );
     }
     List<dynamic> members = groupData!['members'] ?? [];
-    print(memberDetails);
+    //print(memberDetails);
     // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
     List<String> memberNames =
@@ -170,11 +169,22 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-
-              ActivityCard(date: "00.00(화)", place: "장소 이름"),
-              ActivityCard(date: "00.00(수)", place: "장소 이름"),
-              SizedBox(height: 20),
-              MemberSection(title: "그룹장", members: [leaderName]),
+              data!["activities"].length > 0
+                  ? ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: data!["activities"].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var activity = data!["activities"][index];
+                      return ActivityCard(
+                        date: activity['date'] ?? "00.00(화)",
+                        place: activity['place'] ?? "장소 이름",
+                      );
+                    },
+                  )
+                  : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 primary: false,
@@ -182,9 +192,17 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 padding: const EdgeInsets.only(bottom: 10),
                 itemCount: 0,
                 itemBuilder: (BuildContext context, int index) {
-                  return MemberSection(title: "그룹원", members: memberNames);
+                  return ActivityCard(date: "00.00(화)", place: "장소 이름");
                 },
               ),
+
+              SizedBox(height: 20),
+              MemberSection(title: "그룹장", members: [leaderName]),
+
+              memberNames.length > 1
+                  ? MemberSection(title: "그룹원", members: memberNames)
+                  : Text(""),
+
               //MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
