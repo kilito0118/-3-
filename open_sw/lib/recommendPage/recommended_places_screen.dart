@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 
 class RecommendedPlacesScreen extends StatelessWidget {
-  const RecommendedPlacesScreen({super.key});
+  final String activityName;
+  const RecommendedPlacesScreen({super.key, required this.activityName});
 
   @override
   Widget build(BuildContext context) {
-    return const RecommendPage();
+    return RecommendPage(activityName: activityName);
   }
 }
 
@@ -28,7 +29,8 @@ class SizeConfig {
 }
 
 class RecommendPage extends StatelessWidget {
-  const RecommendPage({super.key});
+  final String activityName;
+  const RecommendPage({super.key, required this.activityName});
 
   Widget buildStarRow(int filledStars) {
     return Row(
@@ -112,23 +114,38 @@ class RecommendPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SizeConfig.w(26)),
+        padding: EdgeInsets.symmetric(
+          //left: SizeConfig.w(26),
+          //top: SizeConfig.h(26),
+          vertical: 20,
+          horizontal: 15,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: SizeConfig.h(24)),
             Row(
               children: [
-                Transform.translate(
-                  offset: Offset(-SizeConfig.w(18), -SizeConfig.h(8)),
-                  child: Icon(Icons.arrow_back_ios_new, size: SizeConfig.w(28)),
+                GestureDetector(
+                  onTap: () {
+                    print("뒤로가기 눌림");
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(SizeConfig.w(10)),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 32,
+                    ),
+                  ),
                 ),
               ],
             ),
             SizedBox(height: SizeConfig.h(26)),
             Center(
               child: Text(
-                'Activity_title',
+                activityName,
                 style: TextStyle(
                   fontSize: SizeConfig.w(32),
                   fontWeight: FontWeight.bold,
