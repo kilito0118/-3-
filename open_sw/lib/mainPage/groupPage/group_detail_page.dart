@@ -122,14 +122,14 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
     List<String> memberNames =
-        memberDetails.length > 1
+        memberDetails.isNotEmpty
             ? memberDetails
                 .sublist(1)
                 .map((m) => m['name'] ?? 'member_name')
                 .cast<String>()
                 .toList()
             : ['member_name'];
-
+    //print("그룹원 이름들: $memberDetails");
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -200,10 +200,15 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
               ),
 
               SizedBox(height: 20),
-              MemberSection(title: "그룹장", members: [leaderName]),
+              MemberSection(
+                title: "그룹장",
+                members: [
+                  {'nickName': leaderName},
+                ],
+              ),
 
-              memberNames.length > 1
-                  ? MemberSection(title: "그룹원", members: memberNames)
+              memberDetails.isNotEmpty
+                  ? MemberSection(title: "그룹원", members: memberDetails)
                   : Text(""),
 
               //MemberSection(title: "그룹원", members: memberNames),
@@ -299,17 +304,27 @@ class ActivityCard extends StatelessWidget {
 
 class MemberSection extends StatelessWidget {
   final String title;
-  final List<String> members;
+  final List<Map<dynamic, dynamic>> members;
 
   const MemberSection({super.key, required this.title, required this.members});
 
   @override
   Widget build(BuildContext context) {
+    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        ...members.map((name) => MemberTile(name: name)),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            return MemberTile(
+              name: members[index]['nickName'] ?? 'member_name',
+            );
+          },
+        ),
         SizedBox(height: 10),
       ],
     );
@@ -323,6 +338,7 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(name);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
