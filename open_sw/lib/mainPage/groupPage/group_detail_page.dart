@@ -117,19 +117,8 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         ),
       );
     }
-    List<dynamic> members = groupData!['members'] ?? [];
-    //print(memberDetails);
-    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
-    List<String> memberNames =
-        memberDetails.isNotEmpty
-            ? memberDetails
-                .sublist(1)
-                .map((m) => m['name'] ?? 'member_name')
-                .cast<String>()
-                .toList()
-            : ['member_name'];
-    //print("그룹원 이름들: $memberDetails");
+    print(groupData);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -148,13 +137,33 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      width: 300,
+                      child: TextField(
+                        enabled: false,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(vertical: 10),
+                          hintText: "그룹 이름",
+                        ),
+                        controller: TextEditingController(
+                          text: groupData!['groupName'] ?? "Group_name",
+                        ),
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    /*
                     Text(
-                      groupData!['name'] ?? "Group_name",
+                      groupData!['groupName'] ?? "Group_name",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
+                    ),*/
                     SizedBox(width: 5),
                     InkWell(
                       onTap: () {},
@@ -310,7 +319,8 @@ class MemberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(members);
+    //print(members);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -338,7 +348,7 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(name);
+    // print(name);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
