@@ -158,11 +158,11 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                               : Text(""),
                       trailing: TextButton(
                         onPressed: () {
-                          print("$name 그룹에 추가됨");
                           addMemberToSnapshot(
                             widget.groupDocument,
                             name['uid']!,
                           );
+                          Navigator.pop(context);
                         },
                         child: Text("그룹에 추가하기"),
                         style: TextButton.styleFrom(
