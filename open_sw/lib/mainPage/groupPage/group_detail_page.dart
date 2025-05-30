@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
@@ -53,6 +53,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
       data = widget.group!.data() as Map<String, dynamic>?;
+      docSnapshot = widget.group;
       //print(data);
     } else if (widget.groupId != null) {
       docSnapshot =
@@ -105,6 +106,8 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // print("그룹 데이터: $groupData");
+    //print(widget.groupId);
     if (groupData == null || isLoading) {
       return Scaffold(
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
@@ -215,7 +218,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         builder: (context) {
                           return SizedBox(
                             height: 200,
-                            child: FriendPlusAtGroupWidget(),
+                            child: FriendPlusAtGroupWidget(
+                              groupDocument: docSnapshot,
+                            ),
                           );
                         },
                       );
@@ -268,7 +273,7 @@ class ActivityCard extends StatelessWidget {
   final String date;
   final String place;
 
-  const ActivityCard({required this.date, required this.place});
+  const ActivityCard({super.key, required this.date, required this.place});
 
   @override
   Widget build(BuildContext context) {
@@ -314,7 +319,7 @@ class MemberSection extends StatelessWidget {
 class MemberTile extends StatelessWidget {
   final String name;
 
-  const MemberTile({required this.name});
+  const MemberTile({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {

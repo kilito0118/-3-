@@ -24,7 +24,6 @@ class ThemeButtonWhiteWidget extends StatelessWidget {
           onPressed();
         } else {
           // 포커스가 해제되었을 때의 동작을 여기에 추가할 수 있습니다.
-          print('Button unfocused');
         }
       },
       style: ButtonStyle(

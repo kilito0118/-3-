@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/widget/friend_plus_widget.dart';
-import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'widget/friend_tile.dart';
 
 class FriendPage extends StatefulWidget {
