@@ -53,7 +53,7 @@ class LoginScreenState extends State<LoginScreen> {
         default:
           message = 'An error occurred. Please try again.';
       }
-      print('Login Error: ${e.code}');
+      debugPrint('Login Error: ${e.code}');
       // 에러 메시지를 스낵바로 출력
       if (mounted) {
         ScaffoldMessenger.of(

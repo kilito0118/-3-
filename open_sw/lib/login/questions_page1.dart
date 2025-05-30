@@ -133,7 +133,7 @@ class QuestionsPage1State extends State<QuestionsPage1> {
                                 ),
                               );
                             }
-                            print(selectedActivityNumbers);
+                            //print(selectedActivityNumbers);
 
                             Navigator.push(
                               context,
