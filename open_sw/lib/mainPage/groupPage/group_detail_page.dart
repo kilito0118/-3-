@@ -343,7 +343,20 @@ class MemberTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.black),
+        leading: CircleAvatar(
+          backgroundColor: Colors.black,
+
+          child: Text(
+            name[0],
+
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
+          ),
+        ),
         title: Text(name),
         trailing: Icon(Icons.more_vert),
       ),
