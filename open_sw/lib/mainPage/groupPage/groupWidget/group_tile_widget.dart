@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/groupPage/group_detail_page.dart';
 
+/*
 class Group {
   String name;
   String leader;
@@ -14,7 +16,7 @@ class Group {
     required this.members,
     required this.memberCount,
   });
-}
+}*/
 
 class GroupTileWidget extends StatelessWidget {
   final DocumentSnapshot group;
@@ -36,7 +38,12 @@ class GroupTileWidget extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            print(1);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroupDetailPage(group: group),
+              ),
+            );
           },
           child: Container(
             height: 80,

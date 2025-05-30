@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/login/input_box_widget.dart';
+import 'package:open_sw/login/widget/input_box_widget.dart';
 import 'package:open_sw/login/questions_page1.dart';
-import 'package:open_sw/login/regist_users.dart';
+import 'package:open_sw/login/logic/regist_users.dart';
 import 'package:open_sw/useful_widget/theme_button.dart';
 
 Future<bool> isNicknameAvailable(String nickname) async {
@@ -65,17 +65,23 @@ class SignupScreenState extends State<SignupScreen> {
           );
 
           // 3. 성공 후 화면 전환
-          if (mounted) {
-            Navigator.pushReplacement(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(builder: (context) => QuestionsPage1()),
-            );
-          }
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => QuestionsPage1()),
+          );
         } on FirebaseAuthException catch (e) {
-          // 오류 처리
-          // ignore: avoid_print
-          print('Error: ${e.code}');
+          // 에러 메시지를 스낵바로 출력
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.code)));
+          debugPrint('Sign Up Error: ${e.code}');
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
         }
       }
     }
@@ -95,9 +101,9 @@ class SignupScreenState extends State<SignupScreen> {
           child: Padding(
             padding: EdgeInsets.only(
               top: screenHeight * 0.2,
-              left: screenWidth * 0.15,
-              right: screenWidth * 0.15,
-              bottom: 80,
+              left: screenWidth * 0.1,
+              right: screenWidth * 0.1,
+              bottom: 60,
             ),
             child: Form(
               key: _formKey,
@@ -128,15 +134,13 @@ class SignupScreenState extends State<SignupScreen> {
                         flex: 1,
                         child: Padding(
                           padding: EdgeInsets.all(5),
-                          child: SizedBox(
-                            height: 44,
-                            child: InputBoxWidget(
-                              hintext: "20",
-                              controller: agecontroller,
-                              labelText: "나이",
-                              nowfocus: agefocus,
-                              nextfocus: genderfocus,
-                            ),
+
+                          child: InputBoxWidget(
+                            hintext: "20",
+                            controller: agecontroller,
+                            labelText: "나이",
+                            nowfocus: agefocus,
+                            nextfocus: genderfocus,
                           ),
                         ),
                       ),
@@ -214,7 +218,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "이메일 형식으로 적어주세요.",
                         controller: idcontroller,
@@ -227,7 +231,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "Password",
                         nowfocus: passwordfocus,
@@ -240,7 +244,7 @@ class SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: EdgeInsets.all(6),
                     child: SizedBox(
-                      height: 44,
+                      height: 48,
                       child: InputBoxWidget(
                         hintext: "Password 확인",
                         controller: passwordcheckcontroller,

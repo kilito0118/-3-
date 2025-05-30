@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:open_sw/mainPage/friendPage/add_from_friend_list_page.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/add_from_friend_list_page.dart';
+import 'package:open_sw/mainPage/groupPage/manual_add_page.dart';
 
-class FriendPlusWidget extends StatelessWidget {
-  const FriendPlusWidget({super.key});
+class FriendPlusAtGroupWidget extends StatelessWidget {
+  final DocumentSnapshot<Object?>? groupDocument;
+  const FriendPlusAtGroupWidget({super.key, required this.groupDocument});
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +33,13 @@ class FriendPlusWidget extends StatelessWidget {
               icon: Icons.person_outline,
               label: '친구 목록에서\n추가하기',
               onTap: () {
+                print(groupDocument);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AddFromFriendListPage(),
+                    builder:
+                        (context) =>
+                            AddFromFriendListPage(groupDocument: groupDocument),
                   ),
                 );
               },
@@ -43,7 +49,10 @@ class FriendPlusWidget extends StatelessWidget {
               icon: Icons.edit_outlined,
               label: '직접 추가하기',
               onTap: () {
-                // 두 번째 버튼 동작
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ManualAddPage()),
+                );
               },
             ),
           ],

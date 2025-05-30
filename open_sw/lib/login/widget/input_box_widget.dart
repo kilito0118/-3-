@@ -21,8 +21,16 @@ class InputBoxWidget extends StatelessWidget {
   // 3 비밀번호
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 44,
+    return InputField(
+      controller: controller,
+      label: labelText,
+      hintext: hintext,
+      nextfocus: nextfocus,
+      nowfocus: nowfocus,
+    );
+    /*
+     Container(
+      height: 56,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: Color.fromRGBO(255, 255, 255, 0.6),
@@ -61,6 +69,53 @@ class InputBoxWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+  */
+  }
+}
+
+class InputField extends StatelessWidget {
+  final String label;
+  final TextEditingController controller;
+  final dynamic hintext;
+  final dynamic nowfocus;
+  final dynamic nextfocus;
+
+  const InputField({
+    super.key,
+    required this.label,
+    required this.controller,
+    required this.hintext,
+    required this.nowfocus,
+    required this.nextfocus,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //Text(label, style: TextStyle(fontWeight: FontWeight.bold)),
+        //SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: TextField(
+            focusNode: nowfocus,
+            controller: controller,
+            onSubmitted: (_) => FocusScope.of(context).requestFocus(nextfocus),
+            decoration: InputDecoration(
+              hintText: hintext,
+              label: Text(label),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 20),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
