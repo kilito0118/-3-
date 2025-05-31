@@ -30,13 +30,12 @@
 
 ## 🛠️ 사용 기술 스택
 
-| 구분 | 기술 |
-|------|------|
-| 프론트엔드 | `Flutter` |
-| 백엔드 | `Firebase` + `Flask` (서버는 AWS 배포) |
-| 추천 알고리즘 | `Python` + `연관 규칙 분석` |
-| 데이터 | [2022 국민여가활동조사](https://www.data.go.kr/data/3075652/fileData.do?recommendDataYn=Y) |
-| 버전 관리 | `GitHub` 사용 |
+- 💙 **Frontend**: Flutter  
+- 🔥 **Backend**: Firebase (Auth, Firestore, Hosting)  
+- 🐍 **Recommendation Algorithm**: Python + 연관규칙분석 (Apriori)  
+- 🌐 **API/서버**: Flask (Python), AWS 배포  
+- 📊 **데이터 출처**: [2022 국민여가활동조사](https://www.data.go.kr/data/3075652/fileData.do?recommendDataYn=Y)  
+- 🗂 **Version Control**: Git & GitHub
 
 ---
 
@@ -51,10 +50,18 @@
 
 > - 회원가입 화면
 
-  ![image](https://github.com/user-attachments/assets/60f34080-c25b-413b-a67f-7228773f89bb)
+  ![image](https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e)
+  ![image](https://github.com/user-attachments/assets/1f1fe403-2ee4-4219-a1d5-a9c21ac63fbe)
+  ![image](https://github.com/user-attachments/assets/790669bd-3e89-4a08-afcf-ac0956db5cb3)
+  ![image](https://github.com/user-attachments/assets/dad7cae2-5ce0-49bc-90c2-5f60f29bc6fd)
 
 > - 활동 추천 화면
+
+  ![image](https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e)
+
 > - 장소 보기 지도 연동
+
+  ![image](https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3)
 
 ---
 
@@ -63,7 +70,7 @@
 | 이름 | 학번 | 역할 |
 |------|------|------|
 | 박준혁 | 2023112??? | Firebase, 프론트 일부 |
-| 오정인 | 2023112397 | 연관 규칙 추천 알고리즘, 데이터 분석, 프론트 일부 |
+| 오정인 | 2023112397 | 연관 규칙 추천 알고리즘, 프론트 일부 |
 | 이진용 | 2021113138 | 프론트 일부, 서버 연결 |
 | 장영우 | 2023112415 | 전체 앱 디자인, 프론트 일부, 지도 API 연동 |
 | 허영호 | 2022113601 | 프론트 일부, 서버 연결, 보고서 작성 |
