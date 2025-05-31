@@ -61,6 +61,7 @@
   <img src="https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e" height="250"/>
   <img src="https://github.com/user-attachments/assets/758640ea-8eaf-499f-bea2-150760d8353c" height="250"/>
   <img src="https://github.com/user-attachments/assets/b5590e65-11ac-4843-8df6-7de07bea2796" height="250"/>  
+  <img src="https://github.com/user-attachments/assets/76619e0b-30e9-47fd-9046-d6558045179d" height="250"/> 
 </div>
 
 > - 활동 추천 화면
