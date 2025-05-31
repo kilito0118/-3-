@@ -59,21 +59,21 @@
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e" height="250"/>
-  <img src="https://github.com/user-attachments/assets/1f1fe403-2ee4-4219-a1d5-a9c21ac63fbe" width="250"/>
-  <img src="https://github.com/user-attachments/assets/790669bd-3e89-4a08-afcf-ac0956db5cb3" width="250"/>
-  <img src="https://github.com/user-attachments/assets/dad7cae2-5ce0-49bc-90c2-5f60f29bc6fd" width="250"/>
+  <img src="https://github.com/user-attachments/assets/1f1fe403-2ee4-4219-a1d5-a9c21ac63fbe" height="250"/>
+  <img src="https://github.com/user-attachments/assets/790669bd-3e89-4a08-afcf-ac0956db5cb3" height="250"/>
+  <img src="https://github.com/user-attachments/assets/dad7cae2-5ce0-49bc-90c2-5f60f29bc6fd" height="250"/>
 </div>
 
 > - 활동 추천 화면
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e" width="250"/>
+  <img src="https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e" height="250"/>
 </div>
 
 > - 장소 보기 지도 연동
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3" width="250"/>
+  <img src="https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3" height="250"/>
 </div>
 
 ---
@@ -93,7 +93,10 @@
 ---
 
 ## 📝 향후 계획
-
+- ✅ iOS 버전 출시
+- ✅ Play Store 배포
+- ✅ 분석 시간 단축
+- ✅ 추천 성능 향상
 
 ---
 
