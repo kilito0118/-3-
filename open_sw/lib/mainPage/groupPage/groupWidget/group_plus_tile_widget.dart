@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:open_sw/mainPage/groupPage/group_detail_page.dart';
+import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 import 'package:open_sw/mainPage/groupPage/regist_group.dart';
 
 class GroupPlusTileWidget extends StatelessWidget {

@@ -211,7 +211,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                   ? MemberSection(title: "그룹원", members: memberDetails)
                   : Text(""),
 
-              //MemberSection(title: "그룹원", members: memberNames),
+              // MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
                   GestureDetector(
@@ -261,13 +261,26 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       ),
                     ),
                   ),
-                  SearchButton(),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {}, // 그룹 나가기 로직 추가
+                    child: Text(
+                      "그룹 나가기",
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                    ),
+                  ),
                   SizedBox(height: 10),
                 ],
               ),
               SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: SearchButton(),
         ),
       ),
     );
@@ -342,10 +355,10 @@ class MemberTile extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
       child: ListTile(
         leading: CircleAvatar(backgroundColor: Colors.black),
         title: Text(name),
-        trailing: Icon(Icons.more_vert),
       ),
     );
   }

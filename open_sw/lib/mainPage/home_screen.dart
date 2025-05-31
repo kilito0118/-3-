@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.contacts),
-                label: '친구목록',
+                label: '팔로우 목록',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.diversity_3),
