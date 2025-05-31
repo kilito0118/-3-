@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/recommendPage/recommended_places_screen.dart';
+import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
 class RecommendedActivity extends StatefulWidget {
   final String activity;
@@ -49,8 +50,8 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                 context,
                 MaterialPageRoute(
                   builder:
-                      (context) => RecommendedPlacesScreen(
-                        activityName: widget.activity,
+                      (context) => SetPlacePage(
+                        activity: widget.activity,
                       ),
                 ),
               );

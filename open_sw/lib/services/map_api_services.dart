@@ -48,7 +48,7 @@ Future<List<Map<String, String>>> findPlaces(String query) async {
   }
 }
 
-// x, j 좌표 및 검색 대상을 받아 장소의 리스트 반환
+// x, y 좌표 및 검색 대상을 받아 장소의 리스트 반환
 Future<List<Map<String, String>>> findNearbyPlaces({
   required double latitude,
   required double longitude,
@@ -66,7 +66,7 @@ Future<List<Map<String, String>>> findNearbyPlaces({
     'query': query,
     'x': longitude.toString(),
     'y': latitude.toString(),
-    'radius': '1000',
+    'radius': '5000',
     'size': '15',
     'sort': 'distance',
   });
@@ -81,13 +81,16 @@ Future<List<Map<String, String>>> findNearbyPlaces({
     final json = jsonDecode(response.body);
     final List<Map<String, String>> results = [];
 
-    // id, name, address, phone 으로 구성
+    // id, name, address, phone, x, y 로 구성
     for (var doc in json['documents']) {
       results.add({
         'id': doc['id'],
         'name': doc['place_name'] ?? '',
         'address': doc['road_address_name'] ?? doc['address_name'] ?? '',
         'phone': doc['phone'] ?? '',
+        'x': doc['x'] ?? '',
+        'y': doc['y'] ?? '',
+        'distance': doc['distance'] ?? '',
       });
     }
 

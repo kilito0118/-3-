@@ -13,16 +13,16 @@ class _RecommendActPageState extends State<RecommendActPage> {
 
   // 임시 배열 (이 리스트에 추천 목록들을 전부 받아와야함)
   final List<String> recommendedList = [
-    '활동 1',
-    '활동 2',
-    '활동 3',
-    '활동 4',
-    '활동 5',
-    '활동 6',
-    '활동 7',
-    '활동 8',
-    '활동 9',
-    '활동 10'
+    '볼링장',
+    '풋살장',
+    '미술관',
+    'pc방',
+    '카페',
+    '클럽',
+    '보드게임',
+    '공원',
+    '술집',
+    '도서관'
   ];
   
   // 추천해줄 리스트
