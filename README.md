@@ -30,6 +30,15 @@
 
 ## 🛠️ 사용 기술 스택
 
+## 🛠️ 사용 기술 스택
+
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+
 - 💙 **Frontend**: Flutter  
 - 🔥 **Backend**: Firebase (Auth, Firestore, Hosting)  
 - 🐍 **Recommendation Algorithm**: Python + 연관규칙분석 (Apriori)  
@@ -50,18 +59,24 @@
 
 > - 회원가입 화면
 
-  ![image](https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e)
-  ![image](https://github.com/user-attachments/assets/1f1fe403-2ee4-4219-a1d5-a9c21ac63fbe)
-  ![image](https://github.com/user-attachments/assets/790669bd-3e89-4a08-afcf-ac0956db5cb3)
-  ![image](https://github.com/user-attachments/assets/dad7cae2-5ce0-49bc-90c2-5f60f29bc6fd)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e" width="300"/>
+  <img src="https://github.com/user-attachments/assets/1f1fe403-2ee4-4219-a1d5-a9c21ac63fbe" width="300"/>
+  <img src="https://github.com/user-attachments/assets/790669bd-3e89-4a08-afcf-ac0956db5cb3" width="300"/>
+  <img src="https://github.com/user-attachments/assets/dad7cae2-5ce0-49bc-90c2-5f60f29bc6fd" width="300"/>
+</div>
 
 > - 활동 추천 화면
 
-  ![image](https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e" width="400"/>
+</div>
 
 > - 장소 보기 지도 연동
 
-  ![image](https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3)
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3" width="400"/>
+</div>
 
 ---
 
