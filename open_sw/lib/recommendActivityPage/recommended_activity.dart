@@ -21,14 +21,6 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        shadows: [
-          BoxShadow(
-            color: Color(0x19000000),
-            blurRadius: 10,
-            offset: Offset(0, 0),
-            spreadRadius: 0,
-          ),
-        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

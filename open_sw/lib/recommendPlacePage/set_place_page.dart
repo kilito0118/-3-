@@ -60,7 +60,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => RecommendedPlacesPage(
-                              posName: '현재 위치',
+                              posName: '현재 위치로 검색',
                               /// 매오
                               /// 중요
                               /// 아직 위치 가져오는기능은 안만들어서 임시로 붙여놓은 숫자입니다.
@@ -74,7 +74,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -130,7 +130,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                               },
                               style: TextButton.styleFrom(
                                 foregroundColor: Colors.black,
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(0),
                                 ),

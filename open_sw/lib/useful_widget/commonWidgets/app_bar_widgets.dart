@@ -7,7 +7,7 @@ PreferredSizeWidget defaultAppBar() {
     preferredSize: const Size.fromHeight(kToolbarHeight),
     child: ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
           backgroundColor: const Color(0xB0F2F2F2), // 반투명 회색
           surfaceTintColor: Colors.transparent,
@@ -24,17 +24,17 @@ PreferredSizeWidget searchAppBar({
   required Future<void> Function() onSearch,
 }) {
   return PreferredSize(
-    preferredSize: const Size.fromHeight(kToolbarHeight + 76),
+    preferredSize: const Size.fromHeight(kToolbarHeight + 80),
     child: ClipRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
           backgroundColor: const Color(0xB0F2F2F2),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: const BackButton(),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(76),
+            preferredSize: const Size.fromHeight(80),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               child: Container(
@@ -52,7 +52,7 @@ PreferredSizeWidget searchAppBar({
                         decoration: const InputDecoration(
                           hintText: '모일 장소를 알려주세요',
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         ),
                         onSubmitted: (_) => onSearch(),
                       ),

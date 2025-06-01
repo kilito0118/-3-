@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'recommended_activity.dart';
 
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+
 class RecommendActPage extends StatefulWidget {
   const RecommendActPage({super.key});
 
@@ -58,82 +60,64 @@ class _RecommendActPageState extends State<RecommendActPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       // 뒤로가기 버튼은 AppBar에 구현
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-              Icons.arrow_back,
-              color:Colors.black,
-              size: 32,
-          ),
-        ),
-      ),
+      appBar: defaultAppBar(),
       body: Container(
         // 배경 테마 설정
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.only(left: 26, right: 26),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+        decoration: BoxDecoration(
+          color: Color(0xFFF2F2F2),
         ),
-
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 80,),
-
-              // title
-              Text(
-                '이런 활동, 어떠신가요?',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 32,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                topAppBarSpacer(context),
+                Center(
+                  child: mainTitle('이런 활동, 어떠신가요?'),
                 ),
-              ),
-              SizedBox(height: 40,),
+                spacingBox(),
+                subTitle('추천 활동'),
+                spacingBox(),
+                // 목록 출력
+                ...List.generate(reducedList.length, (index) {
+                  return RecommendedActivity(activity: reducedList[index]);
+                }),
 
-              // 목록 출력
-              ...List.generate(reducedList.length, (index) {
-                return RecommendedActivity(activity: reducedList[index]);
-              }),
-              SizedBox(height: 10,),
-
-              // 새로 고침 버튼
-              TextButton(
-                // 리스트 새로고침 함수
-                onPressed: refreshList,
-                style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey[600],
-                    padding: EdgeInsets.all(0)
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '새로 고침',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
+                Center(
+                  child: TextButton(
+                    // 리스트 새로고침 함수
+                    onPressed: refreshList,
+                    style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey[600],
+                        padding: EdgeInsets.all(0)
                     ),
-                    SizedBox(width: 4,),
-                    Icon(
-                      Icons.refresh,
-                      size: 20,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '새로 고침',
+                          style: TextStyle(
+                              fontSize: 16
+                          ),
+                        ),
+                        SizedBox(width: 4,),
+                        Icon(
+                          Icons.refresh,
+                          size: 20,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                )
+
+                // 새로 고침 버튼
+
+              ],
+            ),
           ),
         ),
       ),

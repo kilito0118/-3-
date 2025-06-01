@@ -5,7 +5,7 @@ Widget topAppBarSpacer(BuildContext context) {
 }
 
 Widget topSearchAppBarSpacer(BuildContext context) {
-  return SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight + 76);
+  return SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight + 80);
 }
 
 Widget spacingBox(){
