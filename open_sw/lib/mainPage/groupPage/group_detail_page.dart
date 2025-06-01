@@ -117,8 +117,21 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         ),
       );
     }
+/*
+    List<dynamic> members = groupData!['members'] ?? [];
+    //print(memberDetails);
+    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
-    print(groupData);
+    List<String> memberNames =
+        memberDetails.isNotEmpty
+            ? memberDetails
+                .sublist(1)
+                .map((m) => m['name'] ?? 'member_name')
+                .cast<String>()
+                .toList()
+            : ['member_name'];
+    //print("그룹원 이름들: $memberDetails");
+*/
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -319,7 +332,6 @@ class MemberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(members);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,7 +360,7 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print(name);
+
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
