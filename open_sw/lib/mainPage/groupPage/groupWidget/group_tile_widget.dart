@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/groupPage/group_detail_page.dart';
+import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
 /*
 class Group {
@@ -42,10 +42,11 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
     final leaderUid = data["leader"];
 
     try {
-      final leaderDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(leaderUid)
-          .get();
+      final leaderDoc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(leaderUid)
+              .get();
 
       if (leaderDoc.exists) {
         setState(() {
@@ -99,10 +100,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                   child: Text(
                     data["groupName"][0], // 첫 글자 표시
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -114,18 +112,12 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                     // 그룹 이름
                     Text(
                       data["groupName"],
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     // 그룹장 이름
                     Text(
                       "$leaderName 님의 그룹",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),

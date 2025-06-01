@@ -31,7 +31,7 @@ class FriendPlusAtGroupWidget extends StatelessWidget {
           children: [
             _AddFriendButton(
               icon: Icons.person_outline,
-              label: '친구 목록에서\n추가하기',
+              label: '팔로우 목록에서\n추가하기',
               onTap: () {
                 print(groupDocument);
                 Navigator.push(
