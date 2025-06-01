@@ -115,6 +115,7 @@ class LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 10),
                         child: InputBoxWidget(
+                          isPassword: true,
                           hintext: "비밀번호",
                           labelText: "Password",
                           nowfocus: _passwordFocus,
