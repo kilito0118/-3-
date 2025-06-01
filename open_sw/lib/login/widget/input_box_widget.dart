@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class InputBoxWidget extends StatelessWidget {
   final String hintext;
   final String labelText;
-
+  final bool isPassword;
   final FocusNode nowfocus;
   final FocusNode nextfocus;
   final TextEditingController controller;
@@ -14,6 +14,7 @@ class InputBoxWidget extends StatelessWidget {
     required this.nowfocus,
     required this.nextfocus,
     required this.controller,
+    this.isPassword = false,
   });
   //0 이름
   // 1 나이
@@ -22,6 +23,7 @@ class InputBoxWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputField(
+      isPassword: isPassword,
       controller: controller,
       label: labelText,
       hintext: hintext,
@@ -81,14 +83,17 @@ class InputField extends StatelessWidget {
   final dynamic hintext;
   final dynamic nowfocus;
   final dynamic nextfocus;
+  final bool isPassword;
 
   const InputField({
     super.key,
     required this.label,
     required this.controller,
+
     required this.hintext,
     required this.nowfocus,
     required this.nextfocus,
+    this.isPassword = false,
   });
 
   @override
@@ -104,6 +109,7 @@ class InputField extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           child: TextField(
+            obscureText: isPassword ?? false,
             focusNode: nowfocus,
             controller: controller,
             onSubmitted: (_) => FocusScope.of(context).requestFocus(nextfocus),
