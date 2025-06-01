@@ -4,6 +4,7 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/services/map_api_services.dart';
 import 'dart:ui';
 import 'recommended_places_page.dart';
+import 'package:open_sw/services/current_location_service.dart';
 
 class SetPlacePage extends StatefulWidget {
   // 활동 명으로 작성해놔서 추후 활동 번호를 전달받고 그대로 전달하는 방식으로 고쳐야 합니다.
@@ -41,132 +42,140 @@ class _SetPlacePageState extends State<SetPlacePage> {
       extendBodyBehindAppBar: true,
       appBar: searchAppBar(controller: _controller, onSearch: search),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          color: Color(0xFFF2F2F2)
-        ),
-        child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
-              child: Column(
-                children: [
-                  topSearchAppBarSpacer(context),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => RecommendedPlacesPage(
-                              posName: '현재 위치로 검색',
-                              /// 매오
-                              /// 중요
-                              /// 아직 위치 가져오는기능은 안만들어서 임시로 붙여놓은 숫자입니다.
-                              lat: double.parse('10'),
-                              lng: double.parse('10'),
-                              activity: widget.activity,
-                            ),
-                          ),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        alignment: Alignment.centerLeft,
-                        textStyle: contentsNormal
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              borderRadius: BorderRadius.circular(10)
-                            ),
-                            child: Icon(Icons.my_location, color: Colors.white,),
-                          ),
-                          SizedBox(width: 10,),
-                          Text(
-                            '현재위치',
-                          ),
-                        ],
-                      )
-                    ),
-                  ),
-                  spacingBox(),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    clipBehavior: Clip.antiAlias,
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              color: Color(0xFFF2F2F2)
+          ),
+          child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 14),
+                child: Column(
+                  children: [
+                    topSearchAppBarSpacer(context),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                          onPressed: () async {
+                            final current = await getCurrentLocation();
 
-                    child: Column(
-                      children: List.generate(places.length, (index) {
-                        final place = places[index];
-                        return SizedBox(
-                          width: double.infinity,
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => RecommendedPlacesPage(
-                                      posName: place['name']!,
-                                      lat: double.parse(place['y']!),
-                                      lng: double.parse(place['x']!),
-                                      activity: widget.activity,
-                                    ),
+                            if (!context.mounted) return;
+
+                            if(current['success']){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => RecommendedPlacesPage(
+                                    posName: '현재 위치',
+                                    lat: current['lat'],
+                                    lng: current['lng'],
+                                    activity: widget.activity,
                                   ),
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.black,
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0),
                                 ),
-                                alignment: Alignment.centerLeft,
+                              );
+                            }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(current['error'])));
+                            }
+
+
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    place['name'] ?? '',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal
-                                    ),
-                                  ),
-                                  Text(
-                                    place['address'] ?? '',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[500],
-                                        fontWeight: FontWeight.normal
-                                    ),
-                                  )
-                                ],
-                              )
+                              alignment: Alignment.centerLeft,
+                              textStyle: contentsNormal
                           ),
-                        );
-                      }),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                    color: Colors.blueAccent,
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Icon(Icons.my_location, color: Colors.white,),
+                              ),
+                              SizedBox(width: 10,),
+                              Text(
+                                '현재위치로 검색',
+                              ),
+                            ],
+                          )
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 80,)
-                ],
-              ),
-            )
-        )
+                    spacingBox(),
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+
+                      child: Column(
+                        children: List.generate(places.length, (index) {
+                          final place = places[index];
+                          return SizedBox(
+                            width: double.infinity,
+                            child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => RecommendedPlacesPage(
+                                        posName: place['name']!,
+                                        lat: double.parse(place['y']!),
+                                        lng: double.parse(place['x']!),
+                                        activity: widget.activity,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                style: TextButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  alignment: Alignment.centerLeft,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      place['name'] ?? '',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal
+                                      ),
+                                    ),
+                                    Text(
+                                      place['address'] ?? '',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[500],
+                                          fontWeight: FontWeight.normal
+                                      ),
+                                    )
+                                  ],
+                                )
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                    SizedBox(height: 80,)
+                  ],
+                ),
+              )
+          )
 
       ),
 

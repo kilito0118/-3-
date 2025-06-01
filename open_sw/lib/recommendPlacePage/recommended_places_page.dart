@@ -5,12 +5,13 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'recommended_place_widget.dart';
 // 검색 알고리즘
 import 'package:open_sw/services/map_api_services.dart';
+// 네이버맵
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 
 class RecommendedPlacesPage extends StatefulWidget {
   final String posName;
   final double lat;
   final double lng;
-
   final String activity;
 
   const RecommendedPlacesPage({
@@ -18,7 +19,7 @@ class RecommendedPlacesPage extends StatefulWidget {
     required this.posName,
     required this.lat,
     required this.lng,
-    required this.activity
+    required this.activity,
   });
 
   @override
@@ -27,11 +28,35 @@ class RecommendedPlacesPage extends StatefulWidget {
 
 class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
   List<Map<String, String>> places = [];
+  NaverMapController? _mapController;
+  NCameraPosition? _initialPosition;
+
+  bool _mapReady = false;
+
+  final PageController _pageController = PageController(viewportFraction: 0.9);
+  int _currentIndex = 0;
 
   @override
-  void initState(){
+  void initState() {
+    int pastIndex;
     super.initState();
+    _initialPosition = NCameraPosition(
+      target: NLatLng(widget.lat, widget.lng),
+      zoom: 13,
+    );
     searchPlaces();
+    _pageController.addListener(() {
+      final page = _pageController.page;
+      if (page != null && page.round() != _currentIndex) {
+        pastIndex = _currentIndex;
+        setState(() {
+          _currentIndex = page.round();
+        });
+        if(_currentIndex != pastIndex){
+          goToMarker();
+        }
+      }
+    });
   }
 
   void searchPlaces() async {
@@ -41,42 +66,122 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
         longitude: widget.lng,
         query: widget.activity,
       );
-      setState(() => places = nearby);
+
+      if (nearby.isNotEmpty) {
+        final first = nearby[0];
+        final lat = double.parse(first['y']!);
+        final lng = double.parse(first['x']!);
+
+        setState(() {
+          places = nearby;
+        });
+
+        // 지도가 준비되어 있으면 바로 마커 추가 및 카메라 이동
+        if (_mapReady && _mapController != null) {
+          addMarkers();
+          _mapController!.updateCamera(NCameraUpdate.withParams(
+            target: NLatLng(lat, lng),
+            zoom: 14,
+          ));
+        }
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('장소 검색 실패: $e')),
+      );
     }
+  }
+
+  void addMarkers() {
+    if (_mapController == null) return;
+
+    final markers = places.asMap().entries.map((entry) {
+      final idx = entry.key;
+      final place = entry.value;
+      return NMarker(
+        id: 'marker_$idx',
+        position: NLatLng(
+          double.parse(place['y']!),
+          double.parse(place['x']!),
+        ),
+        caption: NOverlayCaption(text: place['name'] ?? '이름 없음'),
+      );
+    }).toSet();
+
+    _mapController!.clearOverlays();
+    _mapController!.addOverlayAll(markers);
+  }
+
+  void goToMarker() {
+    if (places.isEmpty || _mapController == null) return;
+
+    final target = places[_currentIndex];
+    final lat = double.parse(target['y']!);
+    final lng = double.parse(target['x']!);
+
+    _mapController!.updateCamera(
+      NCameraUpdate.withParams(
+        target: NLatLng(lat, lng),
+        zoom: 14,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: defaultAppBar(),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          color: Color(0xFFF2F2F2),
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                topAppBarSpacer(context),
-                mainTitle('${widget.posName}\n주변 장소에요'),
-                spacingBox(),
-                ...List.generate(places.length, (index) {
-                  return RecommendedPlaceWidget(place: places[index]);
-                }),
-                SizedBox(height: 80,)
-              ],
+        extendBodyBehindAppBar: true,
+        appBar: defaultAppBar(),
+        body: Stack(
+          children: [
+            NaverMap(
+              onMapReady: (controller) {
+                _mapController = controller;
+                _mapReady = true;
+
+                // 장소가 이미 검색되었으면 마커 추가
+                if (places.isNotEmpty) {
+                  addMarkers();
+
+                  final lat = double.parse(places[_currentIndex]['y']!);
+                  final lng = double.parse(places[_currentIndex]['x']!);
+                  _mapController!.updateCamera(NCameraUpdate.withParams(
+                    target: NLatLng(lat, lng),
+                    zoom: 14,
+                  ));
+                }
+              },
+              options: NaverMapViewOptions(
+                initialCameraPosition: _initialPosition!,
+                rotationGesturesEnable: false,
+                zoomGesturesEnable: false,
+                tiltGesturesEnable: false,
+                scrollGesturesEnable: true,
+                stopGesturesEnable: true,
+              ),
             ),
-          ),
-        ),
-      ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 240,
+                    child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: places.length,
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return RecommendedPlaceWidget(place: places[index]);
+                        }
+                    ),
+                  ),
+                  SizedBox(height: 32,)
+                ],
+              ),
+            )
+          ],
+        )
     );
   }
 }
