@@ -72,83 +72,82 @@ class _GroupPageState extends State<GroupPage> {
           //print(snapshot);
           final groupCounts = groups.length;
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 80),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 82, width: 26),
-                    Text(
-                      "안녕하세요,\n${widget.userName}님.",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(width: 83),
-                    Icon(Icons.account_circle_rounded, size: 68),
-                  ],
-                ),
-                SizedBox(height: 40),
-                Padding(
-                  padding: EdgeInsets.only(left: 26, right: 26),
-                  child: Column(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 26, right: 26),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 80),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "나의 그룹",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {},
-                              child: Text(
-                                "편집",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                      // 인사말
+                      Text.rich(
+                          TextSpan(
+                              children: [
+                                TextSpan(text: '안녕하세요,\n'),
+                                TextSpan(
+                                    text: widget.userName,
+                                    style: TextStyle(fontWeight: FontWeight.bold)
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
+                                TextSpan(text: ' 님')
+                              ],
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 32
+                              )
+                          )
                       ),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
-                              primary: false,
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.only(bottom: 10),
-                              itemCount: groupCounts + 1,
-                              itemBuilder: (BuildContext context, int index) {
-                                print(groupCounts);
-                                if (index < groupCounts) {
-                                  return GroupTileWidget(group: groups[index]);
-                                } else {
-                                  return GroupPlusTileWidget();
-                                }
-                              },
-                            ),
-                          ],
+                      // 프로필 사진
+                      // 현재 아이콘 으로 대체함
+                      // 추후 가능하면 이미지로 변경
+                      CircleAvatar(
+                        radius: 44,
+                        backgroundColor: Colors.orangeAccent,
+                        child: Icon(
+                          Icons.person,
+                          size: 64,
+                          color: Colors.white,
                         ),
-                      ),
+                      )
+
                     ],
+
                   ),
-                ),
-                SizedBox(height: 80),
-                Text(""),
-              ],
-            ),
+                  SizedBox(height: 40),
+                  Text(
+                    '  나의 그룹',
+                    style: TextStyle(
+                      color:Colors.grey[600],
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  // 그룹 목록
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: groupCounts + 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      print(groupCounts);
+                      if (index < groupCounts) {
+                        return GroupTileWidget(group: groups[index]);
+                      } else {
+                        return GroupPlusTileWidget();
+                      }
+                    },
+                  ),
+
+                  SizedBox(height: 80),
+                  Text(""),
+                ],
+              ),
+            )
+
           );
         }
         // Fallback widget in case none of the above conditions are met
