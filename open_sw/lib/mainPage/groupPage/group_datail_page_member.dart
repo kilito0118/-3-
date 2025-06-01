@@ -26,7 +26,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   @override
   void initState() {
     super.initState();
-    //print(widget.group?.data() as Map<String, dynamic>?);
 
     setState(() {
       _loadGroupData();
@@ -36,7 +35,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(id).get();
-    //print(nameSnapshot.data());
+
     if (nameSnapshot.exists) {
       if (type == 0) {
         setState(() {
@@ -54,7 +53,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     if (widget.group != null && widget.group!.exists) {
       data = widget.group!.data() as Map<String, dynamic>?;
       docSnapshot = widget.group;
-      //print(data);
     } else if (widget.groupId != null) {
       docSnapshot =
           await FirebaseFirestore.instance
@@ -106,8 +104,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print("그룹 데이터: $groupData");
-    //print(widget.groupId);
     if (groupData == null || isLoading) {
       return Scaffold(
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
@@ -117,19 +113,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         ),
       );
     }
-    List<dynamic> members = groupData!['members'] ?? [];
-    //print(memberDetails);
-    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
-    List<String> memberNames =
-        memberDetails.isNotEmpty
-            ? memberDetails
-                .sublist(1)
-                .map((m) => m['name'] ?? 'member_name')
-                .cast<String>()
-                .toList()
-            : ['member_name'];
-    //print("그룹원 이름들: $memberDetails");
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -323,7 +307,6 @@ class MemberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -351,7 +334,6 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(name);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

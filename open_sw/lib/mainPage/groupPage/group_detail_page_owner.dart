@@ -17,6 +17,7 @@ class GroupDetailPage extends StatefulWidget {
 
 class _GroupDetailPageState extends State<GroupDetailPage> {
   Map<String, dynamic>? groupData;
+  String groupId = '';
   List<Map> memberDetails = [];
   bool isLoading = true;
   Map<String, dynamic>? data;
@@ -26,17 +27,48 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   @override
   void initState() {
     super.initState();
-    //print(widget.group?.data() as Map<String, dynamic>?);
 
     setState(() {
       _loadGroupData();
     });
   }
 
+  void kickout(String uid, String groupId, String name) async {
+    // 1. 비동기 작업 먼저 처리
+    await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
+      'members': FieldValue.arrayRemove([uid]),
+    });
+
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'groups': FieldValue.arrayRemove([groupId]),
+      });
+
+      // 2. 상태 변경이 필요하면 setState로 감싸기
+      if (mounted) {
+        setState(() {
+          // 예: 목록에서 멤버를 직접 삭제하는 등의 UI 갱신
+          //members.remove(uid);  // 예시
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('$name has been removed from the group.')),
+          );
+          _loadGroupData();
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to remove $name: $e')));
+      }
+    }
+  }
+
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(id).get();
-    //print(nameSnapshot.data());
+
     if (nameSnapshot.exists) {
       if (type == 0) {
         setState(() {
@@ -52,9 +84,13 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
-      data = widget.group!.data() as Map<String, dynamic>?;
-      docSnapshot = widget.group;
-      //print(data);
+      docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.group!.id)
+              .get();
+      groupId = widget.group!.id;
+      data = docSnapshot!.data() as Map<String, dynamic>?;
     } else if (widget.groupId != null) {
       docSnapshot =
           await FirebaseFirestore.instance
@@ -106,8 +142,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print("그룹 데이터: $groupData");
-    //print(widget.groupId);
     if (groupData == null || isLoading) {
       return Scaffold(
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
@@ -117,19 +151,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         ),
       );
     }
-    List<dynamic> members = groupData!['members'] ?? [];
-    //print(memberDetails);
-    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
-    List<String> memberNames =
-        memberDetails.isNotEmpty
-            ? memberDetails
-                .sublist(1)
-                .map((m) => m['name'] ?? 'member_name')
-                .cast<String>()
-                .toList()
-            : ['member_name'];
-    //print("그룹원 이름들: $memberDetails");
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -208,15 +230,24 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
               ),
 
               memberDetails.isNotEmpty
-                  ? MemberSection(title: "그룹원", members: memberDetails)
+                  ? MemberSection(
+                    title: "그룹원",
+                    members: memberDetails,
+                    groupId: groupId,
+                    onKickout:
+                        () => kickout(
+                          memberDetails[0]['uid'] ?? 'uid',
+                          groupId,
+                          memberDetails[0]['nickName'] ?? '그룹원 이름',
+                        ),
+                  )
                   : Text(""),
 
-              //MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
+                    onTap: () async {
+                      final result = await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
                         barrierColor: Colors.transparent,
@@ -229,6 +260,13 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                           );
                         },
                       );
+
+                      // 모달에서 반환된 값이 'refresh'라면 데이터 새로고침 등 원하는 동작 실행
+                      if (true) {
+                        setState(() {
+                          _loadGroupData();
+                        }); // 필요하다면 UI 갱신
+                      }
                     },
                     child: DottedBorder(
                       options: RoundedRectDottedBorderOptions(
@@ -318,12 +356,19 @@ class ActivityCard extends StatelessWidget {
 class MemberSection extends StatelessWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
+  final String groupId;
+  final VoidCallback onKickout;
 
-  const MemberSection({super.key, required this.title, required this.members});
+  const MemberSection({
+    super.key,
+    required this.title,
+    required this.members,
+    required this.groupId,
+    required this.onKickout,
+  });
 
   @override
   Widget build(BuildContext context) {
-    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -335,6 +380,9 @@ class MemberSection extends StatelessWidget {
           itemBuilder: (context, index) {
             return MemberTile(
               name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]['uid'] ?? 'member_uid',
+              groupId: groupId,
+              onKickout: () => onKickout(),
             );
           },
         ),
@@ -346,12 +394,20 @@ class MemberSection extends StatelessWidget {
 
 class MemberTile extends StatelessWidget {
   final String name;
+  final String uid;
+  final String groupId;
+  final VoidCallback onKickout;
 
-  const MemberTile({super.key, required this.name});
+  const MemberTile({
+    super.key,
+    required this.name,
+    required this.uid,
+    required this.groupId,
+    required this.onKickout,
+  });
 
   @override
   Widget build(BuildContext context) {
-    print(name);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -366,7 +422,10 @@ class MemberTile extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
           ),
-          onPressed: () {}, // 그룹원 삭제 로직 추가가
+          onPressed: () async {
+            onKickout();
+          },
+
           child: Text("내보내기", style: TextStyle(color: Colors.red)),
         ),
       ),
@@ -382,7 +441,6 @@ class OwnerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -408,7 +466,6 @@ class OwnerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(name);
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

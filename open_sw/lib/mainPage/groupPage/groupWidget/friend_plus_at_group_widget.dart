@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:open_sw/mainPage/groupPage/groupWidget/add_from_friend_list_page.dart';
+import 'package:open_sw/mainPage/groupPage/add_from_friend_list_page.dart';
 import 'package:open_sw/mainPage/groupPage/manual_add_page.dart';
 
 class FriendPlusAtGroupWidget extends StatelessWidget {
@@ -33,7 +33,7 @@ class FriendPlusAtGroupWidget extends StatelessWidget {
               icon: Icons.person_outline,
               label: '팔로우 목록에서\n추가하기',
               onTap: () {
-                print(groupDocument);
+                //print(groupDocument);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
