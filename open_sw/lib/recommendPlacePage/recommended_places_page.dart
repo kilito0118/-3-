@@ -176,7 +176,8 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                         }
                     ),
                   ),
-                  SizedBox(height: 32,)
+                  SizedBox(height: 32,),
+                  bottomNavigationBarSpacer(context),
                 ],
               ),
             )
