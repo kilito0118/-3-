@@ -16,13 +16,15 @@ class _FriendPageState extends State<FriendPage> {
 
   List<Friend> friends = [];
   List<Map<String, String>> friendDetails = [];
-  void onTap() {
-    setState(() {
-      beforeStart();
-    });
+  Future<void> onTap() async {
+    setState(() {});
+    await beforeStart(); // 친구 목록 새로고침
+    setState(() {});
   }
 
-  void beforeStart() {
+  Future<void> beforeStart() async {
+    friendDetails.clear();
+    friends.clear();
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -200,7 +202,7 @@ class _FriendPageState extends State<FriendPage> {
                               setState(() {
                                 controller.clear(); // 입력 필드 초기화
                                 Navigator.pop(context); // 모달 닫기
-                                initState(); // 친구 목록 새로고침
+                                beforeStart(); // 친구 목록 새로고침
                               });
                             },
                           );

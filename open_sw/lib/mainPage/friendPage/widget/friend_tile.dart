@@ -78,7 +78,7 @@ class FriendTile extends StatelessWidget {
                               return AlertDialog(
                                 backgroundColor: Colors.white,
                                 title: Text(
-                                  '정말 팔로우를 취소하시겠습니까?',
+                                  '정말 팔로우를 삭제하시겠습니까?',
                                   style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
@@ -87,7 +87,7 @@ class FriendTile extends StatelessWidget {
                                   ),
                                 ),
                                 content: Text(
-                                  '취소하시면 이제 그룹원으로 추가할 수 없습니다.',
+                                  '삭제하시면 이제 그룹원으로 추가할 수 없습니다.',
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.black87,
@@ -118,7 +118,6 @@ class FriendTile extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop(); // 그냥 닫기
-                                      onTap(); // 친구 목록 갱신
                                     },
                                   ),
                                   TextButton(
@@ -182,8 +181,9 @@ class FriendTile extends StatelessWidget {
                                                 'Error fetching document: $error',
                                               );
                                             });
+
                                         Navigator.of(context).pop(); // 닫기
-                                        onTap();
+                                        onTap(); // 친구 목록 갱신
                                       }
                                     },
                                   ),
