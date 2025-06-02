@@ -172,7 +172,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      groupData!['name'] ?? "Group_name",
+                      groupData!['groupName'] ?? "Group_name",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
@@ -180,7 +180,51 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     ),
                     SizedBox(width: 5),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            TextEditingController nameController =
+                                TextEditingController(
+                                  text: groupData!['groupName'] ?? "Group_name",
+                                );
+                            return AlertDialog(
+                              title: Text("그룹 이름 편집"),
+                              content: TextField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  labelText: "그룹 이름",
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("취소"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    String newName = nameController.text.trim();
+                                    if (newName.isNotEmpty) {
+                                      await FirebaseFirestore.instance
+                                          .collection('groups')
+                                          .doc(groupId)
+                                          .update({'groupName': newName});
+                                      setState(() {
+                                        groupData!['groupName'] = newName;
+                                      });
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("저장"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       child: Text(
                         "편집",
                         style: TextStyle(color: Colors.grey[600]),
