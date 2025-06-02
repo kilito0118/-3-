@@ -172,7 +172,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      groupData!['name'] ?? "Group_name",
+                      groupData!['groupName'] ?? "Group_name",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
@@ -180,7 +180,51 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     ),
                     SizedBox(width: 5),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            TextEditingController nameController =
+                                TextEditingController(
+                                  text: groupData!['groupName'] ?? "Group_name",
+                                );
+                            return AlertDialog(
+                              title: Text("그룹 이름 편집"),
+                              content: TextField(
+                                controller: nameController,
+                                decoration: InputDecoration(
+                                  labelText: "그룹 이름",
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("취소"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    String newName = nameController.text.trim();
+                                    if (newName.isNotEmpty) {
+                                      await FirebaseFirestore.instance
+                                          .collection('groups')
+                                          .doc(groupId)
+                                          .update({'groupName': newName});
+                                      setState(() {
+                                        groupData!['groupName'] = newName;
+                                      });
+                                    }
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("저장"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       child: Text(
                         "편집",
                         style: TextStyle(color: Colors.grey[600]),
@@ -226,7 +270,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               OwnerSection(
                 title: "그룹장",
                 members: [
-                  {'nickName': leaderName},
+                  {'nickName': leaderName, 'uid': data!['leader'] ?? '그룹장 UID'},
                 ],
               ),
 
@@ -479,7 +523,13 @@ class MemberTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: Colors.white,
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.black),
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+          child: Text(
+            name[0],
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          ),
+        ),
         title: Text(name),
         trailing: TextButton(
           style: ButtonStyle(
@@ -507,6 +557,7 @@ class OwnerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -516,7 +567,10 @@ class OwnerSection extends StatelessWidget {
           shrinkWrap: true,
           itemCount: members.length,
           itemBuilder: (context, index) {
-            return OwnerTile(name: members[index]['nickName'] ?? 'member_name');
+            return OwnerTile(
+              name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]["uid"] ?? "",
+            );
           },
         ),
         SizedBox(height: 10),
@@ -527,8 +581,9 @@ class OwnerSection extends StatelessWidget {
 
 class OwnerTile extends StatelessWidget {
   final String name;
+  final String uid;
 
-  const OwnerTile({super.key, required this.name});
+  const OwnerTile({super.key, required this.name, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +592,13 @@ class OwnerTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: Colors.white,
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.black),
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+          child: Text(
+            name[0],
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          ),
+        ),
         title: Text(name),
       ),
     );

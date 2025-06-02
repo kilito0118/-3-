@@ -68,20 +68,21 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
+          onTap: () async {
             widget.onTap(); // 탭 이벤트 핸들러 호출
             final user = FirebaseAuth.instance.currentUser;
             if (user != null && user.uid == widget.group["leader"]) {
               // 그룹장이면 그룹 상세 페이지로 이동
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder:
                       (context) => GroupDetailPageOwner(group: widget.group),
                 ),
               );
+              widget.onTap();
             } else {
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder:
