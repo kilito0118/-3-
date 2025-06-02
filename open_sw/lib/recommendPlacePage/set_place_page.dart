@@ -48,6 +48,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
               color: Color(0xFFF2F2F2)
           ),
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
