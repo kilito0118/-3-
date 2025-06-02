@@ -26,6 +26,8 @@ class RecommendedPlacesPage extends StatefulWidget {
   State<RecommendedPlacesPage> createState() => _RecommendedPlacesPageState();
 }
 
+final double camZoom = 17.0;
+
 class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
   List<Map<String, String>> places = [];
   NaverMapController? _mapController;
@@ -81,7 +83,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
           addMarkers();
           _mapController!.updateCamera(NCameraUpdate.withParams(
             target: NLatLng(lat, lng),
-            zoom: 14,
+            zoom: camZoom,
           ));
         }
       }
@@ -122,7 +124,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
     _mapController!.updateCamera(
       NCameraUpdate.withParams(
         target: NLatLng(lat, lng),
-        zoom: 14,
+        zoom: camZoom,
       ),
     );
   }
@@ -147,14 +149,16 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                   final lng = double.parse(places[_currentIndex]['x']!);
                   _mapController!.updateCamera(NCameraUpdate.withParams(
                     target: NLatLng(lat, lng),
-                    zoom: 14,
+                    zoom: camZoom,
                   ));
                 }
               },
               options: NaverMapViewOptions(
+                mapType: NMapType.basic,
+                liteModeEnable: true,
                 initialCameraPosition: _initialPosition!,
                 rotationGesturesEnable: false,
-                zoomGesturesEnable: false,
+                zoomGesturesEnable: true,
                 tiltGesturesEnable: false,
                 scrollGesturesEnable: true,
                 stopGesturesEnable: true,

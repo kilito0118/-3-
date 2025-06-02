@@ -66,7 +66,7 @@ Future<List<Map<String, String>>> findNearbyPlaces({
     'query': query,
     'x': longitude.toString(),
     'y': latitude.toString(),
-    'radius': '5000',
+    'radius': '1000',
     'size': '15',
     'sort': 'distance',
   });
