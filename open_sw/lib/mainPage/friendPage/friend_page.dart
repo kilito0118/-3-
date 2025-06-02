@@ -16,8 +16,15 @@ class _FriendPageState extends State<FriendPage> {
 
   List<Friend> friends = [];
   List<Map<String, String>> friendDetails = [];
-  @override
-  initState() {
+  Future<void> onTap() async {
+    setState(() {});
+    await beforeStart(); // 친구 목록 새로고침
+    setState(() {});
+  }
+
+  Future<void> beforeStart() async {
+    friendDetails.clear();
+    friends.clear();
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -45,7 +52,10 @@ class _FriendPageState extends State<FriendPage> {
                       friends =
                           friendDetails
                               .map(
-                                (detail) => Friend(name: detail['nickName']!),
+                                (detail) => Friend(
+                                  name: detail['nickName']!,
+                                  uid: detail['uid']!,
+                                ),
                               )
                               .toList();
                     });
@@ -57,7 +67,11 @@ class _FriendPageState extends State<FriendPage> {
     } else {
       print('로그인된 사용자가 없습니다.');
     }
+  }
 
+  @override
+  initState() {
+    beforeStart(); // 친구 목록 초기화
     super.initState();
   }
 
@@ -101,7 +115,7 @@ class _FriendPageState extends State<FriendPage> {
         backgroundColor: Colors.transparent, // 배경색 설정
         appBar: PreferredSize(
           // '친구' 부분 (appbar)
-          preferredSize: Size.fromHeight(130),
+          preferredSize: Size.fromHeight(135),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
@@ -109,7 +123,7 @@ class _FriendPageState extends State<FriendPage> {
               children: [
                 SizedBox(height: 80),
                 Text(
-                  '친구',
+                  '팔로우 목록',
                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
                 ),
               ],
@@ -151,9 +165,9 @@ class _FriendPageState extends State<FriendPage> {
                       shadowColor: Colors.transparent,
                     ),
                     child: Text(
-                      '친구 추가하기',
+                      '이메일로 팔로우하기',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
@@ -188,7 +202,7 @@ class _FriendPageState extends State<FriendPage> {
                               setState(() {
                                 controller.clear(); // 입력 필드 초기화
                                 Navigator.pop(context); // 모달 닫기
-                                initState(); // 친구 목록 새로고침
+                                beforeStart(); // 친구 목록 새로고침
                               });
                             },
                           );
@@ -202,19 +216,22 @@ class _FriendPageState extends State<FriendPage> {
               SizedBox(height: 40),
               // 친구 목록
               Text(
-                '내 친구',
+                '내 팔로우 목록',
                 style: TextStyle(fontSize: 15, color: Colors.grey[700]),
               ),
               SizedBox(height: 10),
               // 친구 목록 출력 (friend_tile.dart에 자세한 코드 있음)
               friends.isEmpty
-                  ? FriendTile(friend: Friend(name: "친구가 없어요."))
+                  ? FriendTile(
+                    friend: Friend(name: "팔로우가 없어요.", uid: ''),
+                    onTap: () => onTap(),
+                  )
                   : Text(""),
               Expanded(
                 child: ListView.builder(
                   itemCount: friends.length,
                   itemBuilder: (context, index) {
-                    return FriendTile(friend: friends[index]);
+                    return FriendTile(friend: friends[index], onTap: onTap);
                   },
                 ),
               ),

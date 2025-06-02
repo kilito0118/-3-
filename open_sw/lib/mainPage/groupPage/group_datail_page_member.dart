@@ -5,17 +5,17 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 
-class GroupDetailPage extends StatefulWidget {
+class GroupDatailPageMember extends StatefulWidget {
   final DocumentSnapshot? group;
   final String? groupId;
 
-  const GroupDetailPage({super.key, this.group, this.groupId});
+  const GroupDatailPageMember({super.key, this.group, this.groupId});
 
   @override
-  State<GroupDetailPage> createState() => _GroupDetailPageState();
+  State<GroupDatailPageMember> createState() => _GroupDatailPageMemberState();
 }
 
-class _GroupDetailPageState extends State<GroupDetailPage> {
+class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Map<String, dynamic>? groupData;
   List<Map> memberDetails = [];
   bool isLoading = true;
@@ -26,7 +26,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   @override
   void initState() {
     super.initState();
-    //print(widget.group?.data() as Map<String, dynamic>?);
 
     setState(() {
       _loadGroupData();
@@ -36,7 +35,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(id).get();
-    //print(nameSnapshot.data());
+
     if (nameSnapshot.exists) {
       if (type == 0) {
         setState(() {
@@ -54,7 +53,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
     if (widget.group != null && widget.group!.exists) {
       data = widget.group!.data() as Map<String, dynamic>?;
       docSnapshot = widget.group;
-      //print(data);
     } else if (widget.groupId != null) {
       docSnapshot =
           await FirebaseFirestore.instance
@@ -106,8 +104,6 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print("그룹 데이터: $groupData");
-    //print(widget.groupId);
     if (groupData == null || isLoading) {
       return Scaffold(
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
@@ -117,21 +113,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
         ),
       );
     }
-/*
-    List<dynamic> members = groupData!['members'] ?? [];
-    //print(memberDetails);
-    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
 
-    List<String> memberNames =
-        memberDetails.isNotEmpty
-            ? memberDetails
-                .sublist(1)
-                .map((m) => m['name'] ?? 'member_name')
-                .cast<String>()
-                .toList()
-            : ['member_name'];
-    //print("그룹원 이름들: $memberDetails");
-*/
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -150,33 +132,13 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 300,
-                      child: TextField(
-                        enabled: false,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10),
-                          hintText: "그룹 이름",
-                        ),
-                        controller: TextEditingController(
-                          text: groupData!['groupName'] ?? "Group_name",
-                        ),
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    /*
                     Text(
-                      groupData!['groupName'] ?? "Group_name",
+                      groupData!['name'] ?? "Group_name",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),*/
+                    ),
                     SizedBox(width: 5),
                     InkWell(
                       onTap: () {},
@@ -233,7 +195,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                   ? MemberSection(title: "그룹원", members: memberDetails)
                   : Text(""),
 
-              //MemberSection(title: "그룹원", members: memberNames),
+              // MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
                   GestureDetector(
@@ -283,13 +245,26 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       ),
                     ),
                   ),
-                  SearchButton(),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {}, // 그룹 나가기 로직 추가
+                    child: Text(
+                      "그룹 나가기",
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                    ),
+                  ),
                   SizedBox(height: 10),
                 ],
               ),
               SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: SearchButton(),
         ),
       ),
     );
@@ -332,7 +307,6 @@ class MemberSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -360,27 +334,13 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.black,
-
-          child: Text(
-            name[0],
-
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            ),
-          ),
-        ),
+        leading: CircleAvatar(backgroundColor: Colors.black),
         title: Text(name),
-        trailing: Icon(Icons.more_vert),
       ),
     );
   }

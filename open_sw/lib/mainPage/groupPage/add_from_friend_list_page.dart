@@ -22,8 +22,16 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
       print('documentSnapshot이 null입니다!');
       return;
     }
+
+    // 그룹 문서에 newUid를 members에 추가
     await documentSnapshot.reference.update({
       'members': FieldValue.arrayUnion([newUid]),
+    });
+
+    // 사용자 문서에 그룹 uid를 groups에 추가
+    final groupUid = documentSnapshot.id; // 그룹 문서의 uid
+    await FirebaseFirestore.instance.collection('users').doc(newUid).update({
+      'groups': FieldValue.arrayUnion([groupUid]),
     });
   }
 
@@ -60,7 +68,10 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                       friends =
                           friendDetails
                               .map(
-                                (detail) => Friend(name: detail['nickName']!),
+                                (detail) => Friend(
+                                  name: detail['nickName']!,
+                                  uid: detail['uid']!,
+                                ),
                               )
                               .toList();
                     });
@@ -141,7 +152,9 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                     margin: EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(
+                          name['uid']!.hashCode % 0xFFFFFF,
+                        ).withOpacity(1.0), // uid 해시값으로 색상 생성
                         child: Text(
                           name['nickName'] == null
                               ? "닉네임 없음"
@@ -162,6 +175,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                             widget.groupDocument,
                             name['uid']!,
                           );
+                          Navigator.pop(context);
                           Navigator.pop(context);
                         },
                         child: Text("그룹에 추가하기"),

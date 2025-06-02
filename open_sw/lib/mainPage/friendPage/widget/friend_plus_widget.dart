@@ -37,7 +37,8 @@ class _FriendPlusWidgetState extends State<FriendPlusWidget> {
     return Center(
       child: SizedBox(
         width: 320,
-        height: 3000,
+        height:
+            null, // Let the widget size itself dynamically based on its content
         child: Column(
           children: [
             Container(
@@ -52,7 +53,6 @@ class _FriendPlusWidgetState extends State<FriendPlusWidget> {
                   end: Alignment.bottomCenter,
                   colors: [Colors.white, Color(0xFFF6F6F6)],
                 ),
-                //color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.08),
@@ -61,72 +61,72 @@ class _FriendPlusWidgetState extends State<FriendPlusWidget> {
                   ),
                 ],
               ),
-              child: Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "나의 아이디",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                        fontWeight: FontWeight.w400,
+
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "나의 아이디",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    userEmail ?? '로딩 중...',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  TextField(
+                    controller: widget.controller,
+                    decoration: InputDecoration(
+                      hintText: "추가할 친구의 아이디 입력",
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 14,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(22),
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      userEmail ?? '로딩 중...',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    TextField(
-                      controller: widget.controller,
-                      decoration: InputDecoration(
-                        hintText: "추가할 친구의 아이디 입력",
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        border: OutlineInputBorder(
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 44,
+                    child: ElevatedButton(
+                      onPressed: widget.onAddFriend,
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22),
-                          borderSide: BorderSide.none,
                         ),
+                        backgroundColor: const Color(0xFFFF7A00),
+                        elevation: 0,
                       ),
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 44,
-                      child: ElevatedButton(
-                        onPressed: widget.onAddFriend,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22),
-                          ),
-                          backgroundColor: const Color(0xFFFF7A00),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          "친구로 추가하기",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.1,
-                          ),
+                      child: Text(
+                        "친구로 추가하기",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+
             Flexible(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(

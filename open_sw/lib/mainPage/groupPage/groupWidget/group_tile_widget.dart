@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/groupPage/group_detail_page.dart';
+import 'package:open_sw/mainPage/groupPage/group_datail_page_member.dart';
+import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
 /*
 class Group {
@@ -20,8 +22,9 @@ class Group {
 
 class GroupTileWidget extends StatefulWidget {
   final DocumentSnapshot group;
+  final VoidCallback onTap; // 선택적으로 탭 이벤트 핸들러 추가
 
-  const GroupTileWidget({super.key, required this.group});
+  const GroupTileWidget({super.key, required this.group, required this.onTap});
 
   @override
   State<GroupTileWidget> createState() => _GroupTileWidgetState();
@@ -42,10 +45,11 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
     final leaderUid = data["leader"];
 
     try {
-      final leaderDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(leaderUid)
-          .get();
+      final leaderDoc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(leaderUid)
+              .get();
 
       if (leaderDoc.exists) {
         setState(() {
@@ -64,13 +68,29 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GroupDetailPage(group: widget.group),
-              ),
-            );
+          onTap: () async {
+            widget.onTap(); // 탭 이벤트 핸들러 호출
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null && user.uid == widget.group["leader"]) {
+              // 그룹장이면 그룹 상세 페이지로 이동
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => GroupDetailPageOwner(group: widget.group),
+                ),
+              );
+              widget.onTap();
+            } else {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => GroupDatailPageMember(group: widget.group),
+                ),
+              );
+            }
+            widget.onTap();
           },
           child: Container(
             width: double.infinity,
@@ -99,10 +119,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                   child: Text(
                     data["groupName"][0], // 첫 글자 표시
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -114,18 +131,12 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                     // 그룹 이름
                     Text(
                       data["groupName"],
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     // 그룹장 이름
                     Text(
                       "$leaderName 님의 그룹",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),
