@@ -5,17 +5,17 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 
-class GroupDetailPage extends StatefulWidget {
+class GroupDatailPageMember extends StatefulWidget {
   final DocumentSnapshot? group;
   final String? groupId;
 
-  const GroupDetailPage({super.key, this.group, this.groupId});
+  const GroupDatailPageMember({super.key, this.group, this.groupId});
 
   @override
-  State<GroupDetailPage> createState() => _GroupDetailPageState();
+  State<GroupDatailPageMember> createState() => _GroupDatailPageMemberState();
 }
 
-class _GroupDetailPageState extends State<GroupDetailPage> {
+class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Map<String, dynamic>? groupData;
   List<Map> memberDetails = [];
   bool isLoading = true;

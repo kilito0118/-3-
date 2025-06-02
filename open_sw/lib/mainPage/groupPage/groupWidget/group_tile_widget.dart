@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/groupPage/group_datail_page_member.dart';
 import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
 /*
@@ -20,8 +22,9 @@ class Group {
 
 class GroupTileWidget extends StatefulWidget {
   final DocumentSnapshot group;
+  final VoidCallback onTap; // 선택적으로 탭 이벤트 핸들러 추가
 
-  const GroupTileWidget({super.key, required this.group});
+  const GroupTileWidget({super.key, required this.group, required this.onTap});
 
   @override
   State<GroupTileWidget> createState() => _GroupTileWidgetState();
@@ -66,12 +69,27 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
       children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => GroupDetailPage(group: widget.group),
-              ),
-            );
+            widget.onTap(); // 탭 이벤트 핸들러 호출
+            final user = FirebaseAuth.instance.currentUser;
+            if (user != null && user.uid == widget.group["leader"]) {
+              // 그룹장이면 그룹 상세 페이지로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => GroupDetailPageOwner(group: widget.group),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => GroupDatailPageMember(group: widget.group),
+                ),
+              );
+            }
+            widget.onTap();
           },
           child: Container(
             width: double.infinity,

@@ -1,21 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 
-class GroupDetailPage extends StatefulWidget {
+class GroupDetailPageOwner extends StatefulWidget {
   final DocumentSnapshot? group;
   final String? groupId;
 
-  const GroupDetailPage({super.key, this.group, this.groupId});
+  const GroupDetailPageOwner({super.key, this.group, this.groupId});
 
   @override
-  State<GroupDetailPage> createState() => _GroupDetailPageState();
+  State<GroupDetailPageOwner> createState() => _GroupDetailPageOwnerState();
 }
 
-class _GroupDetailPageState extends State<GroupDetailPage> {
+class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Map<String, dynamic>? groupData;
   String groupId = '';
   List<Map> memberDetails = [];
@@ -97,7 +98,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
               .collection('groups')
               .doc(widget.groupId)
               .get();
-
+      groupId = widget.groupId!;
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
         data = docSnapshot!.data() as Map<String, dynamic>?;
@@ -247,7 +248,7 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      final result = await showModalBottomSheet(
+                      await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
                         barrierColor: Colors.transparent,
@@ -261,12 +262,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         },
                       );
 
-                      // 모달에서 반환된 값이 'refresh'라면 데이터 새로고침 등 원하는 동작 실행
-                      if (true) {
-                        setState(() {
-                          _loadGroupData();
-                        }); // 필요하다면 UI 갱신
-                      }
+                      setState(() {
+                        _loadGroupData();
+                      }); // 필요하다면 UI 갱신
                     },
                     child: DottedBorder(
                       options: RoundedRectDottedBorderOptions(
@@ -301,7 +299,75 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                   ),
                   SizedBox(height: 20),
                   TextButton(
-                    onPressed: () {}, // 그룹 삭제 로직 추가
+                    onPressed: () {
+                      // 그룹 삭제 로직 추가
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          //print(groupId);
+                          if (memberDetails.isNotEmpty) {
+                            return AlertDialog(
+                              title: Text("그룹 삭제"),
+                              content: Text("그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다."),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("확인"),
+                                ),
+                              ],
+                            );
+                          }
+                          return AlertDialog(
+                            title: Text("그룹 삭제"),
+                            content: Text("정말로 이 그룹을 삭제하시겠습니까?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("취소"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
+                                  print(groupId);
+                                  if (groupId.isEmpty) {}
+                                  if (user != null && groupId.isNotEmpty) {
+                                    // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
+                                    final userDocRef = FirebaseFirestore
+                                        .instance
+                                        .collection('users')
+                                        .doc(user.uid);
+
+                                    // groups 배열에서 groupId 삭제
+                                    await userDocRef.update({
+                                      'groups': FieldValue.arrayRemove([
+                                        groupId,
+                                      ]),
+                                    });
+                                  } else {
+                                    // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
+                                    print('로그인이 필요하거나 groupId가 잘못되었습니다.');
+                                  }
+                                  await FirebaseFirestore.instance
+                                      .collection('groups')
+                                      .doc(groupId)
+                                      .delete();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(
+                                    context,
+                                  ).pop(true); // 이전 페이지로 돌아가기
+                                },
+                                child: Text("삭제"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }, // 그룹 삭제 로직 추가
                     child: Text(
                       "그룹 삭제",
                       style: TextStyle(color: Colors.red, fontSize: 18),
