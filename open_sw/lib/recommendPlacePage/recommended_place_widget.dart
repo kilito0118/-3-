@@ -70,7 +70,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
             filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withAlpha(144),
+                color: Colors.white.withAlpha(200),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
