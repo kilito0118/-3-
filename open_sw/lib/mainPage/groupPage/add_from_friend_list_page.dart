@@ -68,7 +68,10 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                       friends =
                           friendDetails
                               .map(
-                                (detail) => Friend(name: detail['nickName']!),
+                                (detail) => Friend(
+                                  name: detail['nickName']!,
+                                  uid: detail['uid']!,
+                                ),
                               )
                               .toList();
                     });
@@ -149,7 +152,9 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                     margin: EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(
+                          name['uid']!.hashCode % 0xFFFFFF,
+                        ).withOpacity(1.0), // uid 해시값으로 색상 생성
                         child: Text(
                           name['nickName'] == null
                               ? "닉네임 없음"

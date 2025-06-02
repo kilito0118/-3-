@@ -16,8 +16,13 @@ class _FriendPageState extends State<FriendPage> {
 
   List<Friend> friends = [];
   List<Map<String, String>> friendDetails = [];
-  @override
-  initState() {
+  void onTap() {
+    setState(() {
+      beforeStart();
+    });
+  }
+
+  void beforeStart() {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
@@ -45,7 +50,10 @@ class _FriendPageState extends State<FriendPage> {
                       friends =
                           friendDetails
                               .map(
-                                (detail) => Friend(name: detail['nickName']!),
+                                (detail) => Friend(
+                                  name: detail['nickName']!,
+                                  uid: detail['uid']!,
+                                ),
                               )
                               .toList();
                     });
@@ -57,7 +65,11 @@ class _FriendPageState extends State<FriendPage> {
     } else {
       print('로그인된 사용자가 없습니다.');
     }
+  }
 
+  @override
+  initState() {
+    beforeStart(); // 친구 목록 초기화
     super.initState();
   }
 
@@ -208,13 +220,16 @@ class _FriendPageState extends State<FriendPage> {
               SizedBox(height: 10),
               // 친구 목록 출력 (friend_tile.dart에 자세한 코드 있음)
               friends.isEmpty
-                  ? FriendTile(friend: Friend(name: "팔로우가 없어요."))
+                  ? FriendTile(
+                    friend: Friend(name: "팔로우가 없어요.", uid: ''),
+                    onTap: () => onTap(),
+                  )
                   : Text(""),
               Expanded(
                 child: ListView.builder(
                   itemCount: friends.length,
                   itemBuilder: (context, index) {
-                    return FriendTile(friend: friends[index]);
+                    return FriendTile(friend: friends[index], onTap: onTap);
                   },
                 ),
               ),

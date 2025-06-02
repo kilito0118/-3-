@@ -1,15 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Friend {
   final String name;
+  final String uid;
 
-  Friend({required this.name});
+  Friend({required this.name, required this.uid});
 }
 
 class FriendTile extends StatelessWidget {
   final Friend friend;
+  final VoidCallback onTap;
 
-  const FriendTile({super.key, required this.friend});
+  const FriendTile({super.key, required this.friend, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +46,9 @@ class FriendTile extends StatelessWidget {
                             )
                           else
                             CircleAvatar(
-                              backgroundColor: Colors.black,
+                              backgroundColor: Color(
+                                friend.uid.hashCode % 0xFFFFFF,
+                              ).withOpacity(1.0), // 이름 해시값으로 색상 생성
                               child: Text(
                                 friend.name[0],
                                 style: TextStyle(
@@ -112,6 +118,7 @@ class FriendTile extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop(); // 그냥 닫기
+                                      onTap(); // 친구 목록 갱신
                                     },
                                   ),
                                   TextButton(
@@ -136,10 +143,48 @@ class FriendTile extends StatelessWidget {
                                       ),
                                     ),
                                     onPressed: () {
-                                      Navigator.of(context).pop(); // 닫기
+                                      final currentUser =
+                                          FirebaseAuth.instance.currentUser;
 
-                                      // 삭제 로직 추가
-                                      print('삭제');
+                                      if (currentUser != null) {
+                                        final currentUid = currentUser.uid;
+
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(currentUid)
+                                            .get()
+                                            .then((
+                                              DocumentSnapshot documentSnapshot,
+                                            ) {
+                                              if (documentSnapshot.exists) {
+                                                final data =
+                                                    documentSnapshot.data()
+                                                        as Map<String, dynamic>;
+                                                List<dynamic> friends =
+                                                    data['friends'] ?? [];
+                                                friends.remove(
+                                                  friend.uid,
+                                                ); // 친구 UID 제거
+                                                FirebaseFirestore.instance
+                                                    .collection('users')
+                                                    .doc(currentUid)
+                                                    .update({
+                                                      'friends': friends,
+                                                    });
+                                              } else {
+                                                print(
+                                                  'Document does not exist on the database',
+                                                );
+                                              }
+                                            })
+                                            .catchError((error) {
+                                              print(
+                                                'Error fetching document: $error',
+                                              );
+                                            });
+                                        Navigator.of(context).pop(); // 닫기
+                                        onTap();
+                                      }
                                     },
                                   ),
                                 ],
