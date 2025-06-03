@@ -15,3 +15,23 @@ Widget bottomNavigationBarSpacer(BuildContext context) {
 Widget spacingBox(){
   return SizedBox(height: 14, width: 14,);
 }
+
+Widget spacingBox_mini(){
+  return SizedBox(height: 6, width: 6,);
+}
+
+Widget spacingBox_devider(){
+  return Column(
+    children: [
+      spacingBox(),
+      Container(
+        width: double.infinity,
+        height: 1,
+        decoration: BoxDecoration(
+          color: Colors.black.withAlpha(40),
+        )
+      ),
+      spacingBox(),
+    ],
+  );
+}

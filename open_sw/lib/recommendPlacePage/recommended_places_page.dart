@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 // common_widgets 임포트
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
@@ -164,13 +166,56 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                 stopGesturesEnable: true,
               ),
             ),
+            Column(
+              children: [
+                topAppBarSpacer(context),
+                Center(
+                  child: Container(
+                    margin: EdgeInsets.all(14),
+                    clipBehavior: Clip.antiAlias,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(36),
+                          blurRadius: 8,
+                          offset: Offset(0, 0),
+                          spreadRadius: 0,
+                        )
+                      ]
+                    ),
+                    child: ClipRRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFFFFFF).withAlpha(160),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withAlpha(160),
+                              width: 1.2,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            '"${widget.posName}" 주변 장소들이에요',
+                            style: contentsNormal,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    height: 240,
+                    height: 340,
                     child: PageView.builder(
                         controller: _pageController,
                         itemCount: places.length,
@@ -180,11 +225,10 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                         }
                     ),
                   ),
-                  SizedBox(height: 32,),
-                  bottomNavigationBarSpacer(context),
                 ],
               ),
-            )
+            ),
+
           ],
         )
     );

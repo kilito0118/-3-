@@ -76,9 +76,7 @@ class _RecommendActPageState extends State<RecommendActPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 topAppBarSpacer(context),
-                Center(
-                  child: mainTitle('이런 활동, 어떠신가요?'),
-                ),
+                mainTitle('이런 활동, 어떠신가요?'),
                 spacingBox(),
                 subTitle('추천 활동'),
                 spacingBox(),

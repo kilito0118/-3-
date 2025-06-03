@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui';
 
@@ -27,6 +28,15 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
     setState(() {
       _scale = 1.0; // 원래 크기로 복원
     });
+    // 일정추가 창 띄우는 기능 만드는중
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withAlpha(80),
+      builder: (context) {
+        return Container();
+      }
+    );
   }
   void _addTapCancel() {
     setState(() {
@@ -49,183 +59,138 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
   Widget build(BuildContext context) {
     final _phone = widget.place['phone'] ?? '';
 
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x19000000),
-                blurRadius: 8,
-                offset: Offset(0, 0),
-                spreadRadius: 0,
-              )
-            ]
-        ),
-        margin: EdgeInsets.all(8),
-        child: ClipRRect(
-          child: BackdropFilter(
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(36),
+              blurRadius: 8,
+              offset: Offset(0, 0),
+              spreadRadius: 0,
+            )
+          ]
+      ),
+      margin: EdgeInsets.only(right: 7, left: 7, top: 24),
+      child: ClipRRect(
+        child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
             child: Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFFFFFFFF).withAlpha(160),
-                    Color(0xFFFF9933).withAlpha(160)
-                  ],
-                  begin: Alignment(0.0, 0.0),
-                  end: Alignment(2.0, 0.0),
-                ),
+                  color: Color(0xFFFFFFFF).withAlpha(160),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  border: Border.all(
+                      color: Colors.white.withAlpha(160),
+                      width: 1.2
+                  )
               ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 160,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.place['name'] ?? '',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
-                                softWrap: true,
-                                maxLines: null,
-                                overflow: TextOverflow.visible,
-                              ),
-                              Text(
-                                widget.place['address'] ?? '',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-
-                        GestureDetector(
-                          onTapDown: _addTapDown,
-                          onTapUp: _addTapUp,
-                          onTapCancel: _addTapCancel,
-                          child: AnimatedScale(
-                            scale: _scale,
-                            duration: const Duration(milliseconds: 400),
-                            curve: Curves.easeOutBack,
-                            child: Container(
-                                margin: EdgeInsets.only(top: 4),
-                                width: 100,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          const Color(0xFFFF9933), const Color(0xFFFF6600)
-                                        ],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Color(0x7FFF9933),
-                                        blurRadius: 10,
-                                        offset: Offset(0, 4),
-                                        spreadRadius: 0,
-                                      )
-                                    ]
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '일정에 등록',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16
-                                    ),
-                                  ),
-                                )
-                            ),
-                          ),
-                        ),
-
-                      ],
-                    ),
+                  Text(
+                    widget.place['name'] ?? '',
+                    style: contentsBig,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 1,
-                    decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(20)
-                    ),
+                  spacingBox_mini(),
+                  Text(
+                    widget.place['address'] ?? '',
+                    style: contentsDetail,
                   ),
+                  spacingBox(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(),
-
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            foregroundColor: _phone.isNotEmpty ? Color(0xFF52A658) : Colors.grey,
-                            padding: EdgeInsets.all(0),
-                            minimumSize: Size(144, 44)
-                        ),
-                        onPressed: () {
-                          if(_phone.isNotEmpty){
-                            _launchUrl('tel:$_phone');
-                          }
-                          else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('전화번호가 없습니다.')),
-                            );
-                          }
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('전화걸기', style: TextStyle(fontSize: 14),),
-                            SizedBox(width: 4,),
-                            Icon(Icons.add_call, size: 20,),
-                          ],
+                      Expanded(
+                        // 전화버튼
+                        child: TextButton(
+                          onPressed: () {
+                            if(_phone.isNotEmpty){
+                              _launchUrl('tel:$_phone');
+                            }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('전화번호가 없습니다.')),
+                              );
+                            }
+                          },
+                          style: _phone.isNotEmpty ?
+                          btn_normal(
+                            foregroundColor: Color(0xFF52A658),
+                            backgroundColor: Color(0xFF52A658).withAlpha(30)
+                          ) :
+                          btn_normal(
+                            foregroundColor: Colors.black.withAlpha(120),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          child: Text('전화걸기'),
                         ),
                       ),
-                      TextButton(
-                        style: TextButton.styleFrom(
+                      spacingBox(),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            final url = "https://place.map.kakao.com/${widget.place['id']}";
+                            _launchUrl(url);
+                          },
+                          style: btn_normal(
                             foregroundColor: Colors.black,
-                            padding: EdgeInsets.all(0),
-                            minimumSize: Size(144, 44)
-                        ),
-                        onPressed: () {
-                          final url = "https://place.map.kakao.com/${widget.place['id']}";
-                          _launchUrl(url);
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('지도에서 보기', style: TextStyle(fontSize: 14),),
-                            SizedBox(width: 4,),
-                            Icon(Icons.open_in_new, size: 20,),
-                          ],
-                        ),
+                            backgroundColor: Colors.black.withAlpha(15),
+                          ),
+                          child: Text('지도에서 보기'),
+                        )
                       ),
-                      SizedBox(),
                     ],
                   ),
+                  spacingBox_devider(),
+                  GestureDetector(
+                    onTapDown: _addTapDown,
+                    onTapUp: _addTapUp,
+                    onTapCancel: _addTapCancel,
+                    child: AnimatedScale(
+                      scale: _scale,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeOutBack,
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: themeGradient(),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x7FFF9933),
+                              blurRadius: 12,
+                              offset: Offset(0, 6),
+                              spreadRadius: 0
+                            )
+                          ]
+                        ),
+                        child: Text(
+                          '일정에 추가하기',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            height: 1.1,
+                            letterSpacing: 0.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+
                 ],
               ),
             )
-          ),
         ),
       ),
     );

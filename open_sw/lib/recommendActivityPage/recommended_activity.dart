@@ -17,7 +17,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 14),
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
