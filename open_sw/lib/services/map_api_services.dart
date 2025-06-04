@@ -90,7 +90,6 @@ Future<List<Map<String, String>>> findNearbyPlaces({
         'phone': doc['phone'] ?? '',
         'x': doc['x'] ?? '',
         'y': doc['y'] ?? '',
-        'distance': doc['distance'] ?? '',
       });
     }
 

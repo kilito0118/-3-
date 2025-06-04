@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/recommendPage/recommended_places_screen.dart';
 import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
 class RecommendedActivity extends StatefulWidget {
