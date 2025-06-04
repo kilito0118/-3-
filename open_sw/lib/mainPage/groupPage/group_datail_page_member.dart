@@ -318,6 +318,7 @@ class MemberSection extends StatelessWidget {
           itemBuilder: (context, index) {
             return MemberTile(
               name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]['uid'] ?? 'member_uid',
             );
           },
         ),
@@ -329,8 +330,8 @@ class MemberSection extends StatelessWidget {
 
 class MemberTile extends StatelessWidget {
   final String name;
-
-  const MemberTile({super.key, required this.name});
+  final String uid;
+  const MemberTile({super.key, required this.name, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +340,9 @@ class MemberTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: Colors.white,
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.black),
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+        ),
         title: Text(name),
       ),
     );
