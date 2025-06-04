@@ -68,7 +68,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(id).get();
+    await FirebaseFirestore.instance.collection('users').doc(id).get();
 
     if (nameSnapshot.exists) {
       if (type == 0) {
@@ -86,18 +86,18 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
       docSnapshot =
-          await FirebaseFirestore.instance
-              .collection('groups')
-              .doc(widget.group!.id)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.group!.id)
+          .get();
       groupId = widget.group!.id;
       data = docSnapshot!.data() as Map<String, dynamic>?;
     } else if (widget.groupId != null) {
       docSnapshot =
-          await FirebaseFirestore.instance
-              .collection('groups')
-              .doc(widget.groupId)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.groupId)
+          .get();
       groupId = widget.groupId!;
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
@@ -125,18 +125,18 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-        memberIds.map((uid) {
-          return FirebaseFirestore.instance.collection('users').doc(uid).get();
-        }).toList();
+    memberIds.map((uid) {
+      return FirebaseFirestore.instance.collection('users').doc(uid).get();
+    }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
-        snapshots.map((snapshot) {
-          if (snapshot.exists) {
-            return snapshot.data() as Map<String, dynamic>;
-          } else {
-            return {};
-          }
-        }).toList();
+    snapshots.map((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data() as Map<String, dynamic>;
+      } else {
+        return {};
+      }
+    }).toList();
 
     return memberDataList;
   }
@@ -185,9 +185,9 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                           context: context,
                           builder: (context) {
                             TextEditingController nameController =
-                                TextEditingController(
-                                  text: groupData!['groupName'] ?? "Group_name",
-                                );
+                            TextEditingController(
+                              text: groupData!['groupName'] ?? "Group_name",
+                            );
                             return AlertDialog(
                               title: Text("그룹 이름 편집"),
                               content: TextField(
@@ -241,19 +241,19 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               SizedBox(height: 10),
               data!["activities"].length > 0
                   ? ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    primary: false,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(bottom: 10),
-                    itemCount: data!["activities"].length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var activity = data!["activities"][index];
-                      return ActivityCard(
-                        date: activity['date'] ?? "00.00(화)",
-                        place: activity['place'] ?? "장소 이름",
-                      );
-                    },
-                  )
+                physics: NeverScrollableScrollPhysics(),
+                primary: false,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 10),
+                itemCount: data!["activities"].length,
+                itemBuilder: (BuildContext context, int index) {
+                  var activity = data!["activities"][index];
+                  return ActivityCard(
+                    date: activity['date'] ?? "00.00(화)",
+                    place: activity['place'] ?? "장소 이름",
+                  );
+                },
+              )
                   : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -276,16 +276,16 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
               memberDetails.isNotEmpty
                   ? MemberSection(
-                    title: "그룹원",
-                    members: memberDetails,
-                    groupId: groupId,
-                    onKickout:
-                        () => kickout(
-                          memberDetails[0]['uid'] ?? 'uid',
-                          groupId,
-                          memberDetails[0]['nickName'] ?? '그룹원 이름',
-                        ),
-                  )
+                title: "그룹원",
+                members: memberDetails,
+                groupId: groupId,
+                onKickout:
+                    () => kickout(
+                  memberDetails[0]['uid'] ?? 'uid',
+                  groupId,
+                  memberDetails[0]['nickName'] ?? '그룹원 이름',
+                ),
+              )
                   : Text(""),
 
               Column(
@@ -377,7 +377,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                 onPressed: () async {
                                   final user =
                                       FirebaseAuth.instance.currentUser;
-                                  print(groupId);
+
                                   if (groupId.isEmpty) {}
                                   if (user != null && groupId.isNotEmpty) {
                                     // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
@@ -428,7 +428,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: SearchButton(),
+          child: SearchButton(groupId: groupId),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -34,7 +35,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
-        await FirebaseFirestore.instance.collection('users').doc(id).get();
+    await FirebaseFirestore.instance.collection('users').doc(id).get();
 
     if (nameSnapshot.exists) {
       if (type == 0) {
@@ -55,10 +56,10 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       docSnapshot = widget.group;
     } else if (widget.groupId != null) {
       docSnapshot =
-          await FirebaseFirestore.instance
-              .collection('groups')
-              .doc(widget.groupId)
-              .get();
+      await FirebaseFirestore.instance
+          .collection('groups')
+          .doc(widget.groupId)
+          .get();
 
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
@@ -86,18 +87,18 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-        memberIds.map((uid) {
-          return FirebaseFirestore.instance.collection('users').doc(uid).get();
-        }).toList();
+    memberIds.map((uid) {
+      return FirebaseFirestore.instance.collection('users').doc(uid).get();
+    }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
-        snapshots.map((snapshot) {
-          if (snapshot.exists) {
-            return snapshot.data() as Map<String, dynamic>;
-          } else {
-            return {};
-          }
-        }).toList();
+    snapshots.map((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data() as Map<String, dynamic>;
+      } else {
+        return {};
+      }
+    }).toList();
 
     return memberDataList;
   }
@@ -158,19 +159,19 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
               SizedBox(height: 10),
               data!["activities"].length > 0
                   ? ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    primary: false,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(bottom: 10),
-                    itemCount: data!["activities"].length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var activity = data!["activities"][index];
-                      return ActivityCard(
-                        date: activity['date'] ?? "00.00(화)",
-                        place: activity['place'] ?? "장소 이름",
-                      );
-                    },
-                  )
+                physics: NeverScrollableScrollPhysics(),
+                primary: false,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 10),
+                itemCount: data!["activities"].length,
+                itemBuilder: (BuildContext context, int index) {
+                  var activity = data!["activities"][index];
+                  return ActivityCard(
+                    date: activity['date'] ?? "00.00(화)",
+                    place: activity['place'] ?? "장소 이름",
+                  );
+                },
+              )
                   : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -247,7 +248,32 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                   ),
                   SizedBox(height: 20),
                   TextButton(
-                    onPressed: () {}, // 그룹 나가기 로직 추가
+                    onPressed: () {
+                      final currentUserUid =
+                          FirebaseAuth.instance.currentUser?.uid;
+                      if (groupData != null && groupData!['members'] != null) {
+                        List<dynamic> members = List<dynamic>.from(
+                          groupData!['members'],
+                        );
+                        if (members.contains(currentUserUid)) {
+                          members.remove(currentUserUid);
+
+                          FirebaseFirestore.instance
+                              .collection('groups')
+                              .doc(widget.groupId)
+                              .update({'members': members});
+                        }
+                      }
+
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(currentUserUid)
+                          .update({
+                        'groups': FieldValue.arrayRemove([widget.groupId]),
+                      });
+
+                      Navigator.pop(context); // Optionally navigate back
+                    }, // 그룹 나가기 로직 추가
                     child: Text(
                       "그룹 나가기",
                       style: TextStyle(color: Colors.red, fontSize: 18),
@@ -264,7 +290,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: SearchButton(),
+          child: SearchButton(groupId: docSnapshot!.id),
         ),
       ),
     );
@@ -318,6 +344,7 @@ class MemberSection extends StatelessWidget {
           itemBuilder: (context, index) {
             return MemberTile(
               name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]['uid'] ?? 'member_uid',
             );
           },
         ),
@@ -329,8 +356,8 @@ class MemberSection extends StatelessWidget {
 
 class MemberTile extends StatelessWidget {
   final String name;
-
-  const MemberTile({super.key, required this.name});
+  final String uid;
+  const MemberTile({super.key, required this.name, required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -339,7 +366,9 @@ class MemberTile extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: Colors.white,
       child: ListTile(
-        leading: CircleAvatar(backgroundColor: Colors.black),
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+        ),
         title: Text(name),
       ),
     );
