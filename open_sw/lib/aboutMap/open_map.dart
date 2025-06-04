@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -58,3 +59,4 @@ Future<void> openNaverDirections({
     ).showSnackBar(SnackBar(content: Text('오류 발생: $e')));
   }
 }
+*/

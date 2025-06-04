@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/groupPage/group_page.dart';
 import 'package:open_sw/mypage/my_page.dart';
-import 'package:open_sw/recommendPage/recommended_places_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -108,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.contacts),
-                label: '친구목록',
+                label: '팔로우 목록',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.diversity_3),

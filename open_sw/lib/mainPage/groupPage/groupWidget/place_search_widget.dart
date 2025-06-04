@@ -7,10 +7,9 @@ class PlaceSearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Container(
+    return Column(
+      children: [
+        Container(
           width: 320,
           padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
           decoration: BoxDecoration(
@@ -67,7 +66,18 @@ class PlaceSearchWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
+        Flexible(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(),
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+            ),
+            onPressed: () => Navigator.pop(context),
+            child: Container(height: double.infinity),
+          ),
+        ),
+      ],
     );
   }
 }

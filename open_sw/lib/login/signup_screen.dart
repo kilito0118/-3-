@@ -65,17 +65,23 @@ class SignupScreenState extends State<SignupScreen> {
           );
 
           // 3. 성공 후 화면 전환
-          if (mounted) {
-            Navigator.pushReplacement(
-              // ignore: use_build_context_synchronously
-              context,
-              MaterialPageRoute(builder: (context) => QuestionsPage1()),
-            );
-          }
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => QuestionsPage1()),
+          );
         } on FirebaseAuthException catch (e) {
-          // 오류 처리
-          // ignore: avoid_print
-          print('Error: ${e.code}');
+          // 에러 메시지를 스낵바로 출력
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.code)));
+          debugPrint('Sign Up Error: ${e.code}');
+        } catch (e) {
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
         }
       }
     }

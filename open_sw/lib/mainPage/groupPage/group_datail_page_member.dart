@@ -1,47 +1,73 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 
-class GroupDetailPage extends StatefulWidget {
+class GroupDatailPageMember extends StatefulWidget {
   final DocumentSnapshot? group;
   final String? groupId;
 
-  const GroupDetailPage({super.key, this.group, this.groupId});
+  const GroupDatailPageMember({super.key, this.group, this.groupId});
 
   @override
-  State<GroupDetailPage> createState() => _GroupDetailPageState();
+  State<GroupDatailPageMember> createState() => _GroupDatailPageMemberState();
 }
 
-class _GroupDetailPageState extends State<GroupDetailPage> {
+class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Map<String, dynamic>? groupData;
   List<Map> memberDetails = [];
   bool isLoading = true;
+  Map<String, dynamic>? data;
+  DocumentSnapshot? docSnapshot;
 
+  String leaderName = '그룹장2 이름';
   @override
   void initState() {
     super.initState();
-    _loadGroupData();
+
+    setState(() {
+      _loadGroupData();
+    });
+  }
+
+  Future<void> getName(String id, int type) async {
+    DocumentSnapshot nameSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(id).get();
+
+    if (nameSnapshot.exists) {
+      if (type == 0) {
+        setState(() {
+          leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
+        });
+      } else {
+        setState(() {
+          leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
+        });
+      }
+    }
   }
 
   Future<void> _loadGroupData() async {
-    Map<String, dynamic>? data;
     if (widget.group != null && widget.group!.exists) {
       data = widget.group!.data() as Map<String, dynamic>?;
+      docSnapshot = widget.group;
     } else if (widget.groupId != null) {
-      final docSnapshot =
+      docSnapshot =
           await FirebaseFirestore.instance
               .collection('groups')
               .doc(widget.groupId)
               .get();
-      if (docSnapshot.exists) {
-        data = docSnapshot.data();
+
+      data = docSnapshot!.data() as Map<String, dynamic>?;
+      if (docSnapshot!.exists) {
+        data = docSnapshot!.data() as Map<String, dynamic>?;
       }
     }
     if (data != null) {
-      List<dynamic> members = data['members'] ?? [];
+      getName(data!["leader"], 0);
+      List<dynamic> members = data?['members'] ?? [];
       List<Map> details = await fetchMemberDetails(members);
       setState(() {
         groupData = data;
@@ -72,38 +98,21 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
             return {};
           }
         }).toList();
+
     return memberDataList;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    if (groupData == null || isLoading) {
       return Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: Text('데이터를 불러올 수 없습니다.')),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _loadGroupData, // 새로고침
+          child: Icon(Icons.refresh),
+        ),
       );
     }
-    if (groupData == null) {
-      return Scaffold(
-        backgroundColor: Colors.grey[200],
-        body: Center(child: Text('그룹 정보를 찾을 수 없습니다.')),
-      );
-    }
-    List<dynamic> members = groupData!['members'] ?? [];
-
-    // 그룹장/그룹원 분리 예시 (실제 로직에 맞게 수정 필요)
-    String leaderName =
-        memberDetails.isNotEmpty
-            ? (memberDetails[0]['name'] ?? 'member_name')
-            : 'member_name';
-    List<String> memberNames =
-        memberDetails.length > 1
-            ? memberDetails
-                .sublist(1)
-                .map((m) => m['name'] ?? 'member_name')
-                .cast<String>()
-                .toList()
-            : ['member_name'];
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -147,6 +156,22 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
+              data!["activities"].length > 0
+                  ? ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: data!["activities"].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var activity = data!["activities"][index];
+                      return ActivityCard(
+                        date: activity['date'] ?? "00.00(화)",
+                        place: activity['place'] ?? "장소 이름",
+                      );
+                    },
+                  )
+                  : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 primary: false,
@@ -154,14 +179,23 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                 padding: const EdgeInsets.only(bottom: 10),
                 itemCount: 0,
                 itemBuilder: (BuildContext context, int index) {
-                  return SizedBox.shrink();
+                  return ActivityCard(date: "00.00(화)", place: "장소 이름");
                 },
               ),
-              ActivityCard(date: "00.00(화)", place: "장소 이름"),
-              ActivityCard(date: "00.00(수)", place: "장소 이름"),
+
               SizedBox(height: 20),
-              MemberSection(title: "그룹장", members: [leaderName]),
-              MemberSection(title: "그룹원", members: memberNames),
+              MemberSection(
+                title: "그룹장",
+                members: [
+                  {'nickName': leaderName},
+                ],
+              ),
+
+              memberDetails.isNotEmpty
+                  ? MemberSection(title: "그룹원", members: memberDetails)
+                  : Text(""),
+
+              // MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
                   GestureDetector(
@@ -173,7 +207,9 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                         builder: (context) {
                           return SizedBox(
                             height: 200,
-                            child: FriendPlusAtGroupWidget(),
+                            child: FriendPlusAtGroupWidget(
+                              groupDocument: docSnapshot,
+                            ),
                           );
                         },
                       );
@@ -209,13 +245,26 @@ class _GroupDetailPageState extends State<GroupDetailPage> {
                       ),
                     ),
                   ),
-                  SearchButton(),
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {}, // 그룹 나가기 로직 추가
+                    child: Text(
+                      "그룹 나가기",
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                    ),
+                  ),
                   SizedBox(height: 10),
                 ],
               ),
               SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: SearchButton(),
         ),
       ),
     );
@@ -226,7 +275,7 @@ class ActivityCard extends StatelessWidget {
   final String date;
   final String place;
 
-  const ActivityCard({required this.date, required this.place});
+  const ActivityCard({super.key, required this.date, required this.place});
 
   @override
   Widget build(BuildContext context) {
@@ -252,9 +301,9 @@ class ActivityCard extends StatelessWidget {
 
 class MemberSection extends StatelessWidget {
   final String title;
-  final List<String> members;
+  final List<Map<dynamic, dynamic>> members;
 
-  const MemberSection({required this.title, required this.members});
+  const MemberSection({super.key, required this.title, required this.members});
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +311,16 @@ class MemberSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        ...members.map((name) => MemberTile(name: name)).toList(),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            return MemberTile(
+              name: members[index]['nickName'] ?? 'member_name',
+            );
+          },
+        ),
         SizedBox(height: 10),
       ],
     );
@@ -272,17 +330,17 @@ class MemberSection extends StatelessWidget {
 class MemberTile extends StatelessWidget {
   final String name;
 
-  const MemberTile({required this.name});
+  const MemberTile({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
       child: ListTile(
         leading: CircleAvatar(backgroundColor: Colors.black),
         title: Text(name),
-        trailing: Icon(Icons.more_vert),
       ),
     );
   }
