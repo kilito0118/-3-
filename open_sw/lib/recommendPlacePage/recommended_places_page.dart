@@ -170,40 +170,16 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
               children: [
                 topAppBarSpacer(context),
                 Center(
-                  child: Container(
-                    margin: EdgeInsets.all(14),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(36),
-                          blurRadius: 8,
-                          offset: Offset(0, 0),
-                          spreadRadius: 0,
-                        )
-                      ]
-                    ),
-                    child: ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF).withAlpha(160),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Colors.white.withAlpha(160),
-                              width: 1.2,
-                            ),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                          child: Text(
-                            textAlign: TextAlign.center,
-                            '"${widget.posName}" 주변 장소들이에요',
-                            style: contentsNormal,
-                          ),
-                        ),
+                  child: Padding(
+                    padding: EdgeInsets.all(14),
+                    child: BlurredBox(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        '"${widget.posName}" 주변 장소들이에요',
+                        style: contentsNormal,
                       ),
+                      topRad: 20,
+                      bottomRad: 20
                     ),
                   ),
                 )
