@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'dart:math';
 
 import 'package:open_sw/mainPage/home_screen.dart';
@@ -143,22 +146,40 @@ List<Map<String, dynamic>> createActivityListFromSet(Set<int> intSet) {
   return intSet.map((e) => {"activity": e, "like": 6.0, "count": 5}).toList();
 }
 
-Future<List<String>> updateLikes(List likes) async {
-  String uid = FirebaseAuth.instance.currentUser!.uid;
-  int number = await getCollectionCount("users") + 10000;
-  List<Map<String, dynamic>> data = createActivityListFromSet(
-    likes.toSet().cast<int>(),
-  );
-
-  final docSnapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .update({"likes": data, "number": number});
-
-  return [];
-}
-
 class _QuestionsPage2State extends State<QuestionsPage2> {
+  String result = '';
+  bool isLoading = false;
+
+  Future<void> sendJsonToFlask(Map<String, Object> data) async {
+    const url =
+        'http://43.203.239.150:8000/user/create'; // Flask 서버 주소 (필요시 수정)
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      // if (response.statusCode == 200) {
+      //   final json = jsonDecode(response.body);
+      //   setState(() {
+      //     result = "추천 활동: ${json['recommended_activities']}";
+      //   });
+      // } else {
+      //   setState(() {
+      //     result = '서버 응답 오류: ${response.statusCode}';
+      //   });
+      // }
+
+      if (response.statusCode != 200) {
+        print("오류 발생: ${response.statusCode}");
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   List<int> currentActivities = [];
   Set<int> selectedActivities = {};
 
@@ -166,6 +187,35 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
   void initState() {
     super.initState();
     _refreshActivities();
+  }
+
+  Future<List<String>> updateLikes(List likes) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    print("uid: $uid");
+    print("likes: $likes");
+    int number = await getCollectionCount("users") + 10046;
+    List<Map<String, dynamic>> data = createActivityListFromSet(
+      likes.toSet().cast<int>(),
+    );
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      "likes": data,
+      "number": number,
+    });
+
+    DocumentSnapshot docSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    Map<String, dynamic> userData = docSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data1 = {
+      "gender": userData["gender"] == "남" ? 1 : 2, // 1: 남자, 2: 여자
+      "age": userData["age"],
+      "liked_activities": likes,
+    };
+    debugPrint("Data1: $data1");
+    debugPrint("Likes: $likes");
+    sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+
+    return [];
   }
 
   void _refreshActivities() {

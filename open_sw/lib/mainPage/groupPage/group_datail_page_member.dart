@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -247,7 +248,32 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                   ),
                   SizedBox(height: 20),
                   TextButton(
-                    onPressed: () {}, // 그룹 나가기 로직 추가
+                    onPressed: () {
+                      final currentUserUid =
+                          FirebaseAuth.instance.currentUser?.uid;
+                      if (groupData != null && groupData!['members'] != null) {
+                        List<dynamic> members = List<dynamic>.from(
+                          groupData!['members'],
+                        );
+                        if (members.contains(currentUserUid)) {
+                          members.remove(currentUserUid);
+
+                          FirebaseFirestore.instance
+                              .collection('groups')
+                              .doc(widget.groupId)
+                              .update({'members': members});
+                        }
+                      }
+
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(currentUserUid)
+                          .update({
+                            'groups': FieldValue.arrayRemove([widget.groupId]),
+                          });
+
+                      Navigator.pop(context); // Optionally navigate back
+                    }, // 그룹 나가기 로직 추가
                     child: Text(
                       "그룹 나가기",
                       style: TextStyle(color: Colors.red, fontSize: 18),
@@ -264,7 +290,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: SearchButton(),
+          child: SearchButton(groupId: docSnapshot!.id),
         ),
       ),
     );

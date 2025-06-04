@@ -377,7 +377,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                 onPressed: () async {
                                   final user =
                                       FirebaseAuth.instance.currentUser;
-                                  print(groupId);
+
                                   if (groupId.isEmpty) {}
                                   if (user != null && groupId.isNotEmpty) {
                                     // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
@@ -428,7 +428,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: SearchButton(),
+          child: SearchButton(groupId: groupId),
         ),
       ),
     );

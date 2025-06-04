@@ -1,82 +1,121 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'recommended_activity.dart';
 
+//const String flaskUrl = 'http://127.0.0.1:5000/group/recommendations';
+// Flask 서버 주소 (필요시 수정)
+const String flaskUrl = 'http://43.203.239.150:8000/group/recommendations';
+
 class RecommendActPage extends StatefulWidget {
-  const RecommendActPage({super.key});
+  final List<int> rowNumbers;
+
+  const RecommendActPage({super.key, required this.rowNumbers});
 
   @override
   State<RecommendActPage> createState() => _RecommendActPageState();
 }
 
 class _RecommendActPageState extends State<RecommendActPage> {
+  List<dynamic> originalActivities = []; // 서버에서 받아온 전체 리스트
+  List<String> activityList = [];
+  bool isLoading = false;
 
-  // 임시 배열 (이 리스트에 추천 목록들을 전부 받아와야함)
-  final List<String> recommendedList = [
-    '활동 1',
-    '활동 2',
-    '활동 3',
-    '활동 4',
-    '활동 5',
-    '활동 6',
-    '활동 7',
-    '활동 8',
-    '활동 9',
-    '활동 10'
-  ];
-  
-  // 추천해줄 리스트
-  late List<String> reducedList;
-  
-  // 받아온 리스트에서 5개만 뽑아 추천해줄 리스트에 저장
-  List<T> RandList<T>(List<T> list, int count) {
-    if(count > list.length){
-      count = list.length;
-    }
-    List<T> copy = List.from(list);
-    copy.shuffle(Random());
-    return copy.sublist(0, count);
-  }
-  
-  // 시작시 리스트 추천 리스트 생성
   @override
   void initState() {
     super.initState();
-    reducedList = RandList(recommendedList, 5);
+    fetchRecommendationsFromServer();
   }
-  
-  // 새로고침 버튼을 누르면 다시 추천리슽트 생성
-  void refreshList() {
-    setState(() {
-      reducedList = RandList(recommendedList, 5);
+
+  // 가중치 기반 중복 없는 샘플링
+  List<T> _getUniqueWeightedSample<T>(List<T> items, int count) {
+    final random = Random();
+    final counts = <T, int>{};
+
+    for (var item in items) {
+      counts[item] = (counts[item] ?? 0) + 1;
+    }
+
+    final weightedList = <T>[];
+    counts.forEach((key, value) {
+      weightedList.addAll(List.filled(value, key));
     });
+
+    weightedList.shuffle(random);
+    final unique = <T>{};
+    final result = <T>[];
+
+    for (var item in weightedList) {
+      if (!unique.contains(item)) {
+        unique.add(item);
+        result.add(item);
+        if (result.length == count) break;
+      }
+    }
+
+    return result;
   }
-  
-  
+
+  // 최초 한 번만 Flask 서버에서 데이터 요청
+  Future<void> fetchRecommendationsFromServer() async {
+    setState(() => isLoading = true);
+
+    final requestData = {"row_numbers": widget.rowNumbers};
+    print(requestData);
+
+    try {
+      final response = await http.post(
+        Uri.parse(flaskUrl),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(requestData),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        originalActivities = data['recommended_activities'];
+
+        final sample = _getUniqueWeightedSample(originalActivities, 5);
+
+        setState(() {
+          activityList = sample.map((e) => e.toString()).toList();
+        });
+      } else {
+        print("요청 실패: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("오류 발생: $e");
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  // 새로고침 → 이미 받은 데이터로부터 다시 샘플링
+  void refreshList() {
+    if (originalActivities.isNotEmpty) {
+      final sample = _getUniqueWeightedSample(originalActivities, 5);
+      setState(() {
+        activityList = sample.map((e) => e.toString()).toList();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // 뒤로가기 버튼은 AppBar에 구현
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-              Icons.arrow_back,
-              color:Colors.black,
-              size: 32,
-          ),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 32),
         ),
       ),
       body: Container(
-        // 배경 테마 설정
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.only(left: 26, right: 26),
+        padding: const EdgeInsets.symmetric(horizontal: 26),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
@@ -84,52 +123,37 @@ class _RecommendActPageState extends State<RecommendActPage> {
             end: Alignment.bottomCenter,
           ),
         ),
-
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 80,),
-
-              // title
-              Text(
+              const SizedBox(height: 80),
+              const Text(
                 '이런 활동, 어떠신가요?',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 32,
-                ),
+                style: TextStyle(color: Colors.black, fontSize: 32),
               ),
-              SizedBox(height: 40,),
-
-              // 목록 출력
-              ...List.generate(reducedList.length, (index) {
-                return RecommendedActivity(activity: reducedList[index]);
-              }),
-              SizedBox(height: 10,),
-
-              // 새로 고침 버튼
+              const SizedBox(height: 40),
+              if (isLoading)
+                const CircularProgressIndicator()
+              else if (activityList.isEmpty)
+                const Text('추천 결과가 없습니다.')
+              else
+                ...activityList
+                    .map((activity) => RecommendedActivity(activity: activity))
+                    .toList(),
+              const SizedBox(height: 10),
               TextButton(
-                // 리스트 새로고침 함수
                 onPressed: refreshList,
                 style: TextButton.styleFrom(
-                    foregroundColor: Colors.grey[600],
-                    padding: EdgeInsets.all(0)
+                  foregroundColor: Colors.grey[600],
+                  padding: EdgeInsets.zero,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      '새로 고침',
-                      style: TextStyle(
-                          fontSize: 16
-                      ),
-                    ),
-                    SizedBox(width: 4,),
-                    Icon(
-                      Icons.refresh,
-                      size: 20,
-                    ),
+                  children: const [
+                    Text('새로 고침', style: TextStyle(fontSize: 16)),
+                    SizedBox(width: 4),
+                    Icon(Icons.refresh, size: 20),
                   ],
                 ),
               ),
@@ -137,7 +161,6 @@ class _RecommendActPageState extends State<RecommendActPage> {
           ),
         ),
       ),
-
     );
   }
 }
