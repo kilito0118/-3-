@@ -30,6 +30,8 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
           width: double.infinity,
           topRad: 20,
           alpha: 200,
+          horizontalPadding: 14.0,
+          verticalPadding: 0.0,
           child: Column(
             // mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,8 +39,11 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
               mainTitle('언제 모이나요?'),
               subTitle(widget.place['name'] ?? ''),
               spacingBox(),
-              subTitle('날짜 입력'),
+              subTitle('날짜 및 시간 입력'),
               spacingBox(),
+              Container(
+
+              ),
               SizedBox(
                 width: double.infinity,
                 child: TextButton(
@@ -78,7 +83,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                       )
                     ],
                   ),
-              spacingBox_devider(),
+              spacingBox(),
               SubmitButtonNormal(
                 text: '그룹 일정에 추가',
                 onTap: () {}

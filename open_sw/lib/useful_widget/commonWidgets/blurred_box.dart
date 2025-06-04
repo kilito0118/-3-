@@ -8,6 +8,8 @@ Widget BlurredBox({
   double? height,
   double topRad = 0.0,
   double bottomRad = 0.0,
+  double horizontalPadding = 20.0,
+  double verticalPadding = 16.0,
   int alpha = 160
 }) {
   return Container(
@@ -47,7 +49,7 @@ Widget BlurredBox({
               width: 1.2,
             )
           ),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
           child: child,
         ),
       ),

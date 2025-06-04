@@ -13,7 +13,7 @@ ButtonStyle btn_normal({
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(14)
     ),
-    textStyle: contentsDetail,
+    textStyle: contentsNormal,
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
