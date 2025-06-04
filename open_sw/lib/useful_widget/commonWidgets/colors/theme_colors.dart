@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+const Color themeOrange = Color(0xFFFF8C26);
+const Color themeLightOrange = Color(0xFFFF9933);
+const Color themeDeepOrange = Color(0xFFFF6600);
+
 LinearGradient themeGradient() {
   return const LinearGradient(
     colors: [
-      Color(0xFFFF9933),
-      Color(0xFFFF6600),
+      themeLightOrange,
+      themeDeepOrange
     ],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,

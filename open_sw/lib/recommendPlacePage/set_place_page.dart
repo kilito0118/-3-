@@ -94,8 +94,8 @@ class _SetPlacePageState extends State<SetPlacePage> {
                           child: Row(
                             children: [
                               Container(
-                                width: 24,
-                                height: 24,
+                                width: 24.0,
+                                height: 24.0,
                                 decoration: BoxDecoration(
                                     color: Colors.blueAccent,
                                     borderRadius: BorderRadius.circular(10)

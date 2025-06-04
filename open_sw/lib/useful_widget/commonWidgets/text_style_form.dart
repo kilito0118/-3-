@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 Widget mainTitle(String title){
   return Padding(
-    padding: EdgeInsets.only(left: 8, right: 8, top: 14),
+    padding: EdgeInsets.only(left: 6, right: 6, top: 14),
     child: Text(
       title,
       style: TextStyle(
@@ -44,14 +44,6 @@ const TextStyle contentsBig = TextStyle(
 
 const TextStyle contentsNormal = TextStyle(
   color: Colors.black,
-  fontSize: 16,
-  fontWeight: FontWeight.normal,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
-
-TextStyle contentsNormal_light = TextStyle(
-  color: Colors.black.withAlpha(140),
   fontSize: 16,
   fontWeight: FontWeight.normal,
   height: 1.1,

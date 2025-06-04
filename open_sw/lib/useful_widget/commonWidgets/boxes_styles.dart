@@ -56,3 +56,31 @@ Widget BlurredBox({
     ),
   );
 }
+
+Widget ContentsBox({
+  required Widget child,
+}) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+    ),
+    child: child,
+  );
+}
+
+Widget IconBox({
+  required IconData icon,
+  required Color color,
+}) {
+  return Container(
+    width: 28.0,
+    height: 28.0,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(14),
+    ),
+    child: Icon(icon, color: Colors.white, size: 16,),
+  );
+}
