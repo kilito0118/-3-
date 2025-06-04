@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/place_search_widget.dart';
+import 'package:open_sw/recommendActivityPage/recommend_act_page.dart';
 
 //void main() => runApp(MaterialApp(home: Scaffold(body: Center(child: SearchButton()))));
 
@@ -27,25 +28,11 @@ class SearchButton extends StatelessWidget {
         ),
         child: GestureDetector(
           onTap: () {
-            showModalBottomSheet(
-              context: context,
-              //backgroundColor: Colors.transparent,
-              //barrierColor: Colors.transparent,
-              useSafeArea: true,
-              isScrollControlled: true,
-
-              backgroundColor: Colors.transparent,
-              constraints: BoxConstraints(
-                minHeight: 300,
-                maxHeight: MediaQuery.of(context).size.height * 0.8,
-                maxWidth: 320,
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RecommendActPage(),
               ),
-              elevation: 800,
-
-              builder: (context) {
-                return PlaceSearchWidget(); // PlaceSearchWidget로 변경
-                // 원하는 위젯 추가
-              },
             );
           },
           child: Container(
