@@ -10,15 +10,16 @@ Future<void> registUsers(
 ) async {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   Map<String, dynamic> userData = {
+    "age": age,
     "createdAt": FieldValue.serverTimestamp(),
-    "nickName": nickName,
-    "uid": uid,
+    "email": email,
     "friends": [],
+    "gender": gender,
     "groups": [],
     "likes": [],
-    "email": email,
-    "age": age,
-    "gender": gender,
+    "nickName": nickName,
+    "number": -1,
+    "uid": uid,
   };
   try {
     await FirebaseFirestore.instance
