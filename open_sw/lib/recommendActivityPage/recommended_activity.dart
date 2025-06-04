@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/recommendPage/recommended_places_screen.dart';
+import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
 class RecommendedActivity extends StatefulWidget {
   final String activity;
@@ -16,18 +17,10 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 14),
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        shadows: [
-          BoxShadow(
-            color: Color(0x19000000),
-            blurRadius: 10,
-            offset: Offset(0, 0),
-            spreadRadius: 0,
-          ),
-        ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,8 +42,8 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                 context,
                 MaterialPageRoute(
                   builder:
-                      (context) => RecommendedPlacesScreen(
-                        activityName: widget.activity,
+                      (context) => SetPlacePage(
+                        activity: widget.activity,
                       ),
                 ),
               );

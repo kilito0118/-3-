@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/place_search_widget.dart';
 import 'package:open_sw/recommendActivityPage/recommend_act_page.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 //void main() => runApp(MaterialApp(home: Scaffold(body: Center(child: SearchButton()))));
 
@@ -29,6 +32,7 @@ class SearchButton extends StatelessWidget {
           ],
         ),
         child: GestureDetector(
+
           onTap: () async {
             /*
             showModalBottomSheet(
@@ -97,6 +101,7 @@ class SearchButton extends StatelessWidget {
             } catch (e) {
               print('Error fetching group data: $e');
             }
+
           },
           child: Container(
             decoration: BoxDecoration(
