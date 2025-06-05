@@ -17,6 +17,8 @@ class GroupDatailPageMember extends StatefulWidget {
 }
 
 class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
+  String groupId = '';
+
   Map<String, dynamic>? groupData;
   List<Map> memberDetails = [];
   bool isLoading = true;
@@ -35,7 +37,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(id).get();
+        await FirebaseFirestore.instance.collection('users').doc(id).get();
 
     if (nameSnapshot.exists) {
       if (type == 0) {
@@ -53,14 +55,15 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
       data = widget.group!.data() as Map<String, dynamic>?;
+      groupId = widget.group!.id;
       docSnapshot = widget.group;
     } else if (widget.groupId != null) {
       docSnapshot =
-      await FirebaseFirestore.instance
-          .collection('groups')
-          .doc(widget.groupId)
-          .get();
-
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.groupId)
+              .get();
+      groupId = widget.groupId!;
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
         data = docSnapshot!.data() as Map<String, dynamic>?;
@@ -87,18 +90,18 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-    memberIds.map((uid) {
-      return FirebaseFirestore.instance.collection('users').doc(uid).get();
-    }).toList();
+        memberIds.map((uid) {
+          return FirebaseFirestore.instance.collection('users').doc(uid).get();
+        }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
-    snapshots.map((snapshot) {
-      if (snapshot.exists) {
-        return snapshot.data() as Map<String, dynamic>;
-      } else {
-        return {};
-      }
-    }).toList();
+        snapshots.map((snapshot) {
+          if (snapshot.exists) {
+            return snapshot.data() as Map<String, dynamic>;
+          } else {
+            return {};
+          }
+        }).toList();
 
     return memberDataList;
   }
@@ -159,19 +162,19 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
               SizedBox(height: 10),
               data!["activities"].length > 0
                   ? ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 10),
-                itemCount: data!["activities"].length,
-                itemBuilder: (BuildContext context, int index) {
-                  var activity = data!["activities"][index];
-                  return ActivityCard(
-                    date: activity['date'] ?? "00.00(화)",
-                    place: activity['place'] ?? "장소 이름",
-                  );
-                },
-              )
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: data!["activities"].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var activity = data!["activities"][index];
+                      return ActivityCard(
+                        date: activity['date'] ?? "00.00(화)",
+                        place: activity['place'] ?? "장소 이름",
+                      );
+                    },
+                  )
                   : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -251,16 +254,18 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                     onPressed: () {
                       final currentUserUid =
                           FirebaseAuth.instance.currentUser?.uid;
+                      print(currentUserUid);
                       if (groupData != null && groupData!['members'] != null) {
                         List<dynamic> members = List<dynamic>.from(
                           groupData!['members'],
                         );
                         if (members.contains(currentUserUid)) {
                           members.remove(currentUserUid);
-
+                          print(members);
+                          print(groupId);
                           FirebaseFirestore.instance
                               .collection('groups')
-                              .doc(widget.groupId)
+                              .doc(groupId)
                               .update({'members': members});
                         }
                       }
@@ -269,8 +274,8 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                           .collection('users')
                           .doc(currentUserUid)
                           .update({
-                        'groups': FieldValue.arrayRemove([widget.groupId]),
-                      });
+                            'groups': FieldValue.arrayRemove([groupId]),
+                          });
 
                       Navigator.pop(context); // Optionally navigate back
                     }, // 그룹 나가기 로직 추가

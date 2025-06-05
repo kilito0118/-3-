@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/login/login_screen.dart';
 
 import 'recent_activity.dart';
 
@@ -18,39 +21,119 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+  DocumentSnapshot? userInfo;
+  List<dynamic> recentActivities = [];
+  Map<String, dynamic>? userData;
+
+  Future<void> loadActivities() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+
+      if (doc.exists) {
+        userData = doc.data() as Map<String, dynamic>;
+        if (userData != null) {
+          if (userData!.containsKey('activities')) {
+            recentActivities = (userData!['activities'] as List<dynamic>);
+          } else {
+            userData!['activities'] = [];
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .update({'activities': []});
+          }
+        }
+      }
+      setState(() {});
+    } on FirebaseException catch (e) {
+      debugPrint('Firestore Error: ${e.code}');
+    }
+  }
+
+  Future<void> _loadUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    try {
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
+
+      setState(() {
+        userInfo = doc;
+      });
+      // ignore: unused_catch_clause
+    } on FirebaseException catch (e) {
+      //print('Firestore Error: ${e.code}');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
   //final String userName = '장영우';
   //final int userAge = 22;
   //final Gender userGender = Gender.male;
 
   // 임시 최근활동 내역입니다
+  /*
   final List<Activity> recentActivities = [
     Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
     Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
     Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
     Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
     Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: const EdgeInsets.only(top: 80, left: 26, right: 26),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
-        child: SingleChildScrollView(
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: 40, left: 26, right: 26),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // 사용자 정보
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    child: Text("로그아웃"),
+                    onTap: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
+                ],
+              ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
