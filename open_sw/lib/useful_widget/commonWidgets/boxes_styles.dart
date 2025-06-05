@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'common_widgets.dart';
 
 Widget BlurredBox({
   required Widget child,
@@ -10,7 +9,7 @@ Widget BlurredBox({
   double bottomRad = 0.0,
   double horizontalPadding = 20.0,
   double verticalPadding = 16.0,
-  int alpha = 160
+  int alpha = 180
 }) {
   return Container(
     clipBehavior: Clip.antiAlias,
@@ -45,7 +44,7 @@ Widget BlurredBox({
               bottomRight: Radius.circular(bottomRad),
             ),
             border: Border.all(
-              color: Colors.white.withAlpha(160),
+              color: Colors.white.withAlpha(alpha),
               width: 1.2,
             )
           ),
@@ -61,26 +60,12 @@ Widget ContentsBox({
   required Widget child,
 }) {
   return Container(
+    clipBehavior: Clip.antiAlias,
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),
     ),
     child: child,
-  );
-}
-
-Widget IconBox({
-  required IconData icon,
-  required Color color,
-}) {
-  return Container(
-    width: 28.0,
-    height: 28.0,
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(14),
-    ),
-    child: Icon(icon, color: Colors.white, size: 16,),
   );
 }

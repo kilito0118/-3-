@@ -18,8 +18,6 @@ class RecommendedPlaceWidget extends StatefulWidget {
 }
 
 class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
-  DateTime _selectedDate = DateTime.now();
-
   // 링크 열기
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
@@ -32,13 +30,14 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
 
   // 일정 선택 및 추가 창
   void openTimeSelectScreen() {
+    DateTime now = DateTime.now();
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withAlpha(40),
       builder: (context) {
         return DateSelectorModal(
-          selectedDate: _selectedDate,
+          selectedDate: now.add(Duration(hours: 1)),
           place: widget.place,
         );
       },
@@ -84,7 +83,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                       }
                     },
                     style: _phone.isNotEmpty ?
-                    btn_normal(themeColor: Color(0xFF52A658),) :
+                    btn_normal(themeColor: themeGreen) :
                     btn_normal(themeColor: Colors.grey),
                     child: Text('전화걸기'),
                   ),

@@ -23,7 +23,7 @@ ButtonStyle btn_normal({
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(14)
     ),
-    textStyle: contentsNormal,
+    textStyle: contentsNormal(),
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -76,11 +76,11 @@ class _SubmitButtonNormalState extends State<SubmitButtonNormal> {
           decoration: BoxDecoration(
             gradient: themeGradient(),
             borderRadius: BorderRadius.circular(14),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color(0x7FFF9933),
-                blurRadius: 12,
-                offset: Offset(0, 6),
+                color: themeLightOrange.withAlpha(140),
+                blurRadius: 10,
+                offset: Offset(0, 8),
                 spreadRadius: 0,
               ),
             ],
@@ -104,7 +104,7 @@ class _SubmitButtonNormalState extends State<SubmitButtonNormal> {
 // async 지원 버튼
 class SubmitButtonBig extends StatefulWidget {
   final String text;
-  final VoidCallback onTap;
+  final Future<void> Function() onTap;
 
   const SubmitButtonBig({
     super.key,
@@ -122,9 +122,9 @@ class _SubmitButtonBigState extends State<SubmitButtonBig> {
   void _onTapDown(TapDownDetails details) {
     setState(() => _scale = 0.95);
   }
-  void _onTapUp(TapUpDetails details) {
+  Future<void> _onTapUp(TapUpDetails details) async {
     setState(() => _scale = 1.0);
-    widget.onTap();
+    await widget.onTap();
   }
   void _onTapCancel() {
     setState(() => _scale = 1.0);
@@ -146,12 +146,12 @@ class _SubmitButtonBigState extends State<SubmitButtonBig> {
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: themeGradient(),
-            borderRadius: BorderRadius.circular(14),
-            boxShadow: const [
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
               BoxShadow(
-                color: Color(0x7FFF9933),
-                blurRadius: 12,
-                offset: Offset(0, 6),
+                color: themeLightOrange.withAlpha(140),
+                blurRadius: 10,
+                offset: Offset(0, 8),
                 spreadRadius: 0,
               ),
             ],

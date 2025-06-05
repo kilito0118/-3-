@@ -89,7 +89,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               alignment: Alignment.centerLeft,
-                              textStyle: contentsNormal
+                              textStyle: contentsNormal()
                           ),
                           child: Row(
                             children: [

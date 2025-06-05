@@ -176,7 +176,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                       child: Text(
                         textAlign: TextAlign.center,
                         '"${widget.posName}" 주변 장소들이에요',
-                        style: contentsNormal,
+                        style: contentsNormal(),
                       ),
                       topRad: 20,
                       bottomRad: 20

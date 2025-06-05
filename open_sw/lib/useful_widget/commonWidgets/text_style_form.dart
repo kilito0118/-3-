@@ -36,19 +36,21 @@ Widget subTitle(String title){
 
 const TextStyle contentsBig = TextStyle(
   color: Colors.black,
-  fontSize: 28,
-  fontWeight: FontWeight.normal,
+  fontSize: 26,
+  fontWeight: FontWeight.bold,
   height: 1.1,
   letterSpacing: 0.0,
 );
 
-const TextStyle contentsNormal = TextStyle(
-  color: Colors.black,
-  fontSize: 16,
-  fontWeight: FontWeight.normal,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
+TextStyle contentsNormal({Color color = Colors.black}){
+  return TextStyle(
+    color: color,
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
 
 TextStyle contentsDetail = TextStyle(
   color: Colors.black.withAlpha(140),
