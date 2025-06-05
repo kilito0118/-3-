@@ -206,9 +206,14 @@ class _MyPageState extends State<MyPage> {
                     ),
                     SizedBox(height: 10),
                     // 최근 활동 목록 출력
-                    ...List.generate(recentActivities.length, (index) {
-                      return ActivityBox(recentAct: recentActivities[index]);
-                    }),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: recentActivities.length,
+                      itemBuilder: (context, index) {
+                        return ActivityBox(recentAct: recentActivities[index]);
+                      },
+                    ),
                   ],
                 ),
               ),
