@@ -181,8 +181,7 @@ class _FriendPageState extends State<FriendPage> {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        //backgroundColor: Colors.transparent,
-                        //barrierColor: Colors.transparent,
+
                         useSafeArea: true,
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,

@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Activity {
   final String type;
-  final String placeName;
+  final Map<String, String> place;
   final String date;
   final String groupId;
   final int score; //1~9?
@@ -10,7 +11,7 @@ class Activity {
 
   Activity({
     required this.type,
-    required this.placeName,
+    required this.place,
     required this.date,
     required this.groupId,
     required this.score,
@@ -20,8 +21,9 @@ class Activity {
 
 class ActivityBox extends StatefulWidget {
   final Activity recentAct;
+  final String actId; // 그룹 ID가 필요할 경우 추가
 
-  const ActivityBox({super.key, required this.recentAct});
+  const ActivityBox({super.key, required this.recentAct, required this.actId});
 
   @override
   State<ActivityBox> createState() => _ActivityBoxState();
@@ -38,6 +40,13 @@ class _ActivityBoxState extends State<ActivityBox> {
       if (liked) {
         disliked = false;
       }
+      // actId를 사용하여 Firebase에서 score를 변경
+      if (widget.actId != null) {
+        FirebaseFirestore.instance
+            .collection('activities')
+            .doc(widget.actId)
+            .update({'score': 7});
+      }
     });
   }
 
@@ -48,7 +57,23 @@ class _ActivityBoxState extends State<ActivityBox> {
       if (disliked) {
         liked = false;
       }
+      if (widget.actId != null) {
+        FirebaseFirestore.instance
+            .collection('activities')
+            .doc(widget.actId)
+            .update({'score': 1});
+      }
     });
+  }
+
+  @override
+  void initState() {
+    if (widget.recentAct.score > 4) {
+      like();
+    } else if (widget.recentAct.score < 4) {
+      dislike();
+    }
+    super.initState();
   }
 
   @override
@@ -103,7 +128,7 @@ class _ActivityBoxState extends State<ActivityBox> {
                 ),
                 // 활동 장소
                 Text(
-                  widget.recentAct.placeName,
+                  widget.recentAct.place['name'] ?? "장소 정보 없음",
                   style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
               ],

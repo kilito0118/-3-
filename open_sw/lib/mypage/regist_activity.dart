@@ -8,7 +8,8 @@ Future<String> registActivity(Activity act) async {
     "createdAt": FieldValue.serverTimestamp(),
     "date": act.date,
     "groupId": act.groupId,
-    "placeName": act.placeName,
+    //"placeName": act.placeName,//받아온 활동
+    "place": act.place,
     "score": act.score,
     "type": act.type,
     "userId": uid,
