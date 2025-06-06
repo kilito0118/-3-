@@ -48,7 +48,7 @@ PreferredSizeWidget searchAppBar({
                       child: TextField(
                         cursorColor: Colors.orangeAccent,
                         controller: controller,
-                        style: contentsNormal,
+                        style: contentsNormal(),
                         decoration: const InputDecoration(
                           hintText: '모일 장소를 알려주세요',
                           border: InputBorder.none,

@@ -3,6 +3,7 @@ import 'package:open_sw/main.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui';
+import 'date_selector_modal.dart';
 
 class RecommendedPlaceWidget extends StatefulWidget {
   final Map<String, String> place;
@@ -17,81 +18,7 @@ class RecommendedPlaceWidget extends StatefulWidget {
 }
 
 class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
-  double _scale = 1.0;
-
-  void openTimeSelect() {
-    // 일정추가 창 띄우는 기능 만드는중
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withAlpha(40),
-      builder: (context) {
-        return BlurredBox(
-          width: double.infinity,
-          topRad: 20,
-          alpha: 200,
-          child: Column(
-            // mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              mainTitle('언제 모이나요?'),
-              subTitle(widget.place['name'] ?? ''),
-              spacingBox(),
-              subTitle('날짜 입력'),
-              spacingBox(),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton(
-                  onPressed: () {},
-                  style: btn_normal(
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.black.withAlpha(15)
-                  ),
-                  child: Text('2000년 00월 00일'),
-                ),
-              ),
-              spacingBox(),
-              subTitle('시간 입력'),
-              spacingBox(),
-              Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {},
-                          style: btn_normal(
-                              foregroundColor: Colors.black,
-                              backgroundColor: Colors.black.withAlpha(15)
-                          ),
-                          child: Text('00 시'),
-                        ),
-                      ),
-                      spacingBox(),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {},
-                          style: btn_normal(
-                              foregroundColor: Colors.black,
-                              backgroundColor: Colors.black.withAlpha(15)
-                          ),
-                          child: Text('00 분'),
-                        ),
-                      )
-                    ],
-                  ),
-              spacingBox_devider(),
-              SubmitButtonNormal(
-                text: '그룹 일정에 추가',
-                onTap: () {}
-              ),
-              bottomNavigationBarSpacer(context),
-            ],
-          )
-        );
-      }
-    );
-  }
-
-  /// 링크 열기
+  // 링크 열기
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -100,6 +27,23 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('링크를 열 수 없습니다')));
     }
   }
+
+  // 일정 선택 및 추가 창
+  void openTimeSelectScreen() {
+    DateTime now = DateTime.now();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withAlpha(40),
+      builder: (context) {
+        return DateSelectorModal(
+          selectedDate: now.add(Duration(days: 1)),
+          place: widget.place,
+        );
+      },
+    );
+  }
+
 
 
   @override
@@ -139,14 +83,8 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                       }
                     },
                     style: _phone.isNotEmpty ?
-                    btn_normal(
-                        foregroundColor: Color(0xFF52A658),
-                        backgroundColor: Color(0xFF52A658).withAlpha(30)
-                    ) :
-                    btn_normal(
-                      foregroundColor: Colors.black.withAlpha(120),
-                      backgroundColor: Colors.transparent,
-                    ),
+                    btn_normal(themeColor: themeGreen) :
+                    btn_normal(themeColor: Colors.grey),
                     child: Text('전화걸기'),
                   ),
                 ),
@@ -157,10 +95,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                         final url = "https://place.map.kakao.com/${widget.place['id']}";
                         _launchUrl(url);
                       },
-                      style: btn_normal(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.black.withAlpha(15),
-                      ),
+                      style: btn_normal(),
                       child: Text('지도에서 보기'),
                     )
                 ),
@@ -169,7 +104,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
             spacingBox_devider(),
             SubmitButtonNormal(
               text: '그룹 일정에 추가하기',
-              onTap: openTimeSelect,
+              onTap: openTimeSelectScreen,
             ),
           ],
         ),

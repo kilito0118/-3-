@@ -89,13 +89,13 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               alignment: Alignment.centerLeft,
-                              textStyle: contentsNormal
+                              textStyle: contentsNormal()
                           ),
                           child: Row(
                             children: [
                               Container(
-                                width: 24,
-                                height: 24,
+                                width: 24.0,
+                                height: 24.0,
                                 decoration: BoxDecoration(
                                     color: Colors.blueAccent,
                                     borderRadius: BorderRadius.circular(10)

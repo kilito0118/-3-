@@ -3,9 +3,19 @@ import 'text_style_form.dart';
 import 'colors/theme_colors.dart';
 
 ButtonStyle btn_normal({
-  Color? foregroundColor,
-  Color? backgroundColor,
+  Color? themeColor,
 }){
+  Color foregroundColor;
+  Color backgroundColor;
+
+  if (themeColor == null){
+    foregroundColor = Colors.black;
+    backgroundColor = Colors.black.withAlpha(20);
+  }
+  else{
+    foregroundColor = themeColor;
+    backgroundColor = themeColor.withAlpha(40);
+  }
   return TextButton.styleFrom(
     foregroundColor: foregroundColor ?? Colors.black,
     backgroundColor: backgroundColor ?? Colors.white,
@@ -13,13 +23,14 @@ ButtonStyle btn_normal({
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(14)
     ),
-    textStyle: contentsDetail,
+    textStyle: contentsNormal(),
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
   );
 }
 
+// 일반 버튼
 class SubmitButtonNormal extends StatefulWidget {
   final String text;
   final VoidCallback onTap;
@@ -65,11 +76,82 @@ class _SubmitButtonNormalState extends State<SubmitButtonNormal> {
           decoration: BoxDecoration(
             gradient: themeGradient(),
             borderRadius: BorderRadius.circular(14),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color(0x7FFF9933),
-                blurRadius: 12,
-                offset: Offset(0, 6),
+                color: themeLightOrange.withAlpha(140),
+                blurRadius: 10,
+                offset: Offset(0, 8),
+                spreadRadius: 0,
+              ),
+            ],
+          ),
+          child: Text(
+            widget.text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              height: 1.1,
+              letterSpacing: 0.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// async 지원 버튼
+class SubmitButtonBig extends StatefulWidget {
+  final String text;
+  final Future<void> Function() onTap;
+
+  const SubmitButtonBig({
+    super.key,
+    required this.text,
+    required this.onTap,
+  });
+
+  @override
+  State<SubmitButtonBig> createState() => _SubmitButtonBigState();
+}
+
+class _SubmitButtonBigState extends State<SubmitButtonBig> {
+  // 눌렀을때 효과
+  double _scale = 1.0;
+  void _onTapDown(TapDownDetails details) {
+    setState(() => _scale = 0.95);
+  }
+  Future<void> _onTapUp(TapUpDetails details) async {
+    setState(() => _scale = 1.0);
+    await widget.onTap();
+  }
+  void _onTapCancel() {
+    setState(() => _scale = 1.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      onTapCancel: _onTapCancel,
+      child: AnimatedScale(
+        scale: _scale,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutBack,
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: themeGradient(),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: themeLightOrange.withAlpha(140),
+                blurRadius: 10,
+                offset: Offset(0, 8),
                 spreadRadius: 0,
               ),
             ],
