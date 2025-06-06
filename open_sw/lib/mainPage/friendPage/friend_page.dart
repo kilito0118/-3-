@@ -83,6 +83,7 @@ class _FriendPageState extends State<FriendPage> {
     final userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     Map<String, dynamic>? userData =
+        userSnapshot.data() as Map<String, dynamic>;
 
     if (email == userData!['email']) {
       return null; // 현재 로그인한 사용자의 uid 반환
