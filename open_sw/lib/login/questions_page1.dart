@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/questions_page2.dart';
 
@@ -29,6 +31,25 @@ class QuestionsPage1State extends State<QuestionsPage1> {
     (71, 79, '7'),
     (80, 91, '8'),
   ];
+
+  List<int> getRandomValuesInRange((int, int, String) range, int count) {
+    final random = Random();
+    final start = range.$1;
+    final end = range.$2;
+
+    if (end - start + 1 < count) {
+      throw ArgumentError(
+        'Range is too small to generate $count unique values.',
+      );
+    }
+
+    final values = <int>{};
+    while (values.length < count) {
+      values.add(random.nextInt(end - start + 1) + start);
+    }
+
+    return values.toList();
+  }
 
   Set<int> selectedIndexes = {};
   List<int> selectedActivityNumbers = [];

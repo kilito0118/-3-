@@ -20,12 +20,13 @@ Future<String?> registUsers(
     "groups": [],
     "likes": [],
     "nickName": nickName,
-    "uid": uid,
+    "uid": isManualAdd ? null : uid,
   };
   if (isManualAdd) {
     DocumentReference docRef = await FirebaseFirestore.instance
         .collection('tempUsers')
         .add(userData);
+    await docRef.update({"uid": docRef.id});
     String uid = docRef.id;
     return uid;
   }
