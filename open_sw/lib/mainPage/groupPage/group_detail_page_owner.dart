@@ -36,16 +36,22 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
   void kickout(String uid, String groupId, String name) async {
     // 1. 비동기 작업 먼저 처리
+
     await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
       'members': FieldValue.arrayRemove([uid]),
     });
     DocumentSnapshot userSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    Map<String, dynamic>? userData =
-        userSnapshot.data() as Map<String, dynamic>?;
-    if (userData!["email"] == null) {
-      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+
+    if (userSnapshot.exists == false) {
+      await FirebaseFirestore.instance
+          .collection('tempUsers')
+          .doc(uid)
+          .delete();
     } else {
+      Map<String, dynamic> userData =
+          userSnapshot.data() as Map<String, dynamic>;
+
       try {
         await FirebaseFirestore.instance.collection('users').doc(uid).update({
           'groups': FieldValue.arrayRemove([groupId]),
@@ -131,8 +137,22 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-        memberIds.map((uid) {
-          return FirebaseFirestore.instance.collection('users').doc(uid).get();
+        memberIds.map((uid) async {
+          final k =
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .get();
+
+          if (k.exists) {
+            print(k);
+            return k;
+          } else {
+            return FirebaseFirestore.instance
+                .collection('tempUsers')
+                .doc(uid)
+                .get();
+          }
         }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
@@ -143,7 +163,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
             return {};
           }
         }).toList();
-
+    print(memberDataList);
     return memberDataList;
   }
 
@@ -493,12 +513,14 @@ class MemberSection extends StatelessWidget {
               name: members[index]['nickName'] ?? 'member_name',
               uid: members[index]['uid'] ?? 'member_uid',
               groupId: groupId,
-              onKickout:
-                  () => onKickout(
-                    members[index]['uid'] ?? 'member_uid',
-                    groupId,
-                    members[index]['nickName'] ?? 'member_name',
-                  ),
+              onKickout: () {
+                //print("닉네임은 : ${members.length}");
+                onKickout(
+                  members[index]['uid'] ?? 'member_uid',
+                  groupId,
+                  members[index]['nickName'] ?? 'member_name',
+                );
+              },
             );
           },
         ),
@@ -563,7 +585,7 @@ class OwnerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(members);
+    //print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

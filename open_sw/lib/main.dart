@@ -7,6 +7,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:open_sw/mainPage/home_screen.dart';
 import 'firebase_options.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 final RouteObserver<ModalRoute<void>> routeObserver =
     RouteObserver<ModalRoute<void>>();
@@ -43,6 +44,15 @@ class MyApp extends StatelessWidget {
 
     //var baseStyle = TextStyle(fontFamily: '힘찬체', color: Colors.black);
     return MaterialApp(
+      locale: Locale('ko', 'KR'), // 한국어로 고정
+      supportedLocales: [
+        Locale('ko', 'KR'), // 지원하는 언어에 한국어만 추가
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       /*
       theme: ThemeData(
         fontFamily: '힘찬체',

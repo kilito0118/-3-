@@ -90,8 +90,21 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-        memberIds.map((uid) {
-          return FirebaseFirestore.instance.collection('users').doc(uid).get();
+        memberIds.map((uid) async {
+          final k =
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .get();
+
+          if (k.exists) {
+            return k;
+          } else {
+            return FirebaseFirestore.instance
+                .collection('tempUsers')
+                .doc(uid)
+                .get();
+          }
         }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
@@ -102,7 +115,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
             return {};
           }
         }).toList();
-
+    print(memberDataList);
     return memberDataList;
   }
 

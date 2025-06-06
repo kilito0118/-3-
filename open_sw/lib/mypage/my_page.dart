@@ -59,10 +59,31 @@ class _MyPageState extends State<MyPage> {
                     .collection('activities')
                     .doc(activityId)
                     .get();
+
             if (activityDoc.exists) {
-              recentActivities.add(activityDoc.data() as Map<String, dynamic>);
+              final activityData = activityDoc.data() as Map<String, dynamic>;
               //이거까지 하면 recentActivities에 Map<String, dynamic> 형태로 저장됩니다
               //여기서 Activity 형태로 변환
+              recentActivities.add(
+                Activity(
+                  type: activityData['type'] ?? '활동 이름',
+                  place: (activityData['place'] as Map<String, dynamic>)
+                      .map<String, String>(
+                        (key, value) => MapEntry(key, value.toString()),
+                      ),
+                  date:
+                      activityData['date'] != null &&
+                              activityData['date'] is Timestamp
+                          ? (activityData['date'] as Timestamp)
+                              .toDate()
+                              .toString()
+                          : '날짜 없음',
+                  groupId: activityData['groupId'] ?? '그룹 ID 없음',
+                  score: activityData['score'] ?? 0,
+                  userId: activityData['userId'] ?? '사용자 ID 없음',
+                ),
+              );
+              /*
               recentActivities =
                   recentActivities.map((data) {
                     return Activity(
@@ -83,7 +104,7 @@ class _MyPageState extends State<MyPage> {
                       score: data['score'] ?? 0,
                       userId: data['userId'] ?? '사용자 ID 없음',
                     );
-                  }).toList();
+                  }).toList();*/
             }
           }
           debugPrint('Recent Activities: $recentActivities');

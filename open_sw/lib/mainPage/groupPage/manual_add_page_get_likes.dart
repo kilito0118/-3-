@@ -22,6 +22,33 @@ class ManualAddPageGetLikes extends StatefulWidget {
 }
 
 class ManualAddPageGetLikesState extends State<ManualAddPageGetLikes> {
+  Future<List<String>> updateLikes(List likes, String uid) async {
+    print("likes: $likes");
+    int number = await getCollectionCount("users") + 10046;
+    List<Map<String, dynamic>> data = createActivityListFromSet(
+      likes.toSet().cast<int>(),
+    );
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      "likes": data,
+      "number": number,
+    });
+
+    DocumentSnapshot docSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    Map<String, dynamic> userData = docSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data1 = {
+      "gender": userData["gender"] == "남" ? 1 : 2, // 1: 남자, 2: 여자
+      "age": userData["age"],
+      "liked_activities": likes,
+    };
+    debugPrint("Data1: $data1");
+    debugPrint("Likes: $likes");
+    //sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+
+    return [];
+  }
+
   final List<String> categories = [
     '🎭 감성충전러',
     '✍️ 감성 크리에이터',
@@ -162,17 +189,6 @@ class ManualAddPageGetLikesState extends State<ManualAddPageGetLikes> {
                                 .update({
                                   'members': FieldValue.arrayUnion([uid]),
                                 });
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => QuestionsPage2(
-                                      selectedActivityNumbers:
-                                          selectedActivityNumbers,
-                                    ),
-                              ),
-                            );
                           }
                           : null,
                   label: const Text('다음으로 →', style: TextStyle(fontSize: 16)),

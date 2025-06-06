@@ -81,9 +81,8 @@ class _FriendPageState extends State<FriendPage> {
     if (user == null) return null;
     final uid = user.uid;
     final userSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
     Map<String, dynamic>? userData =
-    userSnapshot.data() as Map<String, dynamic>;
 
     if (email == userData!['email']) {
       return null; // 현재 로그인한 사용자의 uid 반환
@@ -128,9 +127,7 @@ class _FriendPageState extends State<FriendPage> {
           padding: EdgeInsets.symmetric(horizontal: 14),
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(
-            color: Color(0xFFF2F2F2)
-          ),
+          decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -187,15 +184,14 @@ class _FriendPageState extends State<FriendPage> {
                     friend: Friend(name: "팔로우 목록이 없어요.", uid: ''),
                     onTap: () => onTap(),
                   )
-                  :
-              Expanded(
-                child: ListView.builder(
-                  itemCount: friends.length,
-                  itemBuilder: (context, index) {
-                    return FriendTile(friend: friends[index], onTap: onTap);
-                  },
-                ),
-              ),
+                  : Expanded(
+                    child: ListView.builder(
+                      itemCount: friends.length,
+                      itemBuilder: (context, index) {
+                        return FriendTile(friend: friends[index], onTap: onTap);
+                      },
+                    ),
+                  ),
             ],
           ),
         ),
