@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
-
 class DateSelectorModal extends StatefulWidget {
   final DateTime selectedDate;
   final Map<String, String> place;

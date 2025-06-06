@@ -37,7 +37,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
       barrierColor: Colors.black.withAlpha(40),
       builder: (context) {
         return DateSelectorModal(
-          selectedDate: now.add(Duration(hours: 1)),
+          selectedDate: now.add(Duration(days: 1)),
           place: widget.place,
         );
       },
