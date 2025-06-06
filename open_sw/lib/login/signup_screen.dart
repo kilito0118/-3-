@@ -46,6 +46,44 @@ class SignupScreenState extends State<SignupScreen> {
     //double belowWidth = (kIsWeb) ? 520 : screenWidth - 30;
 
     Future<void> signUp() async {
+      if (namecontroller.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("이름을 입력해주세요.")));
+        return;
+      }
+      if (agecontroller.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("나이를 입력해주세요.")));
+        return;
+      }
+      if (selectedGender == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("성별을 선택해주세요.")));
+        return;
+      }
+
+      if (idcontroller.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("ID를 입력해주세요.")));
+        return;
+      }
+      if (passwordcontroller.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("비밀번호를 입력해주세요.")));
+        return;
+      }
+      if (passwordcontroller.text != passwordcheckcontroller.text) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("비밀번호가 일치하지 않습니다.")));
+        return;
+      }
+
       if (_formKey.currentState!.validate()) {
         try {
           // 1. Firebase 인증으로 계정 생성
@@ -62,6 +100,7 @@ class SignupScreenState extends State<SignupScreen> {
             idcontroller.text,
             int.parse(agecontroller.text),
             selectedGender!,
+            false,
           );
 
           // 3. 성공 후 화면 전환
@@ -96,11 +135,23 @@ class SignupScreenState extends State<SignupScreen> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: null,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            "회원가입",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              top: screenHeight * 0.2,
+              top: screenHeight * 0.13,
               left: screenWidth * 0.1,
               right: screenWidth * 0.1,
               bottom: 60,

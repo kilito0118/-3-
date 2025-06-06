@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/groupPage/manual_add_page_get_likes.dart';
 
 class ManualAddPage extends StatefulWidget {
-  const ManualAddPage({super.key});
+  final String groupId;
+  const ManualAddPage({super.key, required this.groupId});
 
   @override
   State<ManualAddPage> createState() => _ManualAddPageState();
@@ -58,6 +60,33 @@ class _ManualAddPageState extends State<ManualAddPage> {
             Spacer(),
             GestureDetector(
               onTap: () {
+                if (nameController.text.isEmpty ||
+                    ageController.text.isEmpty ||
+                    selectedGender == null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("모든 필드를 입력해주세요.")));
+                  return;
+                }
+                if (ageController.text.isNotEmpty &&
+                    int.tryParse(ageController.text) == null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("나이는 숫자로 입력해주세요.")));
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ManualAddPageGetLikes(
+                          name: nameController.text,
+                          age: int.parse(ageController.text),
+                          gender: selectedGender!,
+                          groupId: widget.groupId,
+                        ),
+                  ),
+                );
                 print(
                   "이름: ${nameController.text}, 나이: ${ageController.text}, 성별: $selectedGender",
                 );

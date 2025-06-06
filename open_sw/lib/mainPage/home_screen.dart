@@ -72,6 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         child: Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              'Open SW',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            elevation: 0, // 그림자 제거
+          ),
           backgroundColor: Colors.transparent,
           body: PageView(
             scrollBehavior: const MaterialScrollBehavior().copyWith(

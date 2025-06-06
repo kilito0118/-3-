@@ -39,36 +39,42 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
     await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
       'members': FieldValue.arrayRemove([uid]),
     });
-
-    try {
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'groups': FieldValue.arrayRemove([groupId]),
-      });
-
-      // 2. 상태 변경이 필요하면 setState로 감싸기
-      if (mounted) {
-        setState(() {
-          // 예: 목록에서 멤버를 직접 삭제하는 등의 UI 갱신
-          //members.remove(uid);  // 예시
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$name has been removed from the group.')),
-          );
-          _loadGroupData();
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    Map<String, dynamic>? userData =
+        userSnapshot.data() as Map<String, dynamic>?;
+    if (userData!["email"] == null) {
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+    } else {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          'groups': FieldValue.arrayRemove([groupId]),
         });
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Failed to remove $name: $e')));
+        }
       }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Failed to remove $name: $e')));
-      }
+    }
+    // 2. 상태 변경이 필요하면 setState로 감싸기
+    if (mounted) {
+      setState(() {
+        // 예: 목록에서 멤버를 직접 삭제하는 등의 UI 갱신
+        //members.remove(uid);  // 예시
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('$name has been removed from the group.')),
+        );
+        _loadGroupData();
+      });
     }
   }
 
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(id).get();
+        await FirebaseFirestore.instance.collection('users').doc(id).get();
 
     if (nameSnapshot.exists) {
       if (type == 0) {
@@ -86,18 +92,18 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
       docSnapshot =
-      await FirebaseFirestore.instance
-          .collection('groups')
-          .doc(widget.group!.id)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.group!.id)
+              .get();
       groupId = widget.group!.id;
       data = docSnapshot!.data() as Map<String, dynamic>?;
     } else if (widget.groupId != null) {
       docSnapshot =
-      await FirebaseFirestore.instance
-          .collection('groups')
-          .doc(widget.groupId)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.groupId)
+              .get();
       groupId = widget.groupId!;
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
@@ -125,18 +131,18 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
     List<Future<DocumentSnapshot>> futures =
-    memberIds.map((uid) {
-      return FirebaseFirestore.instance.collection('users').doc(uid).get();
-    }).toList();
+        memberIds.map((uid) {
+          return FirebaseFirestore.instance.collection('users').doc(uid).get();
+        }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
-    snapshots.map((snapshot) {
-      if (snapshot.exists) {
-        return snapshot.data() as Map<String, dynamic>;
-      } else {
-        return {};
-      }
-    }).toList();
+        snapshots.map((snapshot) {
+          if (snapshot.exists) {
+            return snapshot.data() as Map<String, dynamic>;
+          } else {
+            return {};
+          }
+        }).toList();
 
     return memberDataList;
   }
@@ -185,9 +191,9 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                           context: context,
                           builder: (context) {
                             TextEditingController nameController =
-                            TextEditingController(
-                              text: groupData!['groupName'] ?? "Group_name",
-                            );
+                                TextEditingController(
+                                  text: groupData!['groupName'] ?? "Group_name",
+                                );
                             return AlertDialog(
                               title: Text("그룹 이름 편집"),
                               content: TextField(
@@ -241,19 +247,19 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               SizedBox(height: 10),
               data!["activities"].length > 0
                   ? ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 10),
-                itemCount: data!["activities"].length,
-                itemBuilder: (BuildContext context, int index) {
-                  var activity = data!["activities"][index];
-                  return ActivityCard(
-                    date: activity['date'] ?? "00.00(화)",
-                    place: activity['place'] ?? "장소 이름",
-                  );
-                },
-              )
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: data!["activities"].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var activity = data!["activities"][index];
+                      return ActivityCard(
+                        date: activity['date'] ?? "00.00(화)",
+                        place: activity['place'] ?? "장소 이름",
+                      );
+                    },
+                  )
                   : Text("예정된 활동이 없습니다."),
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
@@ -276,16 +282,11 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
               memberDetails.isNotEmpty
                   ? MemberSection(
-                title: "그룹원",
-                members: memberDetails,
-                groupId: groupId,
-                onKickout:
-                    () => kickout(
-                  memberDetails[0]['uid'] ?? 'uid',
-                  groupId,
-                  memberDetails[0]['nickName'] ?? '그룹원 이름',
-                ),
-              )
+                    title: "그룹원",
+                    members: memberDetails,
+                    groupId: groupId,
+                    onKickout: kickout,
+                  )
                   : Text(""),
 
               Column(
@@ -467,7 +468,7 @@ class MemberSection extends StatelessWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
   final String groupId;
-  final VoidCallback onKickout;
+  final void Function(String, String, String) onKickout;
 
   const MemberSection({
     super.key,
@@ -492,7 +493,12 @@ class MemberSection extends StatelessWidget {
               name: members[index]['nickName'] ?? 'member_name',
               uid: members[index]['uid'] ?? 'member_uid',
               groupId: groupId,
-              onKickout: () => onKickout(),
+              onKickout:
+                  () => onKickout(
+                    members[index]['uid'] ?? 'member_uid',
+                    groupId,
+                    members[index]['nickName'] ?? 'member_name',
+                  ),
             );
           },
         ),

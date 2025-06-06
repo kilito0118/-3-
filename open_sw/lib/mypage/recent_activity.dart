@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 
 class Activity {
   final String type;
-  final String place;
+  final String placeName;
   final String date;
+  final String groupId;
+  final int score; //1~9?
+  final String userId;
 
   Activity({
     required this.type,
-    required this.place,
-    required this.date
+    required this.placeName,
+    required this.date,
+    required this.groupId,
+    required this.score,
+    required this.userId,
   });
 }
 
 class ActivityBox extends StatefulWidget {
   final Activity recentAct;
 
-  const ActivityBox({
-    super.key,
-    required this.recentAct,
-  });
+  const ActivityBox({super.key, required this.recentAct});
 
   @override
   State<ActivityBox> createState() => _ActivityBoxState();
@@ -27,22 +30,22 @@ class ActivityBox extends StatefulWidget {
 class _ActivityBoxState extends State<ActivityBox> {
   bool liked = false;
   bool disliked = false;
-  
+
   // 좋아요 버튼을 눌렀을 때 실행되는 함수입니다
-  void like () {
+  void like() {
     setState(() {
       liked = !liked;
-      if(liked){
+      if (liked) {
         disliked = false;
       }
     });
   }
 
   // 싫어요 버튼을 눌렀을 때 실행되는 함수입니다
-  void dislike () {
+  void dislike() {
     setState(() {
       disliked = !disliked;
-      if(disliked){
+      if (disliked) {
         liked = false;
       }
     });
@@ -56,16 +59,14 @@ class _ActivityBoxState extends State<ActivityBox> {
       margin: const EdgeInsets.only(bottom: 10),
       decoration: ShapeDecoration(
         color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         shadows: [
           BoxShadow(
             color: Color(0x19000000),
             blurRadius: 10,
             offset: Offset(0, 0),
             spreadRadius: 0,
-          )
+          ),
         ],
       ),
 
@@ -83,7 +84,7 @@ class _ActivityBoxState extends State<ActivityBox> {
               fontWeight: FontWeight.normal,
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
 
           // 활동 이름 및 장소
           Container(
@@ -97,21 +98,18 @@ class _ActivityBoxState extends State<ActivityBox> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
-                    fontWeight: FontWeight.bold
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 // 활동 장소
                 Text(
-                  widget.recentAct.place,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                  ),
-                )
+                  widget.recentAct.placeName,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
 
           // 활동 평가
           Row(
@@ -122,7 +120,7 @@ class _ActivityBoxState extends State<ActivityBox> {
                 onPressed: dislike,
                 style: TextButton.styleFrom(
                   foregroundColor: Color(0xFF6283E9),
-                  padding: EdgeInsets.all(0)
+                  padding: EdgeInsets.all(0),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -131,14 +129,14 @@ class _ActivityBoxState extends State<ActivityBox> {
                       disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
                       size: 32,
                     ),
-                    SizedBox(width: 4,),
+                    SizedBox(width: 4),
                     Text(
                       '나빴어요',
                       style: TextStyle(
                         color: const Color(0xFF6283E9),
-                        fontSize: 14
+                        fontSize: 14,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -146,8 +144,8 @@ class _ActivityBoxState extends State<ActivityBox> {
               TextButton(
                 onPressed: like,
                 style: TextButton.styleFrom(
-                    foregroundColor: Color(0xFFE75F5F),
-                    padding: EdgeInsets.all(0)
+                  foregroundColor: Color(0xFFE75F5F),
+                  padding: EdgeInsets.all(0),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -155,20 +153,20 @@ class _ActivityBoxState extends State<ActivityBox> {
                     Text(
                       '좋았어요',
                       style: TextStyle(
-                          color: const Color(0xFFE75F5F),
-                          fontSize: 14
+                        color: const Color(0xFFE75F5F),
+                        fontSize: 14,
                       ),
                     ),
-                    SizedBox(width: 4,),
+                    SizedBox(width: 4),
                     Icon(
                       liked ? Icons.favorite : Icons.favorite_outline,
                       size: 32,
-                    )
+                    ),
                   ],
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

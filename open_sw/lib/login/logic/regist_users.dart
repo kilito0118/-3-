@@ -1,26 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> registUsers(
+Future<String?> registUsers(
   String nickName,
-  UserCredential user,
-  String email,
+  UserCredential? user,
+  String? email,
   int age,
   String gender,
+  bool isManualAdd,
 ) async {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   Map<String, dynamic> userData = {
+    "activities": [],
+    "age": age,
     "createdAt": FieldValue.serverTimestamp(),
-    "nickName": nickName,
-    "uid": uid,
+    "email": email,
     "friends": [],
+    "gender": gender,
     "groups": [],
     "likes": [],
-    "email": email,
-    "age": age,
-    "gender": gender,
+    "nickName": nickName,
+    "uid": uid,
   };
+  if (isManualAdd) {
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .collection('users')
+        .add(userData);
+    String uid = docRef.id;
+    return uid;
+  }
+
   try {
+    if (user == null) {
+      throw Exception('User is not authenticated');
+    }
     await FirebaseFirestore.instance
         .collection('users')
         .doc(user.user!.uid)
