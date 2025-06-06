@@ -106,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 name: userData?['nickName'] ?? '정보 찾기 실패',
                 age: userData?['age'] ?? 0,
                 gender: userData?['gender'] ?? '정보 찾기 실패',
+                email: userData?['email'] ?? '정보 찾기 실패',
               ),
             ], // 각 탭의 화면
           ),

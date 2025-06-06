@@ -24,7 +24,7 @@ Future<String?> registUsers(
   };
   if (isManualAdd) {
     DocumentReference docRef = await FirebaseFirestore.instance
-        .collection('users')
+        .collection('tempUsers')
         .add(userData);
     String uid = docRef.id;
     return uid;

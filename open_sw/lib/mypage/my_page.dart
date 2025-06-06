@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
 import 'package:open_sw/mypage/regist_activity.dart';
 
@@ -10,11 +11,13 @@ class MyPage extends StatefulWidget {
   final String name;
   final int age;
   final String gender;
+  final String email;
   const MyPage({
     super.key,
     required this.name,
     required this.age,
     required this.gender,
+    required this.email,
   });
 
   @override
@@ -64,7 +67,14 @@ class _MyPageState extends State<MyPage> {
                   recentActivities.map((data) {
                     return Activity(
                       type: data['type'] ?? '활동 이름',
-                      placeName: data['placeName'] ?? '활동 장소',
+                      place: {
+                        'id': '',
+                        'name': '',
+                        'address': '',
+                        'phone': '',
+                        'x': '',
+                        'y': '',
+                      }, //이 부분을 그냥 받아온 Map<String, String> 형태로 넣어주시면 됩니다,
                       date:
                           data['date'] != null && data['date'] is Timestamp
                               ? (data['date'] as Timestamp).toDate().toString()
@@ -105,28 +115,16 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
+  String uid = FirebaseAuth.instance.currentUser!.uid;
   @override
   void initState() {
+    uid = FirebaseAuth.instance.currentUser!.uid;
     super.initState();
     setState(() {
       _loadUserData();
       loadActivities();
     });
   }
-
-  //final String userName = '장영우';
-  //final int userAge = 22;
-  //final Gender userGender = Gender.male;
-
-  // 임시 최근활동 내역입니다
-  /*
-  final List<Activity> recentActivities = [
-    Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-    Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-    Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-    Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-    Activity(type: '활동 이름', place: '활동 장소', date: '2025.05.20'),
-  ];*/
 
   @override
   Widget build(BuildContext context) {
@@ -175,10 +173,17 @@ class _MyPageState extends State<MyPage> {
                   Container(
                     width: 100,
                     height: 100,
-                    decoration: ShapeDecoration(
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
+                    child: CircleAvatar(
+                      backgroundColor: Color(
+                        uid.hashCode % 0xFFFFFF,
+                      ).withOpacity(1.0), // 이름 해시값으로 색상 생성
+                      child: Text(
+                        widget.name[0],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
@@ -203,20 +208,24 @@ class _MyPageState extends State<MyPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  /*
-                  // 내 정보 편집 버튼
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Color(0x00ff9933),
-                      padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
+                  // 사용자 이메일
+                  InkWell(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: widget.email));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('이메일이 클립보드에 복사되었습니다.')),
+                      );
+                    },
+                    child: Text(
+                      '이메일: ${widget.email}',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                    child: Text('내 정보 편집',
-                      style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal),
-                    ),
-                  )
-                  */
+                  ),
                 ],
               ),
               SizedBox(height: 40),
@@ -253,7 +262,10 @@ class _MyPageState extends State<MyPage> {
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: recentActivities.length,
                       itemBuilder: (context, index) {
-                        return ActivityBox(recentAct: recentActivities[index]);
+                        return ActivityBox(
+                          recentAct: recentActivities[index],
+                          actId: recentActivityIds[index],
+                        );
                       },
                     ),
                     TextButton(
@@ -261,13 +273,20 @@ class _MyPageState extends State<MyPage> {
                         Activity act = Activity(
                           date: '2025.05.20',
                           groupId: 'group1',
-                          placeName: '장소1',
+                          place: {
+                            'id': '',
+                            'name': '',
+                            'address': '',
+                            'phone': '',
+                            'x': '',
+                            'y': '',
+                          }, //이 부분을 그냥 받아온 Map<String, String> 형태로 넣어주시면 됩니다
                           score: 5,
                           type: '활동1',
                           userId: FirebaseAuth.instance.currentUser!.uid,
                         );
                         registActivity(act);
-                        print(act);
+                        //print(act);
                       },
                       child: Text("더보기"),
                     ),

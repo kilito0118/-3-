@@ -76,6 +76,12 @@ class _FriendPageState extends State<FriendPage> {
   }
 
   Future<String?> getUid(String email) async {
+    final userSnapshot = FirebaseAuth.instance.currentUser;
+    Map<String, dynamic>? userData = userSnapshot as Map<String, dynamic>?;
+
+    if (email == userData!['email']) {
+      return userSnapshot?.uid; // 현재 로그인한 사용자의 uid 반환
+    }
     final querySnapshot =
         await FirebaseFirestore.instance
             .collection('users')
@@ -175,8 +181,7 @@ class _FriendPageState extends State<FriendPage> {
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
-                        //backgroundColor: Colors.transparent,
-                        //barrierColor: Colors.transparent,
+
                         useSafeArea: true,
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
