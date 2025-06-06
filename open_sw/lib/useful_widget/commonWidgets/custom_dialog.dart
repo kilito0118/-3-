@@ -39,7 +39,7 @@ void showCustomAlert({
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(title, style: contentsBig, textAlign: TextAlign.center,),
+                Text(title, style: contentsTitle, textAlign: TextAlign.center,),
                 spacingBox_mini(),
                 Text(message, style: contentsNormal(), textAlign: TextAlign.center,),
                 spacingBox(),
@@ -90,7 +90,7 @@ void showCustomDialog({
               children: [
                 AnimatedBlinkingIcon(icon: icon, color: color.withAlpha(20), size: 120),
                 spacingBox(),
-                Text(title, style: contentsBig),
+                Text(title, style: contentsTitle),
                 spacingBox_mini(),
                 Text(message, style: contentsNormal()),
                 spacingBox(),

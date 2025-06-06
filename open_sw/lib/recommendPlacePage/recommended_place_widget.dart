@@ -59,7 +59,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
           children: [
             Text(
               widget.place['name'] ?? '',
-              style: contentsBig,
+              style: contentsTitle,
             ),
             spacingBox_mini(),
             Text(

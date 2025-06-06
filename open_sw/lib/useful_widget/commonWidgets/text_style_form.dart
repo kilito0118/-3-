@@ -34,10 +34,18 @@ Widget subTitle(String title){
   );
 }
 
-const TextStyle contentsBig = TextStyle(
+const TextStyle contentsTitle = TextStyle(
   color: Colors.black,
   fontSize: 26,
   fontWeight: FontWeight.bold,
+  height: 1.1,
+  letterSpacing: 0.0,
+);
+
+const TextStyle contentsBig = TextStyle(
+  color: Colors.black,
+  fontSize: 20,
+  fontWeight: FontWeight.normal,
   height: 1.1,
   letterSpacing: 0.0,
 );
