@@ -1,10 +1,4 @@
 # -공개소프트웨어 3분반-
-브랜치 이름을
-  본인이름/작업내용
-으로 해주세요!
-
-
-
 # 놀래말래
 
 **그룹원의 선호를 고려한 여가활동 추천 어플리케이션**
@@ -80,7 +74,17 @@
 </div>
 
 > - 내 정보 화면
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e52ba33d-38dd-49d4-92af-f2c2ddfc3fe7" height="250"/>
+  <img src="https://github.com/user-attachments/assets/bcf2728e-4614-4aba-be83-1af4b9145f5a" height="250"/>
+  <img src="https://github.com/user-attachments/assets/99398bc6-233b-4697-b1a2-3d88abbfe1aa" height="250"/>
+</div>
 
+> - 활동 추천/ 장소 추천 화면
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/71f00fdf-4a76-4d13-9376-2e24f519b2fe" height="250"/>
+  <img src="https://github.com/user-attachments/assets/43cbcb0d-560a-4b86-b932-09a24b76fc48" height="250"/>
+</div>
 ---
 
 ## 👨‍💻 개발자 소개
@@ -93,7 +97,8 @@
 | 장영우 | 2023112415 | 전체 앱 디자인, 프론트 일부, 지도 API 연동 |
 | 허영호 | 2022113601 | 프론트 일부, 서버 연결, 보고서 작성 |
 
-> 모두 **동국대학교 컴퓨터공학과** 소속입니다.
+> 모두 **동국대학교 컴퓨터공학과** 소속
+> 공개소프트웨어 3분반 5조
 
 ---
 
