@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:open_sw/mainPage/groupPage/groupWidget/place_search_widget.dart';
 import 'package:open_sw/recommendActivityPage/recommend_act_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -60,10 +59,10 @@ class SearchButton extends StatelessWidget {
 
             try {
               DocumentSnapshot groupDoc =
-              await firestore.collection('groups').doc(groupId).get();
+                  await firestore.collection('groups').doc(groupId).get();
               if (groupDoc.exists) {
                 Map<String, dynamic> groupData =
-                groupDoc.data() as Map<String, dynamic>;
+                    groupDoc.data() as Map<String, dynamic>;
                 leaderUid = groupData['leader'] ?? '';
                 membersUid = [
                   leaderUid,
@@ -75,21 +74,14 @@ class SearchButton extends StatelessWidget {
                 print(groupId);
                 try {
                   DocumentSnapshot userDoc =
-                  await firestore.collection('users').doc(uid).get();
+                      await firestore.collection('users').doc(uid).get();
                   if (userDoc.exists) {
                     Map<String, dynamic> userData =
-                    userDoc.data() as Map<String, dynamic>;
+                        userDoc.data() as Map<String, dynamic>;
                     int number = userData['number'] ?? 0;
                     rowNumbers.add(number);
                   }
-                  print(rowNumbers);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => RecommendActPage(rowNumbers: rowNumbers),
-                    ),
-                  );
+                  //print(rowNumbers);
                 } catch (e) {
                   print('Error fetching user data for uid $uid: $e');
                 }
@@ -97,6 +89,12 @@ class SearchButton extends StatelessWidget {
             } catch (e) {
               print('Error fetching group data: $e');
             }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RecommendActPage(rowNumbers: rowNumbers),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(

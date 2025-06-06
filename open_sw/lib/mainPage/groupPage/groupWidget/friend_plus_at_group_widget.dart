@@ -51,7 +51,10 @@ class FriendPlusAtGroupWidget extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ManualAddPage()),
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ManualAddPage(groupId: groupDocument!.id),
+                  ),
                 );
               },
             ),

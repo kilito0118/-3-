@@ -144,13 +144,6 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                       ),
                     ),
                     SizedBox(width: 5),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "편집",
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ),
                   ],
                 ),
               ),

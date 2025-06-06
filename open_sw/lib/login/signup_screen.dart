@@ -100,6 +100,7 @@ class SignupScreenState extends State<SignupScreen> {
             idcontroller.text,
             int.parse(agecontroller.text),
             selectedGender!,
+            false,
           );
 
           // 3. 성공 후 화면 전환

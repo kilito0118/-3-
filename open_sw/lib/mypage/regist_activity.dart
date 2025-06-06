@@ -19,13 +19,12 @@ Future<String> registActivity(Activity act) async {
         .add(activityData);
     String activityId = activityRef.id;
 
-    // 3. 내 user 문서의 groups 배열에 groupId 추가
     await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      'groups': FieldValue.arrayUnion([activityId]),
+      'activities': FieldValue.arrayUnion([activityId]),
     });
     return activityId;
   } catch (e) {
     //print(e);
-    throw Exception('Failed to register group: $e');
+    throw Exception('Failed to register activity: $e');
   }
 }

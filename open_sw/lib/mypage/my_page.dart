@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/login/login_screen.dart';
+import 'package:open_sw/mypage/regist_activity.dart';
 
 import 'recent_activity.dart';
 
@@ -23,12 +24,13 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   DocumentSnapshot? userInfo;
   List<dynamic> recentActivities = [];
+  List<dynamic> recentActivityIds = [];
   Map<String, dynamic>? userData;
 
   Future<void> loadActivities() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
-
+    //debugPrint('Recent Activities: $recentActivities');
     try {
       final doc =
           await FirebaseFirestore.instance
@@ -40,7 +42,7 @@ class _MyPageState extends State<MyPage> {
         userData = doc.data() as Map<String, dynamic>;
         if (userData != null) {
           if (userData!.containsKey('activities')) {
-            recentActivities = (userData!['activities'] as List<dynamic>);
+            recentActivityIds = (userData!['activities']);
           } else {
             userData!['activities'] = [];
             await FirebaseFirestore.instance
@@ -48,6 +50,33 @@ class _MyPageState extends State<MyPage> {
                 .doc(user.uid)
                 .update({'activities': []});
           }
+          for (String activityId in recentActivityIds) {
+            final activityDoc =
+                await FirebaseFirestore.instance
+                    .collection('activities')
+                    .doc(activityId)
+                    .get();
+            if (activityDoc.exists) {
+              recentActivities.add(activityDoc.data() as Map<String, dynamic>);
+              //이거까지 하면 recentActivities에 Map<String, dynamic> 형태로 저장됩니다
+              //여기서 Activity 형태로 변환
+              recentActivities =
+                  recentActivities.map((data) {
+                    return Activity(
+                      type: data['type'] ?? '활동 이름',
+                      placeName: data['placeName'] ?? '활동 장소',
+                      date:
+                          data['date'] != null && data['date'] is Timestamp
+                              ? (data['date'] as Timestamp).toDate().toString()
+                              : '날짜 없음',
+                      groupId: data['groupId'] ?? '그룹 ID 없음',
+                      score: data['score'] ?? 0,
+                      userId: data['userId'] ?? '사용자 ID 없음',
+                    );
+                  }).toList();
+            }
+          }
+          debugPrint('Recent Activities: $recentActivities');
         }
       }
       setState(() {});
@@ -79,7 +108,10 @@ class _MyPageState extends State<MyPage> {
   @override
   void initState() {
     super.initState();
-    _loadUserData();
+    setState(() {
+      _loadUserData();
+      loadActivities();
+    });
   }
 
   //final String userName = '장영우';
@@ -206,6 +238,16 @@ class _MyPageState extends State<MyPage> {
                     ),
                     SizedBox(height: 10),
                     // 최근 활동 목록 출력
+                    recentActivities.isEmpty
+                        ? Text(
+                          '최근 활동이 없습니다.',
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                        : SizedBox.shrink(),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -213,6 +255,21 @@ class _MyPageState extends State<MyPage> {
                       itemBuilder: (context, index) {
                         return ActivityBox(recentAct: recentActivities[index]);
                       },
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Activity act = Activity(
+                          date: '2025.05.20',
+                          groupId: 'group1',
+                          placeName: '장소1',
+                          score: 5,
+                          type: '활동1',
+                          userId: FirebaseAuth.instance.currentUser!.uid,
+                        );
+                        registActivity(act);
+                        print(act);
+                      },
+                      child: Text("더보기"),
                     ),
                   ],
                 ),
