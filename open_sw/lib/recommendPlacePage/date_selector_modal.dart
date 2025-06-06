@@ -256,7 +256,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
             ),
           ),
           spacingBox(),
-          SubmitButtonBig(text: '그룹 일정에 추가', onTap: () => submit()),
+          SubmitButton_async(text: '그룹 일정에 추가', onTap: () => submit()),
           spacingBox_withComment('그룹 일정에 추가하면 그룹원들이 만날 장소와 시간을 볼 수 있어요.'),
           bottomNavigationBarSpacer(context),
         ],
