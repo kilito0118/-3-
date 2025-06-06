@@ -53,9 +53,9 @@
 
 ---
 
-## 📷 스크린샷
+## 📷 화면 예시 (스크린샷)
 
-> - 회원가입 화면
+> - 회원가입/로그인 화면
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/02fa2c47-fa9f-4119-bc06-38afe501e55e" height="250"/>
@@ -64,17 +64,22 @@
   <img src="https://github.com/user-attachments/assets/76619e0b-30e9-47fd-9046-d6558045179d" height="250"/> 
 </div>
 
-> - 활동 추천 화면
-
+> - 팔로우 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/399005a4-5296-45ab-9012-fd6987382c2e" height="250"/>
+  <img src="https://github.com/user-attachments/assets/bb32e26f-032f-456e-a5f7-61b623a193b4" height="250"/>
+  <img src="https://github.com/user-attachments/assets/ad97d739-5a3f-417a-999a-421109604fe7" height="250"/>
+  <img src="https://github.com/user-attachments/assets/26446088-e373-4d1e-8b27-c5fbfaf69fcf" height="250"/>
+  <img src="https://github.com/user-attachments/assets/b9d78405-de67-4bdb-a4e0-0a47dc55b69c" height="250"/>
 </div>
 
-> - 장소 보기 지도 연동
-
+> - 그룹 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/37c67968-bdc5-4b65-a885-4da49c2afdb3" height="250"/>
+  <img src="https://github.com/user-attachments/assets/3e8e2275-453f-413f-8744-9fe35a9b6744" height="250"/>
+  <img src="https://github.com/user-attachments/assets/3a9391e7-e27e-400f-bacb-b2ea65e4b23e" height="250"/>
+  <img src="https://github.com/user-attachments/assets/7c127d22-127f-454d-9b5b-ac22ce38823f" height="250"/>
 </div>
+
+> - 내 정보 화면
 
 ---
 
