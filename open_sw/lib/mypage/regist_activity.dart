@@ -12,7 +12,7 @@ Future<String> registActivity(Activity act) async {
     "place": act.place,
     "score": act.score,
     "type": act.type,
-    "userId": uid,
+    "userId": act.userId,
   };
   try {
     DocumentReference activityRef = await FirebaseFirestore.instance

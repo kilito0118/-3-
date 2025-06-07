@@ -3,8 +3,15 @@ import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
 class RecommendedActivity extends StatefulWidget {
   final String activity;
+  final String groupId;
+  final int type;
 
-  const RecommendedActivity({super.key, required this.activity});
+  const RecommendedActivity({
+    super.key,
+    required this.activity,
+    required this.groupId,
+    required this.type,
+  });
 
   @override
   State<RecommendedActivity> createState() => _RecommendedActivityState();
@@ -42,7 +49,9 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                 MaterialPageRoute(
                   builder:
                       (context) => SetPlacePage(
+                        groupId: widget.groupId,
                         activity: widget.activity,
+                        type: widget.type,
                       ),
                 ),
               );

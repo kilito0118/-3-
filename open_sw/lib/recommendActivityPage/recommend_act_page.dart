@@ -10,8 +10,13 @@ const String flaskUrl = 'http://43.203.239.150:8000/group/recommendations';
 
 class RecommendActPage extends StatefulWidget {
   final List<int> rowNumbers;
+  final String groupId;
 
-  const RecommendActPage({super.key, required this.rowNumbers});
+  const RecommendActPage({
+    super.key,
+    required this.rowNumbers,
+    required this.groupId,
+  });
 
   @override
   State<RecommendActPage> createState() => _RecommendActPageState();
@@ -139,7 +144,13 @@ class _RecommendActPageState extends State<RecommendActPage> {
                 const Text('추천 결과가 없습니다.')
               else
                 ...activityList
-                    .map((activity) => RecommendedActivity(activity: activity))
+                    .map(
+                      (activity) => RecommendedActivity(
+                        activity: activity,
+                        groupId: widget.groupId,
+                        type: int.parse(activity),
+                      ),
+                    )
                     .toList(),
               const SizedBox(height: 10),
               TextButton(

@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Activity {
-  final String type;
+  final int type;
   final Map<String, String> place;
-  final String date;
+  final DateTime date;
   final String groupId;
-  final int score; //1~9?
-  final String userId;
+  final List<dynamic> score; //1~9?
+  final List<dynamic> userId;
 
   Activity({
     required this.type,
@@ -34,45 +35,62 @@ class _ActivityBoxState extends State<ActivityBox> {
   bool disliked = false;
 
   // 좋아요 버튼을 눌렀을 때 실행되는 함수입니다
-  void like() {
-    setState(() {
-      liked = !liked;
-      if (liked) {
-        disliked = false;
-      }
-      // actId를 사용하여 Firebase에서 score를 변경
-      if (widget.actId != null) {
-        FirebaseFirestore.instance
-            .collection('activities')
-            .doc(widget.actId)
-            .update({'score': 7});
-      }
-    });
+  Future<void> like() async {
+    liked = !liked;
+    if (liked) {
+      disliked = false;
+      DocumentSnapshot activityData =
+          await FirebaseFirestore.instance
+              .collection('activities')
+              .doc(widget.actId)
+              .get();
+      List<int> scores = List<int>.from(activityData['score']);
+      scores[userIndex] = 9; // 좋아요를 누르면 9, 아니면 1로 설정
+      FirebaseFirestore.instance
+          .collection('activities')
+          .doc(widget.actId)
+          .update({'score': scores});
+    }
+
+    // actId를 사용하여 Firebase에서 score를 변경
   }
 
   // 싫어요 버튼을 눌렀을 때 실행되는 함수입니다
-  void dislike() {
-    setState(() {
-      disliked = !disliked;
-      if (disliked) {
-        liked = false;
-      }
-      if (widget.actId != null) {
-        FirebaseFirestore.instance
-            .collection('activities')
-            .doc(widget.actId)
-            .update({'score': 1});
-      }
-    });
+  void dislike() async {
+    disliked = !disliked;
+    if (disliked) {
+      liked = false;
+      DocumentSnapshot activityData =
+          await FirebaseFirestore.instance
+              .collection('activities')
+              .doc(widget.actId)
+              .get();
+      List<int> scores = List<int>.from(activityData['score']);
+      scores[userIndex] = 1; // 좋아요를 누르면 9, 아니면 1로 설정
+      FirebaseFirestore.instance
+          .collection('activities')
+          .doc(widget.actId)
+          .update({'score': scores});
+    }
   }
+
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  int userIndex = -1;
 
   @override
   void initState() {
-    if (widget.recentAct.score > 4) {
-      like();
-    } else if (widget.recentAct.score < 4) {
-      dislike();
-    }
+    // userId 배열에서 현재 사용자의 인덱스를 찾습니다.
+    userIndex = widget.recentAct.userId.indexOf(currentUserId);
+
+    // 해당 인덱스의 score 값을 가져옵니다.
+    int userScore = widget.recentAct.score[userIndex];
+    setState(() {
+      if (userScore > 4) {
+        like();
+      } else if (userScore < 4) {
+        dislike();
+      }
+    });
     super.initState();
   }
 
@@ -102,7 +120,7 @@ class _ActivityBoxState extends State<ActivityBox> {
         children: [
           // 활동 일자
           Text(
-            widget.recentAct.date,
+            "${widget.recentAct.date.year}-${widget.recentAct.date.month.toString().padLeft(2, '0')}-${widget.recentAct.date.day.toString().padLeft(2, '0')}",
             style: TextStyle(
               color: Colors.grey[600],
               fontSize: 14,
@@ -119,7 +137,7 @@ class _ActivityBoxState extends State<ActivityBox> {
               children: [
                 // 활동명
                 Text(
-                  widget.recentAct.type,
+                  widget.recentAct.type.toString(),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 24,
@@ -142,7 +160,11 @@ class _ActivityBoxState extends State<ActivityBox> {
             children: [
               // 싫어요 버튼
               TextButton(
-                onPressed: dislike,
+                onPressed: () {
+                  setState(() {
+                    dislike();
+                  });
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: Color(0xFF6283E9),
                   padding: EdgeInsets.all(0),
@@ -167,7 +189,11 @@ class _ActivityBoxState extends State<ActivityBox> {
               ),
               // 좋아요 버튼
               TextButton(
-                onPressed: like,
+                onPressed: () {
+                  setState(() {
+                    like();
+                  });
+                },
                 style: TextButton.styleFrom(
                   foregroundColor: Color(0xFFE75F5F),
                   padding: EdgeInsets.all(0),

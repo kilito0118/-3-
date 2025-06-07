@@ -115,7 +115,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
             return {};
           }
         }).toList();
-    print(memberDataList);
+
     return memberDataList;
   }
 
@@ -260,15 +260,14 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                     onPressed: () {
                       final currentUserUid =
                           FirebaseAuth.instance.currentUser?.uid;
-                      print(currentUserUid);
+
                       if (groupData != null && groupData!['members'] != null) {
                         List<dynamic> members = List<dynamic>.from(
                           groupData!['members'],
                         );
                         if (members.contains(currentUserUid)) {
                           members.remove(currentUserUid);
-                          print(members);
-                          print(groupId);
+
                           FirebaseFirestore.instance
                               .collection('groups')
                               .doc(groupId)

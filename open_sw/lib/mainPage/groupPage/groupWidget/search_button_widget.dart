@@ -92,7 +92,11 @@ class SearchButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => RecommendActPage(rowNumbers: rowNumbers),
+                builder:
+                    (context) => RecommendActPage(
+                      rowNumbers: rowNumbers,
+                      groupId: groupId,
+                    ),
               ),
             );
           },

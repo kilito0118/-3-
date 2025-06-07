@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:open_sw/main.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
@@ -7,10 +9,14 @@ import 'date_selector_modal.dart';
 
 class RecommendedPlaceWidget extends StatefulWidget {
   final Map<String, String> place;
+  final int type;
+  final String groupId;
 
   const RecommendedPlaceWidget({
     super.key,
-    required this.place
+    required this.place,
+    required this.type,
+    required this.groupId,
   });
 
   @override
@@ -24,7 +30,9 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('링크를 열 수 없습니다')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('링크를 열 수 없습니다')));
     }
   }
 
@@ -37,14 +45,14 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
       barrierColor: Colors.black.withAlpha(40),
       builder: (context) {
         return DateSelectorModal(
+          type: widget.type,
           selectedDate: now.add(Duration(days: 1)),
           place: widget.place,
+          groupId: widget.groupId,
         );
       },
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,15 +65,9 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              widget.place['name'] ?? '',
-              style: contentsBig,
-            ),
+            Text(widget.place['name'] ?? '', style: contentsBig),
             spacingBox_mini(),
-            Text(
-              widget.place['address'] ?? '',
-              style: contentsDetail,
-            ),
+            Text(widget.place['address'] ?? '', style: contentsDetail),
             spacingBox(),
             Row(
               children: [
@@ -73,31 +75,32 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                   // 전화버튼
                   child: TextButton(
                     onPressed: () {
-                      if(_phone.isNotEmpty){
+                      if (_phone.isNotEmpty) {
                         _launchUrl('tel:$_phone');
-                      }
-                      else{
+                      } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('전화번호가 없습니다.')),
                         );
                       }
                     },
-                    style: _phone.isNotEmpty ?
-                    btn_normal(themeColor: themeGreen) :
-                    btn_normal(themeColor: Colors.grey),
+                    style:
+                        _phone.isNotEmpty
+                            ? btn_normal(themeColor: themeGreen)
+                            : btn_normal(themeColor: Colors.grey),
                     child: Text('전화걸기'),
                   ),
                 ),
                 spacingBox(),
                 Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        final url = "https://place.map.kakao.com/${widget.place['id']}";
-                        _launchUrl(url);
-                      },
-                      style: btn_normal(),
-                      child: Text('지도에서 보기'),
-                    )
+                  child: TextButton(
+                    onPressed: () {
+                      final url =
+                          "https://place.map.kakao.com/${widget.place['id']}";
+                      _launchUrl(url);
+                    },
+                    style: btn_normal(),
+                    child: Text('지도에서 보기'),
+                  ),
                 ),
               ],
             ),
