@@ -16,7 +16,7 @@ void showCustomAlert({
     barrierDismissible: false,
     barrierLabel: 'CustomDialog',
     barrierColor: Colors.black.withAlpha(60),
-    transitionDuration: const Duration(milliseconds: 400),
+    transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return const SizedBox(); // 실 내용은 transitionBuilder에서 그림
     },
@@ -66,7 +66,7 @@ void showCustomDialog({
     barrierDismissible: false,
     barrierLabel: 'CustomDialog',
     barrierColor: Colors.black.withAlpha(60),
-    transitionDuration: const Duration(milliseconds: 400),
+    transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return const SizedBox(); // 실 내용은 transitionBuilder에서 그림
     },

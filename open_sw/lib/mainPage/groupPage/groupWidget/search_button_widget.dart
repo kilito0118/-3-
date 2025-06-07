@@ -111,18 +111,30 @@ class _SearchButtonState extends State<SearchButton> {
           child: AnimatedGradientBox(
               shadowColor1: themeRed,
               shadowColor2: themeLightOrange,
+              edgeRad: 24,
+              horizontalPadding: 6,
+              verticalPadding: 6,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('맞춤 활동 검색하기',
-                    style: contentsNormal(
-                        color: Colors.black.withAlpha(180),
-                        fontWeight: FontWeight.bold
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withAlpha(160),
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Text('맞춤 활동 찾아보기',
+                        style: contentsNormal(
+                          fontWeight: FontWeight.bold
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   spacingBox_mini(),
-                  Icon(Icons.search)
+                  Icon(Icons.arrow_forward_rounded, size: 32, color: Colors.black.withAlpha(100),),
+                  spacingBox_mini()
                 ],
               )
           ),

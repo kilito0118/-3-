@@ -6,8 +6,8 @@ Widget BlurredBox({
   Color backGroundColor = Colors.white,
   double? width,
   double? height,
-  double topRad = 0.0,
-  double bottomRad = 0.0,
+  double topRad = 20.0,
+  double bottomRad = 20.0,
   double horizontalPadding = 20.0,
   double verticalPadding = 16.0,
   int alpha = 180,
@@ -46,7 +46,7 @@ Widget BlurredBox({
               bottomRight: Radius.circular(bottomRad),
             ),
             border: Border.all(
-              color: Colors.white.withAlpha(alpha),
+              color: Colors.white.withAlpha(180),
               width: 1.2,
             )
           ),

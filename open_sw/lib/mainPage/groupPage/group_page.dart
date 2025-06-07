@@ -135,7 +135,7 @@ class _GroupPageState extends State<GroupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     topAppBarSpacer(context),
-                    mainTitle('안녕하세요,\n${widget.userName} 님'),
+                    mainTitle('안녕하세요 🖐️\n${widget.userName} 님'),
                     spacingBox(),
                     subTitle('나의 그룹'),
                     SizedBox(height: 10),

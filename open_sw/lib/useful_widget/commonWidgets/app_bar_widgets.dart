@@ -56,7 +56,7 @@ PreferredSizeWidget searchAppBar({
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(16),
+                  color: Colors.black.withAlpha(20),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(

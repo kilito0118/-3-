@@ -47,7 +47,9 @@ class _FriendPageState extends State<FriendPage> {
                   if (friendDoc.exists) {
                     String nickName =
                         friendDoc.data()?['nickName'] ?? 'Unknown';
-                    friendDetails.add({'uid': friendUid, 'nickName': nickName});
+                    String Email =
+                        friendDoc.data()?['email'] ?? 'Unknown';
+                    friendDetails.add({'uid': friendUid, 'nickName': nickName, 'email': Email});
 
                     setState(() {
                       friends =
@@ -56,6 +58,7 @@ class _FriendPageState extends State<FriendPage> {
                                 (detail) => Friend(
                                   name: detail['nickName']!,
                                   uid: detail['uid']!,
+                                  email: detail['email']!
                                 ),
                               )
                               .toList();
@@ -182,7 +185,7 @@ class _FriendPageState extends State<FriendPage> {
               // 친구 목록 출력 (friend_tile.dart에 자세한 코드 있음)
               friends.isEmpty
                   ? FriendTile(
-                    friend: Friend(name: "팔로우 목록이 없어요.", uid: ''),
+                    friend: Friend(name: "팔로우 목록이 없어요.", uid: '', email: '새 팔로워를 추가해보세요'),
                     onTap: () => onTap(),
                   )
                   : Expanded(

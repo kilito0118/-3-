@@ -9,19 +9,21 @@ import 'recommended_place_widget.dart';
 import 'package:open_sw/services/map_api_services.dart';
 // 네이버맵
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+// 활동 정보
+import 'package:open_sw/services/activity_info.dart';
 
 class RecommendedPlacesPage extends StatefulWidget {
   final String posName;
   final double lat;
   final double lng;
-  final String activity;
+  final int activityNum;
 
   const RecommendedPlacesPage({
     super.key,
     required this.posName,
     required this.lat,
     required this.lng,
-    required this.activity,
+    required this.activityNum,
   });
 
   @override
@@ -37,6 +39,8 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
 
   bool _mapReady = false;
 
+  late Map<String, dynamic> selectedAct;
+
   final PageController _pageController = PageController(viewportFraction: 0.9);
   int _currentIndex = 0;
 
@@ -48,6 +52,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
       target: NLatLng(widget.lat, widget.lng),
       zoom: 13,
     );
+    selectedAct = activityList[widget.activityNum];
     searchPlaces();
     _pageController.addListener(() {
       final page = _pageController.page;
@@ -68,7 +73,8 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
       final nearby = await findNearbyPlaces(
         latitude: widget.lat,
         longitude: widget.lng,
-        query: widget.activity,
+        keywords: selectedAct['keywords'],
+        categoryCodes: selectedAct['categoryCodes']
       );
 
       if (nearby.isNotEmpty) {

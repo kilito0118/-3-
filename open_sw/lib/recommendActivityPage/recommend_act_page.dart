@@ -139,7 +139,7 @@ class _RecommendActPageState extends State<RecommendActPage> {
                 const Text('추천 결과가 없습니다.')
               else
                 ...activityList
-                    .map((activity) => RecommendedActivity(activity: activity))
+                    .map((activity) => RecommendedActivity(activityNum: int.parse(activity)))
                     .toList(),
               const SizedBox(height: 10),
               TextButton(

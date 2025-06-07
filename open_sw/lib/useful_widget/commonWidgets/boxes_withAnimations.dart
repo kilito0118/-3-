@@ -10,6 +10,8 @@ class AnimatedGradientBox extends StatefulWidget {
   final Color backGroundColor;
   final int alpha;
   final int shadowAlpha;
+  final double horizontalPadding;
+  final double verticalPadding;
 
   const AnimatedGradientBox({
     super.key,
@@ -18,8 +20,10 @@ class AnimatedGradientBox extends StatefulWidget {
     this.shadowColor1 = Colors.pinkAccent,
     this.shadowColor2 = Colors.lightBlueAccent,
     this.backGroundColor = Colors.white,
-    this.alpha = 150,
-    this.shadowAlpha = 180
+    this.alpha = 120,
+    this.shadowAlpha = 180,
+    this.horizontalPadding = 20.0,
+    this.verticalPadding = 16.0
   });
 
   @override
@@ -78,6 +82,8 @@ class _AnimatedGradientBoxState extends State<AnimatedGradientBox> with SingleTi
             alpha: widget.alpha,
             topRad: widget.edgeRad,
             bottomRad: widget.edgeRad,
+            horizontalPadding: widget.horizontalPadding,
+            verticalPadding: widget.verticalPadding,
             backGroundColor: widget.backGroundColor,
             child: widget.child
           ),

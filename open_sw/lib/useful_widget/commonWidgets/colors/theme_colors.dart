@@ -14,7 +14,11 @@ LinearGradient themeGradient() {
       themeLightOrange,
       themeDeepOrange
     ],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    begin: Alignment.bottomLeft,
+    end: Alignment.topCenter,
+    stops: [
+      0.3,
+      0.9,
+    ],
   );
 }

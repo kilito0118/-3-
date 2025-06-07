@@ -7,13 +7,12 @@ import 'recommended_places_page.dart';
 import 'package:open_sw/services/current_location_service.dart';
 
 class SetPlacePage extends StatefulWidget {
-  // 활동 명으로 작성해놔서 추후 활동 번호를 전달받고 그대로 전달하는 방식으로 고쳐야 합니다.
-  // 활동별로 검색 잘되는 키워드들 찾아서 Map으로 저장한 다음에 불러오면 어떨까 생각하긴 합니다.
-  final String activity;
+  // 활동번호
+  final int activityNum;
 
   const SetPlacePage({
     super.key,
-    required this.activity
+    required this.activityNum
   });
 
   @override
@@ -70,7 +69,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                     posName: '현재 위치',
                                     lat: current['lat'],
                                     lng: current['lng'],
-                                    activity: widget.activity,
+                                    activityNum: widget.activityNum,
                                   ),
                                 ),
                               );
@@ -133,7 +132,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                         posName: place['name']!,
                                         lat: double.parse(place['y']!),
                                         lng: double.parse(place['x']!),
-                                        activity: widget.activity,
+                                        activityNum: widget.activityNum,
                                       ),
                                     ),
                                   );

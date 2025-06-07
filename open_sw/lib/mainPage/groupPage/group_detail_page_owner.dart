@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
-import 'package:open_sw/useful_widget/commonWidgets/app_bar_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/colors/theme_colors.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+import 'groupWidget/member_tile.dart';
 
 class GroupDetailPageOwner extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -189,6 +187,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       extendBody: true,
       appBar: defaultAppBar(),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Column(
@@ -203,48 +202,69 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     mainTitle(groupData!['groupName'] ?? "Group_name"),
                     InkWell(
                       onTap: () {
-                        showDialog(
+                        TextEditingController nameController =
+                        TextEditingController(
+                          text: groupData!['groupName'] ?? "Group_name",
+                        );
+                        showCustomAlert(
                           context: context,
-                          builder: (context) {
-                            TextEditingController nameController =
-                                TextEditingController(
-                                  text: groupData!['groupName'] ?? "Group_name",
-                                );
-                            return AlertDialog(
-                              title: Text("그룹 이름 편집"),
-                              content: TextField(
-                                controller: nameController,
-                                decoration: InputDecoration(
-                                  labelText: "그룹 이름",
-                                  border: OutlineInputBorder(),
+                          title: '그룹 이름 편집',
+                          message: '변경하실 이름을 입력해주세요',
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(20),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: TextField(
+                                  cursorColor: Colors.orangeAccent,
+                                  controller: nameController,
+                                  style: contentsNormal(),
+                                  decoration: const InputDecoration(
+                                    hintText: '그룹 이름을 입력해주세요',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                                  ),
                                 ),
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("취소"),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    String newName = nameController.text.trim();
-                                    if (newName.isNotEmpty) {
-                                      await FirebaseFirestore.instance
-                                          .collection('groups')
-                                          .doc(groupId)
-                                          .update({'groupName': newName});
-                                      setState(() {
-                                        groupData!['groupName'] = newName;
-                                      });
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("저장"),
-                                ),
-                              ],
-                            );
-                          },
+                              spacingBox(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: btn_normal(),
+                                      child: Text("취소"),
+                                    ),
+                                  ),
+                                  spacingBox(),
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        String newName = nameController.text.trim();
+                                        if (newName.isNotEmpty) {
+                                          await FirebaseFirestore.instance
+                                            .collection('groups')
+                                            .doc(groupId)
+                                            .update({'groupName': newName});
+                                          setState(() {
+                                            groupData!['groupName'] = newName;
+                                          });
+                                        }
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: btn_normal(themeColor: Colors.blueAccent),
+                                      child: Text("저장"),
+                                    ),
+                                  )
+                                ],
+                              ),
+
+                            ],
+                          )
                         );
                       },
                       child: Text(
@@ -346,79 +366,88 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     child: TextButton(
                       onPressed: () {
                         // 그룹 삭제 로직 추가
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            //print(groupId);
-                            if (memberDetails.isNotEmpty) {
-                              return AlertDialog(
-                                title: Text("그룹 삭제"),
-                                content: Text("그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다."),
-                                actions: [
-                                  TextButton(
+                        if(memberDetails.isNotEmpty) {
+                          showCustomAlert(
+                            context: context,
+                            title: '삭제 불가',
+                            message: '그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다.',
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: btn_normal(),
+                                child: Text('확인'),
+                              ),
+                            )
+                          );
+                        } else {
+                          showCustomAlert(
+                            context: context,
+                            title: '그룹 삭제',
+                            message: '정말로 이 그룹을 삭제하시겠습니까?',
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text("확인"),
+                                    style: btn_normal(),
+                                    child: Text('취소'),
                                   ),
-                                ],
-                              );
-                            }
-                            return AlertDialog(
-                              title: Text("그룹 삭제"),
-                              content: Text("정말로 이 그룹을 삭제하시겠습니까?"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("취소"),
                                 ),
-                                TextButton(
-                                  onPressed: () async {
-                                    final user =
-                                        FirebaseAuth.instance.currentUser;
+                                spacingBox(),
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      final user =
+                                          FirebaseAuth.instance.currentUser;
 
-                                    if (groupId.isEmpty) {}
-                                    if (user != null && groupId.isNotEmpty) {
-                                      // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
-                                      final userDocRef = FirebaseFirestore
-                                          .instance
-                                          .collection('users')
-                                          .doc(user.uid);
+                                      if (groupId.isEmpty) {}
+                                      if (user != null && groupId.isNotEmpty) {
+                                        // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
+                                        final userDocRef = FirebaseFirestore
+                                            .instance
+                                            .collection('users')
+                                            .doc(user.uid);
 
-                                      // groups 배열에서 groupId 삭제
-                                      await userDocRef.update({
-                                        'groups': FieldValue.arrayRemove([
-                                          groupId,
-                                        ]),
-                                      });
-                                    } else {
-                                      // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
-                                      print('로그인이 필요하거나 groupId가 잘못되었습니다.');
-                                    }
-                                    await FirebaseFirestore.instance
-                                        .collection('groups')
-                                        .doc(groupId)
-                                        .delete();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(
-                                      context,
-                                    ).pop(true); // 이전 페이지로 돌아가기
-                                  },
-                                  child: Text("삭제"),
-                                ),
+                                        // groups 배열에서 groupId 삭제
+                                        await userDocRef.update({
+                                          'groups': FieldValue.arrayRemove([
+                                            groupId,
+                                          ]),
+                                        });
+                                      } else {
+                                        // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
+                                        print('로그인이 필요하거나 groupId가 잘못되었습니다.');
+                                      }
+                                      await FirebaseFirestore.instance
+                                          .collection('groups')
+                                          .doc(groupId)
+                                          .delete();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(
+                                        context,
+                                      ).pop(true); // 이전 페이지로 돌아가기
+                                    },
+                                    style: btn_normal(themeColor: themeRed),
+                                    child: Text('삭제'),
+                                  ),
+                                )
                               ],
-                            );
-                          },
-                        );
-                      }, // 그룹 삭제 로직 추가
+                            )
+                          );
+                        }
+                      },
                       style: btn_big(themeColor: themeRed, alpha: 0),
                       child: Text(
                         "그룹 삭제",
                       ),
                     ),
                   ),
+
                   SizedBox(height: 120,),
                   bottomNavigationBarSpacer(context),
                 ],
@@ -487,70 +516,23 @@ class MemberSection extends StatelessWidget {
         subTitle(title),
         spacingBox(),
         ...List.generate(members.length, (index) {
-          return MemberTile(
+          return memberTile(
             name: members[index]['nickName'] ?? 'member_name',
             uid: members[index]['uid'] ?? 'member_uid',
-            groupId: groupId,
-            onKickout: () {
-              //print("닉네임은 : ${members.length}");
-              onKickout(
-                members[index]['uid'] ?? 'member_uid',
-                groupId,
-                members[index]['nickName'] ?? 'member_name',
-              );
-            },
+            child: TextButton(
+              style: btn_small(themeColor: themeRed),
+              onPressed: () async {
+                //print("닉네임은 : ${members.length}");
+                onKickout(
+                  members[index]['uid'] ?? 'member_uid',
+                  groupId,
+                  members[index]['nickName'] ?? 'member_name',
+                );
+              },
+              child: Text('내보내기'),
+            ),
           );
         }),
-      ],
-    );
-  }
-}
-
-class MemberTile extends StatelessWidget {
-  final String name;
-  final String uid;
-  final String groupId;
-  final VoidCallback onKickout;
-
-  const MemberTile({
-    super.key,
-    required this.name,
-    required this.uid,
-    required this.groupId,
-    required this.onKickout,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContentsBox(
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-                child: Text(
-                  name[0],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
-              spacingBox(),
-              Expanded(
-                child: Text(name, style: contentsNormal(),),
-              ),
-              TextButton(
-                style: btn_small(themeColor: themeRed),
-                onPressed: () async {onKickout();},
-                child: Text('내보내기'),
-              )
-            ],
-          ),
-        ),
-        spacingBox()
       ],
     );
   }
@@ -571,50 +553,12 @@ class OwnerSection extends StatelessWidget {
         subTitle(title),
         spacingBox(),
         ...List.generate(members.length, (index) {
-          return OwnerTile(
+          return memberTile(
             name: members[index]['nickName'] ?? 'member_name',
             uid: members[index]["uid"] ?? "",
+            child: Icon(Icons.star, color: themeYellow, size: 28,)
           );
         }),
-      ],
-    );
-  }
-}
-
-class OwnerTile extends StatelessWidget {
-  final String name;
-  final String uid;
-
-  const OwnerTile({super.key, required this.name, required this.uid});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContentsBox(
-          child: Row(
-            children: [
-              // 프로필 사진
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-                child: Text(
-                  name[0],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
-              spacingBox(),
-              Expanded(
-                child: Text(name, style: contentsNormal(),),
-              ),
-              Icon(Icons.star, color: themeYellow, size: 28,)
-            ],
-          )
-        ),
-        spacingBox(),
       ],
     );
   }

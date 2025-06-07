@@ -24,7 +24,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
   Future<void> submit() async {
     if (_selectedDate.isBefore(DateTime.now())) {
       // 날짜가 너무 이르면 경고 출력
-      showCustomDialog(
+      showCustomAlert(
         context: context,
         title: '날짜 오류!',
         message: '선택된 날짜가 너무 이릅니다!',

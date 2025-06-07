@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
-class RecommendedActivity extends StatefulWidget {
-  final String activity;
+import 'package:open_sw/services/activity_info.dart';
 
-  const RecommendedActivity({super.key, required this.activity});
+class RecommendedActivity extends StatefulWidget {
+  final int activityNum;
+
+  const RecommendedActivity({super.key, required this.activityNum});
 
   @override
   State<RecommendedActivity> createState() => _RecommendedActivityState();
@@ -26,7 +28,8 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
         children: [
           // 활동명
           Text(
-            widget.activity,
+            // 액티비티 리스트에서 가져와야함
+            activityList[widget.activityNum]['name'],
             style: TextStyle(
               color: Colors.black,
               fontSize: 24,
@@ -42,7 +45,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                 MaterialPageRoute(
                   builder:
                       (context) => SetPlacePage(
-                        activity: widget.activity,
+                        activityNum: widget.activityNum,
                       ),
                 ),
               );
