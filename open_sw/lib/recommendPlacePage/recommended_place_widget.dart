@@ -1,10 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:open_sw/main.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui';
+
 import 'date_selector_modal.dart';
 
 class RecommendedPlaceWidget extends StatefulWidget {
@@ -30,9 +27,11 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('링크를 열 수 없습니다')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('링크를 열 수 없습니다')));
+      }
     }
   }
 

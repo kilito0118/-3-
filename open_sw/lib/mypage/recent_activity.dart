@@ -137,6 +137,7 @@ class _ActivityBoxState extends State<ActivityBox> {
               children: [
                 // 활동명
                 Text(
+                  //TODO : 활동 이름을 가져오는 로직 추가
                   widget.recentAct.type.toString(),
                   style: TextStyle(
                     color: Colors.black,

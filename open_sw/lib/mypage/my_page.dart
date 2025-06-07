@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
-import 'package:open_sw/mypage/regist_activity.dart';
+import 'package:open_sw/recommendPlacePage/regist_activity.dart';
 
 import 'recent_activity.dart';
 

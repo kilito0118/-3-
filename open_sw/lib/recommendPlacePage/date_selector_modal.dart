@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/mypage/recent_activity.dart';
-import 'package:open_sw/mypage/regist_activity.dart';
+import 'package:open_sw/recommendPlacePage/regist_activity.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class DateSelectorModal extends StatefulWidget {
@@ -56,6 +55,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
         .get()
         .then((doc) => doc.exists ? doc.data() : null);
     Map<String, dynamic> groupData = groupDoc as Map<String, dynamic>;
+    List<String> members = [...groupData['members'], groupData['leader']];
 
     registActivity(
       Activity(
@@ -65,14 +65,11 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
         groupId: widget.groupId,
         score: List.generate(
           groupData['members'].length + 1,
-          (_) => 0,
-        ), // 초기 점수는 모두 0으로 설정
-        userId: [...groupData['members'], groupData['leader']], // 멤버 리스트에 리더 추가
+          (_) => 5,
+        ), // 초기 점수는 모두 5로 설정
+        userId: members, // 멤버 리스트에 리더 추가
       ),
     );
-    // 프린트 함수 지우고 일정추가 기능 구현 필요
-    print(widget.place['name']);
-    print(_selectedDate);
 
     // 팝업 보여주고 확인 누르면 모달 닫기
     showCustomDialog(
@@ -86,6 +83,10 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            setState(() {});
           },
           style: btn_normal(),
           child: Text('확인'),

@@ -202,7 +202,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
                     itemBuilder: (context, index) {
                       return RecommendedPlaceWidget(
                         place: places[index],
-                        type: 0,
+                        type: widget.type,
                         groupId: widget.groupId,
                       );
                     },
