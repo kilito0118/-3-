@@ -7,7 +7,6 @@ import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widg
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
 import 'package:open_sw/useful_widget/commonWidgets/app_bar_widgets.dart';
 import 'package:open_sw/useful_widget/commonWidgets/colors/theme_colors.dart';
-import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupDetailPageOwner extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -185,22 +184,25 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
     return Scaffold(
       backgroundColor: themePageColor,
-      extendBodyBehindAppBar: true,
-      extendBody: true,
       appBar: defaultAppBar(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              topAppBarSpacer(context),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    mainTitle(groupData!['groupName'] ?? "Group_name"),
+                    Text(
+                      groupData!['groupName'] ?? "Group_name",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 5),
                     InkWell(
                       onTap: () {
                         showDialog(
@@ -255,9 +257,12 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                   ],
                 ),
               ),
-              spacingBox(),
-              subTitle('예정된 활동'),
-              spacingBox(),
+              SizedBox(height: 20),
+              Text(
+                "예정된 활동",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
               data!["activities"].length > 0
                   ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
@@ -273,24 +278,19 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                       );
                     },
                   )
-                  : ContentsBox(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Icon(Icons.calendar_month, size: 60, color: Colors.blueAccent,),
-                    spacingBox(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('예정된 활동이 없어요', style: contentsNormal(),),
-                        Text('활동 검색을 통해 일정을 추가해보세요', style: contentsDetail,)
-                      ],
-                    )
-                  ],
-                )
+                  : Text("예정된 활동이 없습니다."),
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                primary: false,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(bottom: 10),
+                itemCount: 0,
+                itemBuilder: (BuildContext context, int index) {
+                  return ActivityCard(date: "00.00(화)", place: "장소 이름");
+                },
               ),
 
-              spacingBox(),
+              SizedBox(height: 20),
               OwnerSection(
                 title: "그룹장",
                 members: [
@@ -305,12 +305,12 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     groupId: groupId,
                     onKickout: kickout,
                   )
-                  : Column(children: [subTitle('그룹원을 추가하세요'), spacingBox()],),
+                  : Text(""),
 
               Column(
                 children: [
-                  TextButton(
-                    onPressed: () async {
+                  GestureDetector(
+                    onTap: () async {
                       await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
@@ -327,109 +327,126 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
                       setState(() {
                         _loadGroupData();
-                      });
+                      }); // 필요하다면 UI 갱신
                     },
-                    style: btn_big(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('그룹원 추가하기',),
-                        spacingBox_mini(),
-                        Icon(Icons.add)
-                      ],
+                    child: DottedBorder(
+                      options: RoundedRectDottedBorderOptions(
+                        radius: Radius.circular(20),
+                        dashPattern: [10, 5],
+                        strokeWidth: 2,
+                        color: Color(0xff585858),
+                        padding: EdgeInsets.all(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(20),
+                                child: Text(
+                                  "그룹원 추가하기",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff585858),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  spacingBox(),
-                  // 삭제버튼
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {
-                        // 그룹 삭제 로직 추가
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            //print(groupId);
-                            if (memberDetails.isNotEmpty) {
-                              return AlertDialog(
-                                title: Text("그룹 삭제"),
-                                content: Text("그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다."),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text("확인"),
-                                  ),
-                                ],
-                              );
-                            }
+                  SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      // 그룹 삭제 로직 추가
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          //print(groupId);
+                          if (memberDetails.isNotEmpty) {
                             return AlertDialog(
                               title: Text("그룹 삭제"),
-                              content: Text("정말로 이 그룹을 삭제하시겠습니까?"),
+                              content: Text("그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다."),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("취소"),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    final user =
-                                        FirebaseAuth.instance.currentUser;
-
-                                    if (groupId.isEmpty) {}
-                                    if (user != null && groupId.isNotEmpty) {
-                                      // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
-                                      final userDocRef = FirebaseFirestore
-                                          .instance
-                                          .collection('users')
-                                          .doc(user.uid);
-
-                                      // groups 배열에서 groupId 삭제
-                                      await userDocRef.update({
-                                        'groups': FieldValue.arrayRemove([
-                                          groupId,
-                                        ]),
-                                      });
-                                    } else {
-                                      // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
-                                      print('로그인이 필요하거나 groupId가 잘못되었습니다.');
-                                    }
-                                    await FirebaseFirestore.instance
-                                        .collection('groups')
-                                        .doc(groupId)
-                                        .delete();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(
-                                      context,
-                                    ).pop(true); // 이전 페이지로 돌아가기
-                                  },
-                                  child: Text("삭제"),
+                                  child: Text("확인"),
                                 ),
                               ],
                             );
-                          },
-                        );
-                      }, // 그룹 삭제 로직 추가
-                      style: btn_big(themeColor: themeRed, alpha: 0),
-                      child: Text(
-                        "그룹 삭제",
-                      ),
+                          }
+                          return AlertDialog(
+                            title: Text("그룹 삭제"),
+                            content: Text("정말로 이 그룹을 삭제하시겠습니까?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("취소"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final user =
+                                      FirebaseAuth.instance.currentUser;
+
+                                  if (groupId.isEmpty) {}
+                                  if (user != null && groupId.isNotEmpty) {
+                                    // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
+                                    final userDocRef = FirebaseFirestore
+                                        .instance
+                                        .collection('users')
+                                        .doc(user.uid);
+
+                                    // groups 배열에서 groupId 삭제
+                                    await userDocRef.update({
+                                      'groups': FieldValue.arrayRemove([
+                                        groupId,
+                                      ]),
+                                    });
+                                  } else {
+                                    // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
+                                    print('로그인이 필요하거나 groupId가 잘못되었습니다.');
+                                  }
+                                  await FirebaseFirestore.instance
+                                      .collection('groups')
+                                      .doc(groupId)
+                                      .delete();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(
+                                    context,
+                                  ).pop(true); // 이전 페이지로 돌아가기
+                                },
+                                child: Text("삭제"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }, // 그룹 삭제 로직 추가
+                    child: Text(
+                      "그룹 삭제",
+                      style: TextStyle(color: Colors.red, fontSize: 18),
                     ),
                   ),
-                  SizedBox(height: 120,),
-                  bottomNavigationBarSpacer(context),
+                  SizedBox(height: 10),
                 ],
               ),
+              SizedBox(height: 20),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           child: SearchButton(groupId: groupId),
         ),
       ),
@@ -484,23 +501,28 @@ class MemberSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        subTitle(title),
-        spacingBox(),
-        ...List.generate(members.length, (index) {
-          return MemberTile(
-            name: members[index]['nickName'] ?? 'member_name',
-            uid: members[index]['uid'] ?? 'member_uid',
-            groupId: groupId,
-            onKickout: () {
-              //print("닉네임은 : ${members.length}");
-              onKickout(
-                members[index]['uid'] ?? 'member_uid',
-                groupId,
-                members[index]['nickName'] ?? 'member_name',
-              );
-            },
-          );
-        }),
+        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            return MemberTile(
+              name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]['uid'] ?? 'member_uid',
+              groupId: groupId,
+              onKickout: () {
+                //print("닉네임은 : ${members.length}");
+                onKickout(
+                  members[index]['uid'] ?? 'member_uid',
+                  groupId,
+                  members[index]['nickName'] ?? 'member_name',
+                );
+              },
+            );
+          },
+        ),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -522,36 +544,33 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContentsBox(
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-                child: Text(
-                  name[0],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
-              spacingBox(),
-              Expanded(
-                child: Text(name, style: contentsNormal(),),
-              ),
-              TextButton(
-                style: btn_small(themeColor: themeRed),
-                onPressed: () async {onKickout();},
-                child: Text('내보내기'),
-              )
-            ],
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+          child: Text(
+            name[0],
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
           ),
         ),
-        spacingBox()
-      ],
+        title: Text(name),
+        trailing: TextButton(
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all(Colors.white),
+            shape: WidgetStateProperty.all(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+          ),
+          onPressed: () async {
+            onKickout();
+          },
+
+          child: Text("내보내기", style: TextStyle(color: Colors.red)),
+        ),
+      ),
     );
   }
 }
@@ -568,14 +587,19 @@ class OwnerSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        subTitle(title),
-        spacingBox(),
-        ...List.generate(members.length, (index) {
-          return OwnerTile(
-            name: members[index]['nickName'] ?? 'member_name',
-            uid: members[index]["uid"] ?? "",
-          );
-        }),
+        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: members.length,
+          itemBuilder: (context, index) {
+            return OwnerTile(
+              name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]["uid"] ?? "",
+            );
+          },
+        ),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -589,33 +613,20 @@ class OwnerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContentsBox(
-          child: Row(
-            children: [
-              // 프로필 사진
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-                child: Text(
-                  name[0],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-              ),
-              spacingBox(),
-              Expanded(
-                child: Text(name, style: contentsNormal(),),
-              ),
-              Icon(Icons.star, color: themeYellow, size: 28,)
-            ],
-          )
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.white,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
+          child: Text(
+            name[0],
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+          ),
         ),
-        spacingBox(),
-      ],
+        title: Text(name),
+      ),
     );
   }
 }

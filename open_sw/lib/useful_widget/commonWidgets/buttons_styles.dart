@@ -2,6 +2,35 @@ import 'package:flutter/material.dart';
 import 'text_style_form.dart';
 import 'colors/theme_colors.dart';
 
+ButtonStyle btn_big({
+  Color? themeColor,
+  int alpha = 40,
+}){
+  Color foregroundColor;
+  Color backgroundColor;
+
+  if (themeColor == null){
+    foregroundColor = Colors.black;
+    backgroundColor = Colors.white;
+  }
+  else{
+    foregroundColor = themeColor;
+    backgroundColor = themeColor.withAlpha(alpha);
+  }
+  return TextButton.styleFrom(
+    foregroundColor: foregroundColor ?? Colors.black,
+    backgroundColor: backgroundColor ?? Colors.white,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20)
+    ),
+    textStyle: contentsNormal(),
+    alignment: Alignment.center,
+    minimumSize: Size(0, 0),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
+}
+
 ButtonStyle btn_normal({
   Color? themeColor,
 }){

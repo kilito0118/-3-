@@ -41,7 +41,7 @@ void showCustomAlert({
               children: [
                 Text(title, style: contentsTitle, textAlign: TextAlign.center,),
                 spacingBox_mini(),
-                Text(message, style: contentsNormal(), textAlign: TextAlign.center,),
+                Text(message, style: contentsDetail, textAlign: TextAlign.center,),
                 spacingBox(),
                 child,
               ],
@@ -92,7 +92,7 @@ void showCustomDialog({
                 spacingBox(),
                 Text(title, style: contentsTitle),
                 spacingBox_mini(),
-                Text(message, style: contentsNormal()),
+                Text(message, style: contentsDetail),
                 spacingBox(),
                 child,
               ],

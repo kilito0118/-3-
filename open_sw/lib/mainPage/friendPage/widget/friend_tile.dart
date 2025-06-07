@@ -55,7 +55,7 @@ class FriendTile extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          SizedBox(width: 10),
+                          spacingBox(),
                           // 친구 이름
                           Text(
                             friend.name,
@@ -167,7 +167,7 @@ class FriendTile extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 10), // tile별 거리 확보
+        SizedBox(height: 14), // tile별 거리 확보
       ],
     );
   }

@@ -132,11 +132,11 @@ class _FriendPageState extends State<FriendPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              topAppBarSpacer(context),
+              SizedBox(height: kToolbarHeight,),
               mainTitle('팔로우 목록'),
               spacingBox(),
               SubmitButtonBig(
-                text: '이메일로 팔로우하기',
+                text: '팔로우 추가하기',
                 onTap: () {
                   showModalBottomSheet(
                     context: context,

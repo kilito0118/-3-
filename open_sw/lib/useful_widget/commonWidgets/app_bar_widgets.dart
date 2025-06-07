@@ -9,7 +9,7 @@ PreferredSizeWidget defaultAppBar() {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: const Color(0xB0F2F2F2), // 반투명 회색
+          backgroundColor: themePageColor.withAlpha(200),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: const BackButton(),
@@ -26,7 +26,7 @@ PreferredSizeWidget defaultAppBar_withoutBtn() {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: const Color(0xB0F2F2F2), // 반투명 회색
+          backgroundColor: themePageColor.withAlpha(200),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           automaticallyImplyLeading: false,

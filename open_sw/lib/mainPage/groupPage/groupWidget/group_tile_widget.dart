@@ -133,7 +133,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
           ),
         ),
         // 다음 타일과 거리두기
-        SizedBox(height: 10),
+        SizedBox(height: 14),
       ],
     );
   }
