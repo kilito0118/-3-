@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:intl/intl.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
@@ -27,6 +28,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   bool isLoading = true;
   Map<String, dynamic>? data;
   DocumentSnapshot? docSnapshot;
+  List<DocumentSnapshot> activityDatas = [];
 
   String leaderName = '그룹장2 이름';
   @override
@@ -35,7 +37,34 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
     setState(() {
       _loadGroupData();
+      loadActivities();
     });
+  }
+
+  Future<void> loadActivities() async {
+    try {
+      final activityIds = (data!['activities'] as List<dynamic>).cast<String>();
+
+      // 병렬 요청 생성
+      final futures =
+          activityIds
+              .map(
+                (id) =>
+                    FirebaseFirestore.instance
+                        .collection('activities')
+                        .doc(id)
+                        .get(),
+              )
+              .toList();
+
+      // 모든 요청 동시 실행
+      activityDatas = await Future.wait(futures);
+
+      // UI 업데이트
+      if (mounted) setState(() {});
+    } catch (e) {
+      print('문서 조회 오류: $e');
+    }
   }
 
   Future<void> getName(String id, int type) async {
@@ -118,7 +147,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
             return {};
           }
         }).toList();
-    print(memberDataList);
+
     return memberDataList;
   }
 
@@ -152,14 +181,26 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    mainTitle(groupData!['groupName'] ?? "Group_name"),
+
+                    Text(
+                      groupData!['groupName'] ?? "Group_name",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 5),
                   ],
                 ),
               ),
-              spacingBox(),
-              subTitle('예정된 활동'),
-              spacingBox(),
-              data!["activities"].length > 0
+              SizedBox(height: 20),
+              Text(
+                "예정된 활동",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              activityDatas.isNotEmpty
+
                   ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     primary: false,
@@ -167,13 +208,19 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                     padding: const EdgeInsets.only(bottom: 10),
                     itemCount: data!["activities"].length,
                     itemBuilder: (BuildContext context, int index) {
-                      var activity = data!["activities"][index];
-                      return ActivityCard(
-                        date: activity['date'] ?? "00.00(화)",
-                        place: activity['place'] ?? "장소 이름",
-                      );
+                      if (activityDatas[index].exists) {
+                        var activityData =
+                            activityDatas[index].data() as Map<String, dynamic>;
+                        return ActivityCard(
+                          date: activityData['date'] ?? "00.00(화)",
+                          place: activityData['place']['name'] ?? "장소 이름",
+                        );
+                      } else {
+                        return Text("활동 데이터를 불러올 수 없습니다.");
+                      }
                     },
                   )
+
                   : ContentsBox(
                   width: double.infinity,
                   child: Row(
@@ -190,6 +237,9 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                     ],
                   )
               ),
+
+                  : Text("예정된 활동이 없습니다."),
+
 
               spacingBox(),
               OwnerSection(
@@ -236,6 +286,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                       ],
                     ),
                   ),
+
                   spacingBox(),
                   SizedBox(
                     width: double.infinity,
@@ -293,7 +344,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 }
 
 class ActivityCard extends StatelessWidget {
-  final String date;
+  final Timestamp date;
   final String place;
 
   const ActivityCard({super.key, required this.date, required this.place});
@@ -310,7 +361,7 @@ class ActivityCard extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(
-          date,
+          DateFormat('yyyy-MM-dd').format(date.toDate()),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(place, style: TextStyle(color: Colors.white)),

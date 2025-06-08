@@ -1,14 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/mypage/recent_activity.dart';
+import 'package:open_sw/recommendPlacePage/regist_activity.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class DateSelectorModal extends StatefulWidget {
   final DateTime selectedDate;
   final Map<String, String> place;
+  final int type;
+  final String groupId;
 
   const DateSelectorModal({
+    required this.groupId,
     super.key,
     required this.selectedDate,
     required this.place,
+    required this.type,
   });
 
   @override
@@ -37,14 +44,32 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
             style: btn_normal(),
             child: Text('확인'),
           ),
-        )
+        ),
       );
       return;
     }
+    // 그룹 데이터 불러오기
+    final groupDoc = await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(widget.groupId)
+        .get()
+        .then((doc) => doc.exists ? doc.data() : null);
+    Map<String, dynamic> groupData = groupDoc as Map<String, dynamic>;
+    List<String> members = [...groupData['members'], groupData['leader']];
 
-    // 프린트 함수 지우고 일정추가 기능 구현 필요
-    print(widget.place['name']);
-    print(_selectedDate);
+    registActivity(
+      Activity(
+        type: widget.type,
+        place: widget.place,
+        date: _selectedDate,
+        groupId: widget.groupId,
+        score: List.generate(
+          groupData['members'].length + 1,
+          (_) => 5,
+        ), // 초기 점수는 모두 5로 설정
+        userId: members, // 멤버 리스트에 리더 추가
+      ),
+    );
 
     // 팝업 보여주고 확인 누르면 모달 닫기
     showCustomDialog(
@@ -58,14 +83,17 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            Navigator.pop(context);
+            setState(() {});
           },
           style: btn_normal(),
           child: Text('확인'),
         ),
-      )
+      ),
     );
   }
-
 
   // 초기 날짜를 현재 날짜로 지정
   @override
@@ -173,14 +201,17 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.black.withAlpha(20),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 0,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none
+                            borderSide: BorderSide.none,
                           ),
                         ),
                         dropdownColor: Colors.white,
@@ -188,7 +219,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                         items: List.generate(24, (index) {
                           return DropdownMenuItem(
                             value: index,
-                            child: Text('${index.toString().padLeft(2, '0')}시')
+                            child: Text('${index.toString().padLeft(2, '0')}시'),
                           );
                         }),
                         onChanged: (value) {
@@ -200,12 +231,12 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                                 _selectedDate.month,
                                 _selectedDate.day,
                                 _selectedHour,
-                                _selectedMinute
+                                _selectedMinute,
                               );
                             });
                           }
                         },
-                      )
+                      ),
                     ),
                     spacingBox(),
                     // 분 선택 버튼
@@ -216,14 +247,17 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.black.withAlpha(20),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 0,
+                          ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
                             borderSide: BorderSide.none,
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none
+                            borderSide: BorderSide.none,
                           ),
                         ),
                         dropdownColor: Colors.white,
@@ -231,7 +265,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                         items: List.generate(60, (index) {
                           return DropdownMenuItem(
                             value: index,
-                            child: Text('${index.toString().padLeft(2, '0')}분')
+                            child: Text('${index.toString().padLeft(2, '0')}분'),
                           );
                         }),
                         onChanged: (value) {
@@ -243,12 +277,12 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
                                 _selectedDate.month,
                                 _selectedDate.day,
                                 _selectedHour,
-                                _selectedMinute
+                                _selectedMinute,
                               );
                             });
                           }
                         },
-                      )
+                      ),
                     ),
                   ],
                 ),

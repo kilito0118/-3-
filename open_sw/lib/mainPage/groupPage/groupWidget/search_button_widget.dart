@@ -94,13 +94,37 @@ class _SearchButtonState extends State<SearchButton> {
                 print('Error fetching user data for uid $uid: $e');
               }
             }
-          } catch (e) {
-            print('Error fetching group data: $e');
-          }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RecommendActPage(rowNumbers: rowNumbers),
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => RecommendActPage(
+                      rowNumbers: rowNumbers,
+                      groupId: groupId,
+                    ),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              gradient: LinearGradient(
+                colors: [Colors.orangeAccent, Colors.deepOrange],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: const Center(
+              child: Text(
+                "찾아보기",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+
             ),
           );
         },

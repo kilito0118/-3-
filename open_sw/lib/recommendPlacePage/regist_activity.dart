@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:open_sw/mypage/recent_activity.dart';
 
 Future<String> registActivity(Activity act) async {
-  String uid = FirebaseAuth.instance.currentUser!.uid;
+  //String uid = FirebaseAuth.instance.currentUser!.uid;
   Map<String, dynamic> activityData = {
     "createdAt": FieldValue.serverTimestamp(),
     "date": act.date,
@@ -12,17 +12,38 @@ Future<String> registActivity(Activity act) async {
     "place": act.place,
     "score": act.score,
     "type": act.type,
-    "userId": uid,
+    "userId": act.userId,
   };
+  print(act.userId);
   try {
     DocumentReference activityRef = await FirebaseFirestore.instance
         .collection('activities')
         .add(activityData);
     String activityId = activityRef.id;
 
-    await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      'activities': FieldValue.arrayUnion([activityId]),
-    });
+    for (var userDoc in act.userId) {
+      DocumentSnapshot userSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userDoc)
+              .get();
+      if (userSnapshot.exists) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userDoc)
+            .update({
+              'activities': FieldValue.arrayUnion([activityId]),
+            });
+      }
+    }
+    print(act.groupId);
+    await FirebaseFirestore.instance
+        .collection('groups')
+        .doc(act.groupId)
+        .update({
+          'activities': FieldValue.arrayUnion([activityId]),
+        });
+
     return activityId;
   } catch (e) {
     //print(e);

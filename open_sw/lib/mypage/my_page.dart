@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
-import 'package:open_sw/mypage/regist_activity.dart';
+import 'package:open_sw/recommendPlacePage/regist_activity.dart';
 
 import 'recent_activity.dart';
 
@@ -74,10 +74,9 @@ class _MyPageState extends State<MyPage> {
                   date:
                       activityData['date'] != null &&
                               activityData['date'] is Timestamp
-                          ? (activityData['date'] as Timestamp)
-                              .toDate()
-                              .toString()
-                          : '날짜 없음',
+                          ? (activityData['date'] as Timestamp).toDate()
+                          : DateTime.now(),
+
                   groupId: activityData['groupId'] ?? '그룹 ID 없음',
                   score: activityData['score'] ?? 0,
                   userId: activityData['userId'] ?? '사용자 ID 없음',
@@ -277,22 +276,26 @@ class _MyPageState extends State<MyPage> {
                             fontWeight: FontWeight.normal,
                           ),
                         )
-                        : SizedBox.shrink(),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: recentActivities.length,
-                      itemBuilder: (context, index) {
-                        return ActivityBox(
-                          recentAct: recentActivities[index],
-                          actId: recentActivityIds[index],
-                        );
-                      },
-                    ),
+                        : Container(
+                          height: 700,
+                          child:
+                              ListView.builder(
+                                //shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: recentActivities.length,
+                                itemBuilder: (context, index) {
+                                  return ActivityBox(
+                                    recentAct: recentActivities[index],
+                                    actId: recentActivityIds[index],
+                                  );
+                                },
+                              ) ??
+                              Text(""),
+                        ),
                     TextButton(
                       onPressed: () {
                         Activity act = Activity(
-                          date: '2025.05.20',
+                          date: DateTime.now(),
                           groupId: 'group1',
                           place: {
                             'id': '',
@@ -302,9 +305,9 @@ class _MyPageState extends State<MyPage> {
                             'x': '',
                             'y': '',
                           }, //이 부분을 그냥 받아온 Map<String, String> 형태로 넣어주시면 됩니다
-                          score: 5,
-                          type: '활동1',
-                          userId: FirebaseAuth.instance.currentUser!.uid,
+                          score: [5],
+                          type: 0,
+                          userId: [FirebaseAuth.instance.currentUser!.uid],
                         );
                         registActivity(act);
                         //print(act);

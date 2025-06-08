@@ -6,9 +6,18 @@ import 'package:open_sw/services/category_info.dart';
 import 'package:open_sw/services/activity_info.dart';
 
 class RecommendedActivity extends StatefulWidget {
-  final int activityNum;
 
-  const RecommendedActivity({super.key, required this.activityNum});
+  final String activity;
+  final String groupId;
+  final int type;
+
+  const RecommendedActivity({
+    super.key,
+    required this.activity,
+    required this.groupId,
+    required this.type,
+  });
+
 
   @override
   State<RecommendedActivity> createState() => _RecommendedActivityState();
@@ -18,17 +27,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TouchReactBox(
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              boxShadow: [
-              ]
+
             ),
             child: Row(
               children: [
@@ -49,8 +48,9 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) => SetPlacePage(
-                                activityNum: widget.activityNum,
+                                  (context) => SetPlacePage(groupId: widget.groupId,
+                        activity: widget.activity,
+                        type: widget.type,
                               ),
                             ),
                           );

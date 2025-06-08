@@ -16,14 +16,22 @@ class RecommendedPlacesPage extends StatefulWidget {
   final String posName;
   final double lat;
   final double lng;
-  final int activityNum;
+
+  final String activity;
+  final String groupId;
+  final int type;
+
 
   const RecommendedPlacesPage({
     super.key,
     required this.posName,
     required this.lat,
     required this.lng,
-    required this.activityNum,
+
+    required this.activity,
+    required this.groupId,
+    required this.type,
+
   });
 
   @override
@@ -61,7 +69,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
         setState(() {
           _currentIndex = page.round();
         });
-        if(_currentIndex != pastIndex){
+        if (_currentIndex != pastIndex) {
           goToMarker();
         }
       }
@@ -89,34 +97,34 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
         // 지도가 준비되어 있으면 바로 마커 추가 및 카메라 이동
         if (_mapReady && _mapController != null) {
           addMarkers();
-          _mapController!.updateCamera(NCameraUpdate.withParams(
-            target: NLatLng(lat, lng),
-            zoom: camZoom,
-          ));
+          _mapController!.updateCamera(
+            NCameraUpdate.withParams(target: NLatLng(lat, lng), zoom: camZoom),
+          );
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('장소 검색 실패: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('장소 검색 실패: $e')));
     }
   }
 
   void addMarkers() {
     if (_mapController == null) return;
 
-    final markers = places.asMap().entries.map((entry) {
-      final idx = entry.key;
-      final place = entry.value;
-      return NMarker(
-        id: 'marker_$idx',
-        position: NLatLng(
-          double.parse(place['y']!),
-          double.parse(place['x']!),
-        ),
-        caption: NOverlayCaption(text: place['name'] ?? '이름 없음'),
-      );
-    }).toSet();
+    final markers =
+        places.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final place = entry.value;
+          return NMarker(
+            id: 'marker_$idx',
+            position: NLatLng(
+              double.parse(place['y']!),
+              double.parse(place['x']!),
+            ),
+            caption: NOverlayCaption(text: place['name'] ?? '이름 없음'),
+          );
+        }).toSet();
 
     _mapController!.clearOverlays();
     _mapController!.addOverlayAll(markers);
@@ -130,89 +138,91 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
     final lng = double.parse(target['x']!);
 
     _mapController!.updateCamera(
-      NCameraUpdate.withParams(
-        target: NLatLng(lat, lng),
-        zoom: camZoom,
-      ),
+      NCameraUpdate.withParams(target: NLatLng(lat, lng), zoom: camZoom),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: defaultAppBar(),
-        body: Stack(
-          children: [
-            NaverMap(
-              onMapReady: (controller) {
-                _mapController = controller;
-                _mapReady = true;
+      extendBodyBehindAppBar: true,
+      appBar: defaultAppBar(),
+      body: Stack(
+        children: [
+          NaverMap(
+            onMapReady: (controller) {
+              _mapController = controller;
+              _mapReady = true;
 
-                // 장소가 이미 검색되었으면 마커 추가
-                if (places.isNotEmpty) {
-                  addMarkers();
+              // 장소가 이미 검색되었으면 마커 추가
+              if (places.isNotEmpty) {
+                addMarkers();
 
-                  final lat = double.parse(places[_currentIndex]['y']!);
-                  final lng = double.parse(places[_currentIndex]['x']!);
-                  _mapController!.updateCamera(NCameraUpdate.withParams(
+                final lat = double.parse(places[_currentIndex]['y']!);
+                final lng = double.parse(places[_currentIndex]['x']!);
+                _mapController!.updateCamera(
+                  NCameraUpdate.withParams(
                     target: NLatLng(lat, lng),
                     zoom: camZoom,
-                  ));
-                }
-              },
-              options: NaverMapViewOptions(
-                mapType: NMapType.basic,
-                liteModeEnable: true,
-                initialCameraPosition: _initialPosition!,
-                rotationGesturesEnable: false,
-                zoomGesturesEnable: true,
-                tiltGesturesEnable: false,
-                scrollGesturesEnable: true,
-                stopGesturesEnable: true,
-              ),
-            ),
-            Column(
-              children: [
-                topAppBarSpacer(context),
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(14),
-                    child: BlurredBox(
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        '"${widget.posName}" 주변 장소들이에요',
-                        style: contentsNormal(),
-                      ),
-                      topRad: 20,
-                      bottomRad: 20
-                    ),
                   ),
-                )
+                );
+              }
+            },
+            options: NaverMapViewOptions(
+              mapType: NMapType.basic,
+              liteModeEnable: true,
+              initialCameraPosition: _initialPosition!,
+              rotationGesturesEnable: false,
+              zoomGesturesEnable: true,
+              tiltGesturesEnable: false,
+              scrollGesturesEnable: true,
+              stopGesturesEnable: true,
+            ),
+          ),
+          Column(
+            children: [
+              topAppBarSpacer(context),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(14),
+                  child: BlurredBox(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      '"${widget.posName}" 주변 장소들이에요',
+                      style: contentsNormal(),
+                    ),
+                    topRad: 20,
+                    bottomRad: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 340,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: places.length,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return RecommendedPlaceWidget(
+                        place: places[index],
+                        type: widget.type,
+                        groupId: widget.groupId,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 340,
-                    child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: places.length,
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return RecommendedPlaceWidget(place: places[index]);
-                        }
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-          ],
-        )
+          ),
+        ],
+      ),
     );
   }
 }
