@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:open_sw/mypage/recent_activity.dart';
 import 'package:open_sw/recommendPlacePage/set_place_page.dart';
 
 class RecommendedActivity extends StatefulWidget {
-  final String activity;
+  final Activity activity;
   final String groupId;
   final int type;
 
