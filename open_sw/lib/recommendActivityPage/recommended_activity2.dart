@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:open_sw/recommendPlacePage/set_place_page.dart';
+
+import 'package:open_sw/services/activity_info.dart';
+
+class RecommendedActivity extends StatefulWidget {
+  final int activityNum;
+
+  const RecommendedActivity({super.key, required this.activityNum});
+
+  @override
+  State<RecommendedActivity> createState() => _RecommendedActivityState();
+}
+
+class _RecommendedActivityState extends State<RecommendedActivity> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 14),
+      decoration: ShapeDecoration(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // 활동명
+          Text(
+            // 액티비티 리스트에서 가져옴
+            activityList[widget.activityNum]['name'],
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // 장소 검색버 튼
+          TextButton(
+            // 함수 구현 필요함
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => SetPlacePage(
+                        activity: activityList[widget.activityNum]['name'],
+                        groupId: activityList[widget.activityNum]['groupId'],
+                        type: widget.activityNum,
+                      ),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+              padding: EdgeInsets.all(0),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '장소 검색하기',
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
+                SizedBox(width: 4),
+                Icon(Icons.search, size: 20),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
