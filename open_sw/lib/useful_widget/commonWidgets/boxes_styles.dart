@@ -35,7 +35,7 @@ Widget blurredBox({
     ),
     child: ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
+        filter: ImageFilter.blur(sigmaX: blurRadius, sigmaY: blurRadius),
         child: Container(
           width: width,
           height: height,
