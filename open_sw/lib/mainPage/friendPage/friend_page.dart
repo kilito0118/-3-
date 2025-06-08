@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/widget/friend_plus_widget.dart';
 import 'widget/friend_tile.dart';
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class FriendPage extends StatefulWidget {
   const FriendPage({super.key});
@@ -46,7 +47,9 @@ class _FriendPageState extends State<FriendPage> {
                   if (friendDoc.exists) {
                     String nickName =
                         friendDoc.data()?['nickName'] ?? 'Unknown';
-                    friendDetails.add({'uid': friendUid, 'nickName': nickName});
+                    String Email =
+                        friendDoc.data()?['email'] ?? 'Unknown';
+                    friendDetails.add({'uid': friendUid, 'nickName': nickName, 'email': Email});
 
                     setState(() {
                       friends =
@@ -55,6 +58,7 @@ class _FriendPageState extends State<FriendPage> {
                                 (detail) => Friend(
                                   name: detail['nickName']!,
                                   uid: detail['uid']!,
+                                  email: detail['email']!
                                 ),
                               )
                               .toList();
@@ -123,128 +127,74 @@ class _FriendPageState extends State<FriendPage> {
     //print(friendDetails);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.transparent, // 배경색 설정
-        appBar: PreferredSize(
-          // '친구' 부분 (appbar)
-          preferredSize: Size.fromHeight(135),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 80),
-                Text(
-                  '팔로우 목록',
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: Padding(
-          // 친구 추가 버튼 + 친구 목록 (body)
-          padding: const EdgeInsets.all(15.0),
+        body: Container(
+          padding: EdgeInsets.symmetric(horizontal: 14),
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 친구 추가 버튼
-              ConstrainedBox(
-                constraints: BoxConstraints(minWidth: double.infinity - 20),
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color.fromRGBO(255, 152, 49, 1),
-                        const Color.fromRGBO(255, 104, 2, 1),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 203, 144, 55),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      shadowColor: Colors.transparent,
-                    ),
-                    child: Text(
-                      '이메일로 팔로우하기',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
+              mainTitle('팔로우 목록'),
+              spacingBox(),
+              SubmitButtonBig(
+                text: '팔로우 추가하기',
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
 
-                        useSafeArea: true,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        constraints: BoxConstraints(
-                          minHeight: 300,
-                          maxHeight: MediaQuery.of(context).size.height * 0.8,
-                          maxWidth: 320,
-                        ),
-                        elevation: 800,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    constraints: BoxConstraints(
+                      minHeight: 300,
+                      maxHeight: MediaQuery.of(context).size.height * 0.8,
+                      maxWidth: 320,
+                    ),
+                    elevation: 800,
 
-                        builder: (context) {
-                          return FriendPlusWidget(
-                            controller: controller,
-                            onAddFriend: () async {
-                              String? uid = await getUid(controller.text);
+                    builder: (context) {
+                      return FriendPlusWidget(
+                        controller: controller,
+                        onAddFriend: () async {
+                          String? uid = await getUid(controller.text);
 
-                              if (uid != null) {
-                                print('해당 이메일의 uid: $uid');
-                                addFriend(uid);
-                              } else {
-                                print('해당 이메일을 가진 사용자가 없습니다.');
-                              }
-                              setState(() {
-                                controller.clear(); // 입력 필드 초기화
-                                Navigator.pop(context); // 모달 닫기
-                                beforeStart(); // 친구 목록 새로고침
-                              });
-                            },
-                          );
-                          // 원하는 위젯 추가
+                          if (uid != null) {
+                            print('해당 이메일의 uid: $uid');
+                            addFriend(uid);
+                          } else {
+                            print('해당 이메일을 가진 사용자가 없습니다.');
+                          }
+                          setState(() {
+                            controller.clear(); // 입력 필드 초기화
+                            Navigator.pop(context); // 모달 닫기
+                            beforeStart(); // 친구 목록 새로고침
+                          });
                         },
                       );
+                      // 원하는 위젯 추가
                     },
-                  ),
-                ),
+                  );
+                },
               ),
-              SizedBox(height: 40),
+              spacingBox(),
               // 친구 목록
-              Text(
-                '내 팔로우 목록',
-                style: TextStyle(fontSize: 15, color: Colors.grey[700]),
-              ),
+              subTitle('나의 팔로우 목록'),
               SizedBox(height: 10),
               // 친구 목록 출력 (friend_tile.dart에 자세한 코드 있음)
               friends.isEmpty
                   ? FriendTile(
-                    friend: Friend(name: "팔로우가 없어요.", uid: ''),
+                    friend: Friend(name: "팔로우 목록이 없어요.", uid: '', email: '새 팔로워를 추가해보세요'),
                     onTap: () => onTap(),
                   )
-                  : Text(""),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: friends.length,
-                  itemBuilder: (context, index) {
-                    return FriendTile(friend: friends[index], onTap: onTap);
-                  },
-                ),
-              ),
+                  : Expanded(
+                    child: ListView.builder(
+                      itemCount: friends.length,
+                      itemBuilder: (context, index) {
+                        return FriendTile(friend: friends[index], onTap: onTap);
+                      },
+                    ),
+                  ),
             ],
           ),
         ),

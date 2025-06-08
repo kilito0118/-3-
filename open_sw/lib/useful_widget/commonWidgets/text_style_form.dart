@@ -24,9 +24,9 @@ Widget subTitle(String title){
     child: Text(
       title,
       style: TextStyle(
-        color: Colors.black.withAlpha(140),
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
+        color: Colors.black.withAlpha(100),
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
         height: 1.1,
         letterSpacing: 0.0,
       ),
@@ -34,19 +34,32 @@ Widget subTitle(String title){
   );
 }
 
-const TextStyle contentsBig = TextStyle(
-  color: Colors.black,
-  fontSize: 26,
-  fontWeight: FontWeight.bold,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
 
-TextStyle contentsNormal({Color color = Colors.black}){
+TextStyle contentsNormal({Color color = Colors.black, FontWeight fontWeight = FontWeight.normal}){
   return TextStyle(
     color: color,
     fontSize: 16,
-    fontWeight: FontWeight.normal,
+    fontWeight: fontWeight,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
+
+TextStyle contentsTitle({Color color = Colors.black}){
+  return TextStyle(
+    color: color,
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
+
+TextStyle contentsBig({Color color = Colors.black, FontWeight fontWeight = FontWeight.normal}){
+  return TextStyle(
+    color: color,
+    fontSize: 20,
+    fontWeight: fontWeight,
     height: 1.1,
     letterSpacing: 0.0,
   );

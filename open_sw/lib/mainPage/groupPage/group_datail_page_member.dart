@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:intl/intl.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
+
+import '../../useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupDatailPageMember extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -161,23 +164,24 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: BackButton(color: Colors.black),
-        title: Text("그룹 페이지", style: TextStyle(color: Colors.black)),
-      ),
+      backgroundColor: themePageColor,
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      appBar: defaultAppBar(),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              topAppBarSpacer(context),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+
                     Text(
                       groupData!['groupName'] ?? "Group_name",
                       style: TextStyle(
@@ -196,6 +200,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
               ),
               SizedBox(height: 10),
               activityDatas.isNotEmpty
+
                   ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     primary: false,
@@ -215,26 +220,45 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                       }
                     },
                   )
+
+                  : ContentsBox(
+                  width: double.infinity,
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_month, size: 65, color: Colors.blueAccent,),
+                      SizedBox(width: 20,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('예정된 활동이 없어요', style: contentsBig(),),
+                          Text('활동 검색을 통해 일정을 추가해보세요', style: contentsDetail,)
+                        ],
+                      )
+                    ],
+                  )
+              ),
+
                   : Text("예정된 활동이 없습니다."),
 
-              SizedBox(height: 20),
-              MemberSection(
+
+              spacingBox(),
+              OwnerSection(
                 title: "그룹장",
                 members: [
-                  {'nickName': leaderName},
+                  {'nickName': leaderName, 'uid': data!['leader'] ?? '그룹장 UID'},
                 ],
               ),
 
               memberDetails.isNotEmpty
                   ? MemberSection(title: "그룹원", members: memberDetails)
-                  : Text(""),
+                  : Column(children: [subTitle('그룹원을 추가하세요'), spacingBox()],),
 
               // MemberSection(title: "그룹원", members: memberNames),
               Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
+                  TextButton(
+                    onPressed: () async {
+                      await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
                         barrierColor: Colors.transparent,
@@ -247,83 +271,71 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                           );
                         },
                       );
+
+                      setState(() {
+                        _loadGroupData();
+                      });
                     },
-                    child: DottedBorder(
-                      options: RoundedRectDottedBorderOptions(
-                        radius: Radius.circular(20),
-                        dashPattern: [10, 5],
-                        strokeWidth: 2,
-                        color: Color(0xff585858),
-                        padding: EdgeInsets.all(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Text(
-                                  "그룹원 추가하기",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff585858),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    style: btn_big(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('그룹원 추가하기',),
+                        spacingBox_mini(),
+                        Icon(Icons.add)
+                      ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      final currentUserUid =
-                          FirebaseAuth.instance.currentUser?.uid;
 
-                      if (groupData != null && groupData!['members'] != null) {
-                        List<dynamic> members = List<dynamic>.from(
-                          groupData!['members'],
-                        );
-                        if (members.contains(currentUserUid)) {
-                          members.remove(currentUserUid);
-
-                          FirebaseFirestore.instance
-                              .collection('groups')
-                              .doc(groupId)
-                              .update({'members': members});
+                  spacingBox(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () {
+                        final currentUserUid =
+                            FirebaseAuth.instance.currentUser?.uid;
+                        print(currentUserUid);
+                        if (groupData != null && groupData!['members'] != null) {
+                          List<dynamic> members = List<dynamic>.from(
+                            groupData!['members'],
+                          );
+                          if (members.contains(currentUserUid)) {
+                            members.remove(currentUserUid);
+                            print(members);
+                            print(groupId);
+                            FirebaseFirestore.instance
+                                .collection('groups')
+                                .doc(groupId)
+                                .update({'members': members});
+                          }
                         }
-                      }
 
-                      FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(currentUserUid)
-                          .update({
-                            'groups': FieldValue.arrayRemove([groupId]),
-                          });
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(currentUserUid)
+                            .update({
+                          'groups': FieldValue.arrayRemove([groupId]),
+                        });
 
-                      Navigator.pop(context); // Optionally navigate back
-                    }, // 그룹 나가기 로직 추가
-                    child: Text(
-                      "그룹 나가기",
-                      style: TextStyle(color: Colors.red, fontSize: 18),
+                        Navigator.pop(context); // Optionally navigate back
+                      }, // 그룹 나가기 로직 추가
+                      style: btn_big(themeColor: themeRed, alpha: 0),
+                      child: Text(
+                        "그룹 나가기",
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 120,),
+                  bottomNavigationBarSpacer(context),
                 ],
               ),
-              SizedBox(height: 20),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 14),
           child: SearchButton(groupId: docSnapshot!.id),
         ),
       ),
@@ -359,6 +371,31 @@ class ActivityCard extends StatelessWidget {
   }
 }
 
+class OwnerSection extends StatelessWidget {
+  final String title;
+  final List<Map<dynamic, dynamic>> members;
+
+  const OwnerSection({super.key, required this.title, required this.members});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        subTitle(title),
+        spacingBox(),
+        ...List.generate(members.length, (index) {
+          return memberTile(
+              name: members[index]['nickName'] ?? 'member_name',
+              uid: members[index]["uid"] ?? "",
+              child: Icon(Icons.star, color: themeYellow, size: 28,)
+          );
+        }),
+      ],
+    );
+  }
+}
+
 class MemberSection extends StatelessWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
@@ -370,41 +407,16 @@ class MemberSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: members.length,
-          itemBuilder: (context, index) {
-            return MemberTile(
+        subTitle(title),
+        spacingBox(),
+        ...List.generate(members.length, (index) {
+          return memberTile(
               name: members[index]['nickName'] ?? 'member_name',
-              uid: members[index]['uid'] ?? 'member_uid',
-            );
-          },
-        ),
-        SizedBox(height: 10),
+              uid: members[index]["uid"] ?? "",
+              child: Text('')
+          );
+        }),
       ],
-    );
-  }
-}
-
-class MemberTile extends StatelessWidget {
-  final String name;
-  final String uid;
-  const MemberTile({super.key, required this.name, required this.uid});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Colors.white,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-        ),
-        title: Text(name),
-      ),
     );
   }
 }

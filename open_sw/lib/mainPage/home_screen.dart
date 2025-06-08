@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/friendPage/friend_page.dart';
 import 'package:open_sw/mainPage/groupPage/group_page.dart';
 import 'package:open_sw/mypage/my_page.dart';
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,64 +62,54 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() => _currentIndex = index);
     }
 
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: themePageColor,
+      appBar: defaultAppBar(),
+      body: PageView(
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.touch,
+            PointerDeviceKind.mouse, // 웹에서 마우스 드래그 허용
+          },
         ),
-
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: PageView(
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse, // 웹에서 마우스 드래그 허용
-              },
-            ),
-            physics: const ClampingScrollPhysics(),
-            pageSnapping: true,
-            controller: _pageController,
-            onPageChanged: (index) => setState(() => _currentIndex = index),
-            children: [
-              FriendPage(),
-              GroupPage(
-                userName: userData?['nickName'] ?? "로그인되지 않음",
-              ), //로그인 할 때 받아오도록 함.
-              MyPage(
-                name: userData?['nickName'] ?? '정보 찾기 실패',
-                age: userData?['age'] ?? 0,
-                gender: userData?['gender'] ?? '정보 찾기 실패',
-                email: userData?['email'] ?? '정보 찾기 실패',
-              ),
-            ], // 각 탭의 화면
+        physics: const ClampingScrollPhysics(),
+        pageSnapping: true,
+        controller: _pageController,
+        onPageChanged: (index) => setState(() => _currentIndex = index),
+        children: [
+          FriendPage(),
+          GroupPage(
+            userName: userData?['nickName'] ?? "로그인되지 않음",
+          ), //로그인 할 때 받아오도록 함.
+          MyPage(
+            name: userData?['nickName'] ?? '정보 찾기 실패',
+            age: userData?['age'] ?? 0,
+            gender: userData?['gender'] ?? '정보 찾기 실패',
+            email: userData?['email'] ?? '정보 찾기 실패',
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            selectedItemColor: Colors.black,
-            //mouseCursor: MouseCursor.defer,
-            selectedFontSize: 20,
-            selectedIconTheme: IconThemeData(size: 35, color: Colors.black),
-            currentIndex: _currentIndex,
-            onTap: handleNavTap,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.contacts),
-                label: '팔로우 목록',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.diversity_3),
-                label: '그룹 목록',
-                //activeIcon: Text("하이라이트"),
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
-            ],
+        ], // 각 탭의 화면
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        //mouseCursor: MouseCursor.defer,
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(size: 35, color: Colors.black),
+        currentIndex: _currentIndex,
+        onTap: handleNavTap,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.contacts),
+            label: '팔로우 목록',
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.diversity_3),
+            label: '그룹 목록',
+            //activeIcon: Text("하이라이트"),
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
+        ],
       ),
     );
   }

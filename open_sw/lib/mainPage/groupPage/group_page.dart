@@ -5,6 +5,8 @@ import 'package:open_sw/mainPage/groupPage/groupWidget/group_plus_tile_widget.da
 import 'package:open_sw/mainPage/groupPage/groupWidget/group_tile_widget.dart';
 import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 import 'package:open_sw/mainPage/groupPage/regist_group.dart';
+import 'package:open_sw/useful_widget/commonWidgets/colors/theme_colors.dart';
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key, required this.userName});
@@ -113,7 +115,7 @@ class _GroupPageState extends State<GroupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: themePageColor,
       body: FutureBuilder<List<DocumentSnapshot>>(
         future: _futureGroups,
         builder: (context, snapshot) {
@@ -126,49 +128,17 @@ class _GroupPageState extends State<GroupPage> {
             final groupCounts = groups.length;
 
             return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
-                padding: const EdgeInsets.only(left: 26, right: 26),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 80),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: '안녕하세요,\n'),
-                              TextSpan(
-                                text: widget.userName,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: ' 님'),
-                            ],
-                            style: TextStyle(color: Colors.black, fontSize: 32),
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 44,
-                          backgroundColor: Colors.orangeAccent,
-                          child: Icon(
-                            Icons.person,
-                            size: 64,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 40),
-                    Text(
-                      '  나의 그룹',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    SizedBox(height: MediaQuery.of(context).padding.top),
+                    mainTitle('안녕하세요 🖐️\n${widget.userName} 님'),
+                    spacingBox(),
+                    subTitle('나의 그룹'),
                     SizedBox(height: 10),
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
