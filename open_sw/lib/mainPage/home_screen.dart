@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      extendBody: true,
       backgroundColor: themePageColor,
       appBar: defaultAppBar(),
       body: PageView(

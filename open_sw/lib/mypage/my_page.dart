@@ -241,7 +241,8 @@ class _MyPageState extends State<MyPage> {
                 style: btnTransparent(themeColor: themeRed),
                 child: Text('로그아웃'),
               ),
-            )
+            ),
+            SafeArea(child: SizedBox.shrink()),
           ],
         ),
       ),

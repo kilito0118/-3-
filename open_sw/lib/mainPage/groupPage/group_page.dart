@@ -175,6 +175,7 @@ class _GroupPageState extends State<GroupPage> {
                         }
                       },
                     ),
+                    SafeArea(child: SizedBox.shrink()),
                   ],
                 ),
               ),
