@@ -134,7 +134,7 @@ class _FriendPageState extends State<FriendPage> {
           padding: EdgeInsets.symmetric(horizontal: padding_small),
           width: double.infinity,
           height: double.infinity,
-          decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
+          decoration: BoxDecoration(color: themePageColor),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

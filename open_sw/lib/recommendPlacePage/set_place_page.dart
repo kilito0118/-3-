@@ -51,7 +51,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
+        decoration: BoxDecoration(color: themePageColor),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(

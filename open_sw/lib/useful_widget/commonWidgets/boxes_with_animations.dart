@@ -56,10 +56,10 @@ class _AnimatedGradientBoxState extends State<AnimatedGradientBox>
       animation: _controller,
       builder: (context, child) {
         final angle = _controller.value * 2 * pi;
-        final dx1 = 10 * cos(angle);
-        final dy1 = 10 * sin(angle);
-        final dx2 = 10 * cos(angle * 2);
-        final dy2 = -10 * sin(angle * 2);
+        final dx1 = 12 * cos(angle);
+        final dy1 = 6 * sin(angle);
+        final dx2 = -12 * cos(angle);
+        final dy2 = -6 * sin(angle);
 
         return Container(
           decoration: BoxDecoration(

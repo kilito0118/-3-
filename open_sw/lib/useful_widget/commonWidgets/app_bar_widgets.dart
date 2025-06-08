@@ -29,7 +29,7 @@ PreferredSizeWidget searchAppBar({
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: const Color(0xB0F2F2F2),
+          backgroundColor: themePageColor,
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: const BackButton(),
