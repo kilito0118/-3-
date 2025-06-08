@@ -136,7 +136,7 @@ class _GroupPageState extends State<GroupPage> {
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: padding_small),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,13 +145,13 @@ class _GroupPageState extends State<GroupPage> {
                     mainTitle('안녕하세요 🖐️\n${widget.userName} 님'),
                     spacingBox(),
                     subTitle('나의 그룹'),
-                    SizedBox(height: 10),
+                    spacingBox(),
 
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       primary: false,
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.only(bottom: padding_small),
                       itemCount: groupCounts + 1,
                       itemBuilder: (BuildContext context, int index) {
                         if (index < groupCounts) {
@@ -175,8 +175,6 @@ class _GroupPageState extends State<GroupPage> {
                         }
                       },
                     ),
-                    SizedBox(height: 80),
-                    Text(""),
                   ],
                 ),
               ),

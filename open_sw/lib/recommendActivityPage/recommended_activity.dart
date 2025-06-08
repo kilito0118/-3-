@@ -46,7 +46,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
 
             child: Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              padding: EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_mid),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
@@ -54,8 +54,8 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
               ),
               child: Row(
                 children: [
-                  getPrimeIcon(widget.type, 65),
-                  SizedBox(width: 20),
+                  getPrimeIcon(widget.type, 60),
+                  SizedBox(width: padding_big),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,6 +64,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                           activityList[widget.type]['name'],
                           style: contentsBig(fontWeight: FontWeight.bold),
                         ),
+                        spacingBoxMini(),
                         spacingBoxMini(),
                         TextButton(
                           onPressed: () {

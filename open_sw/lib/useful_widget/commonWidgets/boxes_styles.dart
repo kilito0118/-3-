@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'spacing_widgets.dart';
 
 Widget blurredBox({
   required Widget child,
@@ -8,10 +9,11 @@ Widget blurredBox({
   double? height,
   double topRad = 20.0,
   double bottomRad = 20.0,
-  double horizontalPadding = 20.0,
-  double verticalPadding = 16.0,
+  double horizontalPadding = padding_big,
+  double verticalPadding = padding_mid,
   int alpha = 180,
   int shadowAlpha = 36,
+  double blurRadius = 40,
 }) {
   return Container(
     clipBehavior: Clip.antiAlias,
@@ -66,7 +68,7 @@ Widget contentsBox({required Widget child, double? width, double? height}) {
     width: width,
     height: height,
     clipBehavior: Clip.antiAlias,
-    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+    padding: EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_mid),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(20),

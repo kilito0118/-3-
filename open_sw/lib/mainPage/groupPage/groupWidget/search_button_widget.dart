@@ -31,7 +31,7 @@ class _SearchButtonState extends State<SearchButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.all(padding_small),
       child: GestureDetector(
         onTapDown: _onTapDown,
         onTapUp: _onTapUp,

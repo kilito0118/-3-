@@ -113,7 +113,7 @@ class _RecommendActPageState extends State<RecommendActPage> {
       backgroundColor: themePageColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: EdgeInsets.symmetric(horizontal: padding_small),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -140,9 +140,9 @@ class _RecommendActPageState extends State<RecommendActPage> {
                   style: btnTransparent(),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       Text('새로 고침'),
-                      SizedBox(width: 4),
+                      spacingBoxMini(),
                       Icon(Icons.refresh, size: 20),
                     ],
                   ),

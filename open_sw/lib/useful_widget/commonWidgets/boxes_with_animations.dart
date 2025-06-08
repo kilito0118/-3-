@@ -1,6 +1,7 @@
 import 'boxes_styles.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'spacing_widgets.dart';
 
 class AnimatedGradientBox extends StatefulWidget {
   final Widget child;
@@ -22,8 +23,8 @@ class AnimatedGradientBox extends StatefulWidget {
     this.backGroundColor = Colors.white,
     this.alpha = 100,
     this.shadowAlpha = 180,
-    this.horizontalPadding = 20.0,
-    this.verticalPadding = 16.0,
+    this.horizontalPadding = padding_big,
+    this.verticalPadding = padding_mid,
   });
 
   @override

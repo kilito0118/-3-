@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+const double padding_big = 18.0;
+const double padding_mid = 16.0;
+const double padding_small = 12.0;
+
 Widget topAppBarSpacer(BuildContext context) {
   return SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight);
 }
 
 Widget topSearchAppBarSpacer(BuildContext context) {
   return SizedBox(
-    height: MediaQuery.of(context).padding.top + kToolbarHeight + 80,
+    height: MediaQuery.of(context).padding.top + kToolbarHeight + 76,
   );
 }
 
@@ -15,11 +19,11 @@ Widget bottomNavigationBarSpacer(BuildContext context) {
 }
 
 Widget spacingBox() {
-  return SizedBox(height: 14, width: 14);
+  return SizedBox(height: padding_small, width: padding_small);
 }
 
 Widget spacingBoxMini() {
-  return SizedBox(height: 6, width: 6);
+  return SizedBox(height: 5, width: 5);
 }
 
 Widget spacingBoxDevider() {
@@ -38,7 +42,7 @@ Widget spacingBoxDevider() {
 
 Widget spacingBoxWithComment(String title) {
   return Padding(
-    padding: EdgeInsets.only(left: 20, right: 20, top: 6, bottom: 14),
+    padding: EdgeInsets.only(left: 20, right: 20, top: 6, bottom: padding_small),
     child: Text(
       title,
       style: TextStyle(

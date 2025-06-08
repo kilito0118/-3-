@@ -152,9 +152,11 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Widget build(BuildContext context) {
     if (groupData == null || isLoading) {
       return Scaffold(
+        backgroundColor: themePageColor,
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
         floatingActionButton: FloatingActionButton(
-          onPressed: _loadGroupData, // 새로고침
+          onPressed: _loadGroupData,
+          backgroundColor: Colors.white, // 새로고침
           child: Icon(Icons.refresh),
         ),
       );
@@ -169,7 +171,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: padding_small),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -215,11 +217,11 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.calendar_month,
-                          size: 65,
+                          Icons.event_busy,
+                          size: 60,
                           color: Colors.blueAccent,
                         ),
-                        SizedBox(width: 20),
+                        SizedBox(width: padding_big),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -308,24 +310,21 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
                         Navigator.pop(context); // Optionally navigate back
                       }, // 그룹 나가기 로직 추가
-                      child: Text(
-                        "그룹 나가기",
-                        style: TextStyle(color: Colors.red, fontSize: 18),
-                      ),
+                      child: Text("그룹 나가기"),
+                      style: btnBig(themeColor: themeRed, alpha: 0),
                     ),
                   ),
                   SizedBox(height: 120),
                   bottomNavigationBarSpacer(context),
                 ],
               ),
-              SizedBox(height: 20),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 0,),
           child: SearchButton(groupId: docSnapshot!.id),
         ),
       ),

@@ -194,9 +194,11 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Widget build(BuildContext context) {
     if (groupData == null || isLoading) {
       return Scaffold(
+        backgroundColor: themePageColor,
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
         floatingActionButton: FloatingActionButton(
           onPressed: _loadGroupData, // 새로고침
+          backgroundColor: Colors.white,
           child: Icon(Icons.refresh),
         ),
       );
@@ -210,7 +212,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: padding_small),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -336,11 +338,11 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.calendar_month,
-                          size: 65,
+                          Icons.event_busy,
+                          size: 60,
                           color: Colors.blueAccent,
                         ),
-                        SizedBox(width: 20),
+                        SizedBox(width: padding_big),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -501,7 +503,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 0),
           child: SearchButton(groupId: groupId),
         ),
       ),

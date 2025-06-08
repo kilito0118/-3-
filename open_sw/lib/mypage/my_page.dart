@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
 
+import '../useful_widget/commonWidgets/common_widgets.dart';
 import 'recent_activity.dart';
 
 class MyPage extends StatefulWidget {
@@ -147,152 +148,101 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.only(top: 40, left: 26, right: 26),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 사용자 정보
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: padding_small),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top),
+            Center(
+              child: Column(
                 children: [
-                  InkWell(
-                    child: Text("로그아웃"),
-                    onTap: () {
-                      FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // 사용자 이미지(현재는 검정 container로 대체하였습니다)
-                  SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircleAvatar(
-                      backgroundColor: Color(
-                        uid.hashCode % 0xFFFFFF,
-                        // ignore: deprecated_member_use
-                      ).withOpacity(1.0), // 이름 해시값으로 색상 생성
-                      child: Text(
-                        widget.name[0],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                        ),
+                  spacingBox(),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Color(
+                      uid.hashCode % 0xFFFFFF,
+                    ).withAlpha(255),
+                    child: Text(
+                      widget.name[0],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  // 사용자 이름
-                  Text(
-                    widget.name,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  // 사용자 나이, 성별
+                  mainTitle(widget.name),
+                  spacingBoxMini(),
                   Text(
                     '나이: ${widget.age}  성별: ${widget.gender}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
+                    style: contentsNormal(),
                   ),
-                  SizedBox(height: 10),
-                  // 사용자 이메일
-                  InkWell(
-                    onTap: () {
+                  spacingBox(),
+                  TextButton(
+                    onPressed: () {
                       Clipboard.setData(ClipboardData(text: widget.email));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('이메일이 클립보드에 복사되었습니다.')),
                       );
                     },
-                    child: Text(
-                      '이메일: ${widget.email}',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
+                    style: btnBig(),
+                    child: Text('이메일: ${widget.email}'),
+                  )
                 ],
               ),
-              SizedBox(height: 40),
-              // 최근 활동
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 타이틀
-                    Text(
-                      '  최근 활동',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    // 최근 활동 목록 출력
-                    recentActivities.isEmpty
-                        ? Text(
-                          '최근 활동이 없습니다.',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14,
-                            fontWeight: FontWeight.normal,
-                          ),
+            ),
+            spacingBox(),
+            subTitle('최근 활동'),
+            recentActivities.isEmpty
+                ? Column(
+              children: [
+                spacingBox(),
+                contentsBox(
+                    child: Row(
+                      children: [
+                        Icon(Icons.history_toggle_off, size: 60, color: Colors.grey,),
+                        SizedBox(width: padding_big,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('최근 활동 내역이 없어요.',style: contentsBig(),),
+                            spacingBoxMini(),
+                            Text('그룹에서 한 활동들이 이곳에 추가돼요', style: contentsDetail,),
+                          ],
                         )
-                        : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: recentActivities.length,
-                          itemBuilder: (context, index) {
-                            return ActivityBox(
-                              recentAct: recentActivities[index],
-                              actId: recentActivityIds[index],
-                            );
-                          },
-                        ),
-                  ],
+                      ],
+                    )
                 ),
+                spacingBox()
+              ],
+            )
+                : spacingBox(),
+            ...List.generate(recentActivities.length, (index) {
+              return ActivityBox(
+                  recentAct: recentActivities[index],
+                  actId: recentActivityIds[index]
+              );
+            }),
+            spacingBox(),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                        (Route<dynamic> route) => false,
+                  );
+                },
+                style: btnTransparent(themeColor: themeRed),
+                child: Text('로그아웃'),
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

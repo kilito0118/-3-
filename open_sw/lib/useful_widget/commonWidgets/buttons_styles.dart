@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'text_style_form.dart';
 import 'colors/theme_colors.dart';
+import 'spacing_widgets.dart';
 
 ButtonStyle btnBig({Color? themeColor, int alpha = 40}) {
   Color foregroundColor;
@@ -16,7 +17,7 @@ ButtonStyle btnBig({Color? themeColor, int alpha = 40}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_mid),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -39,7 +40,7 @@ ButtonStyle btnNormal({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_small),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -62,7 +63,7 @@ ButtonStyle btnTransparent({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_small),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -85,7 +86,7 @@ ButtonStyle btnSmall({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+    padding: const EdgeInsets.symmetric(horizontal: padding_small, vertical: 8),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     textStyle: contentsDetail,
     alignment: Alignment.center,

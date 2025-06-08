@@ -66,72 +66,73 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
   @override
   Widget build(BuildContext context) {
     final data = widget.group.data() as Map<String, dynamic>;
-
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            widget.onTap(); // 탭 이벤트 핸들러 호출
-            final user = FirebaseAuth.instance.currentUser;
-            if (user != null && user.uid == widget.group["leader"]) {
-              // 그룹장이면 그룹 상세 페이지로 이동
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => GroupDetailPageOwner(group: widget.group),
-                ),
-              );
-              widget.onTap();
-            } else {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => GroupDatailPageMember(group: widget.group),
-                ),
-              );
-            }
-            widget.onTap();
-          },
-          child: contentsBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // 그룹 프로필 사진
-                // 현재는 그룹명 첫글자 표시로 대체
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: Colors.orangeAccent,
-                  child: Text(
-                    data["groupName"][0], // 첫 글자 표시
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+    return TouchReactBox(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              widget.onTap(); // 탭 이벤트 핸들러 호출
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null && user.uid == widget.group["leader"]) {
+                // 그룹장이면 그룹 상세 페이지로 이동
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => GroupDetailPageOwner(group: widget.group),
                   ),
-                ),
-                spacingBox(),
-                // 그룹 정보
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 그룹 이름
-                    Text(
-                      data["groupName"],
-                      style: contentsBig(fontWeight: FontWeight.bold),
+                );
+                widget.onTap();
+              } else {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => GroupDatailPageMember(group: widget.group),
+                  ),
+                );
+              }
+              widget.onTap();
+            },
+            child: contentsBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 그룹 프로필 사진
+                  // 현재는 그룹명 첫글자 표시로 대체
+                  CircleAvatar(
+                    radius: 22,
+                    backgroundColor: Colors.orangeAccent,
+                    child: Text(
+                      data["groupName"][0], // 첫 글자 표시
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
-                    // 그룹장 이름
-                    Text("$leaderName 님의 그룹", style: contentsDetail),
-                  ],
-                ),
-              ],
+                  ),
+                  spacingBox(),
+                  // 그룹 정보
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 그룹 이름
+                      Text(
+                        data["groupName"],
+                        style: contentsBig(fontWeight: FontWeight.bold),
+                      ),
+                      // 그룹장 이름
+                      Text("$leaderName 님의 그룹", style: contentsDetail),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        // 다음 타일과 거리두기
-        SizedBox(height: 14),
-      ],
+          // 다음 타일과 거리두기
+          spacingBox()
+        ],
+      ),
     );
   }
 }

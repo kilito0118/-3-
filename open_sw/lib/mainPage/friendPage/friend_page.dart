@@ -131,7 +131,7 @@ class _FriendPageState extends State<FriendPage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: EdgeInsets.symmetric(horizontal: padding_small),
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(color: Color(0xFFF2F2F2)),
@@ -182,7 +182,7 @@ class _FriendPageState extends State<FriendPage> {
               spacingBox(),
               // 친구 목록
               subTitle('나의 팔로우 목록'),
-              SizedBox(height: 10),
+              spacingBox(),
               // 친구 목록 출력 (friend_tile.dart에 자세한 코드 있음)
               friends.isEmpty
                   ? FriendTile(

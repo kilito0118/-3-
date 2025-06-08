@@ -24,7 +24,7 @@ PreferredSizeWidget searchAppBar({
   required Future<void> Function() onSearch,
 }) {
   return PreferredSize(
-    preferredSize: const Size.fromHeight(kToolbarHeight + 80),
+    preferredSize: const Size.fromHeight(kToolbarHeight + 76),
     child: ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
@@ -34,9 +34,9 @@ PreferredSizeWidget searchAppBar({
           elevation: 0,
           leading: const BackButton(),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(80),
+            preferredSize: const Size.fromHeight(76),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: padding_small, vertical: padding_small),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black.withAlpha(20),

@@ -162,7 +162,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
     return blurredBox(
       width: double.infinity,
       topRad: 20,
-      horizontalPadding: 14.0,
+      horizontalPadding: padding_small,
       verticalPadding: 0.0,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

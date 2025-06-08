@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/services/activity_info.dart';
+import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
 
 class Activity {
   final int type;
@@ -100,18 +101,10 @@ class _ActivityBoxState extends State<ActivityBox> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: padding_small),
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        shadows: [
-          BoxShadow(
-            color: Color(0x19000000),
-            blurRadius: 10,
-            offset: Offset(0, 0),
-            spreadRadius: 0,
-          ),
-        ],
       ),
 
       child: Column(

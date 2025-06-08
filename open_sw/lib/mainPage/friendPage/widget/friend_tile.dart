@@ -36,13 +36,13 @@ class FriendTile extends StatelessWidget {
                     // 친구 프로필 (지금은 그냥 이름 첫글자로 해둠)
                     if (friend.name == "팔로우 목록이 없어요.")
                       CircleAvatar(
-                        radius: 22,
+                        radius: 20,
                         backgroundColor: Colors.grey,
                         child: Icon(Icons.question_mark, color: Colors.white),
                       )
                     else
                       CircleAvatar(
-                        radius: 22,
+                        radius: 20,
                         backgroundColor: Color(
                           friend.uid.hashCode % 0xFFFFFF,
                           // ignore: deprecated_member_use
@@ -165,7 +165,7 @@ class FriendTile extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 14), // tile별 거리 확보
+        spacingBox(),// tile별 거리 확보
       ],
     );
   }

@@ -58,7 +58,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
     final phone = widget.place['phone'] ?? '';
 
     return Padding(
-      padding: EdgeInsets.only(right: 7, left: 7, top: 24),
+      padding: EdgeInsets.only(right: 6, left: 6, top: 24),
       child: blurredBox(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

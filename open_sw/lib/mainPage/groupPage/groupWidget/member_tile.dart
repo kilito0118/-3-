@@ -13,7 +13,7 @@ Widget memberTile({
           children: [
             // 프로필 사진
             CircleAvatar(
-              radius: 22,
+              radius: 20,
               // ignore: deprecated_member_use
               backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
               child: Text(
