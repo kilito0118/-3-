@@ -41,7 +41,7 @@ class PlaceSearchWidget extends StatelessWidget {
               SizedBox(height: 20),
               GestureDetector(
                 onTap: () {
-                  print("입력된 위치: ${_controller.text}");
+                  debugPrint("입력된 위치: ${_controller.text}");
                 },
                 child: Container(
                   width: double.infinity,

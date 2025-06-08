@@ -59,7 +59,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
         });
       }
     } catch (e) {
-      print("그룹장 정보 불러오기 실패: $e");
+      debugPrint("그룹장 정보 불러오기 실패: $e");
     }
   }
 
@@ -94,7 +94,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
             }
             widget.onTap();
           },
-          child: ContentsBox(
+          child: contentsBox(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,

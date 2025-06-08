@@ -39,7 +39,9 @@ Future<String?> registUsers(
         .collection('users')
         .doc(user.user!.uid)
         .set(userData);
+    return user.user!.uid;
   } catch (e) {
     //print(e);
   }
+  return null;
 }

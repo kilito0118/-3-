@@ -23,14 +23,15 @@ class AnimatedGradientBox extends StatefulWidget {
     this.alpha = 100,
     this.shadowAlpha = 180,
     this.horizontalPadding = 20.0,
-    this.verticalPadding = 16.0
+    this.verticalPadding = 16.0,
   });
 
   @override
   State<AnimatedGradientBox> createState() => _AnimatedGradientBoxState();
 }
 
-class _AnimatedGradientBoxState extends State<AnimatedGradientBox> with SingleTickerProviderStateMixin{
+class _AnimatedGradientBoxState extends State<AnimatedGradientBox>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -68,28 +69,27 @@ class _AnimatedGradientBoxState extends State<AnimatedGradientBox> with SingleTi
                 color: widget.shadowColor1.withAlpha(widget.shadowAlpha),
                 offset: Offset(dx1, dy1),
                 blurRadius: 30,
-                spreadRadius: 6
+                spreadRadius: 6,
               ),
               BoxShadow(
                 color: widget.shadowColor2.withAlpha(widget.shadowAlpha),
                 offset: Offset(dx2, dy2),
                 blurRadius: 30,
-                spreadRadius: 6
-              )
-            ]
+                spreadRadius: 6,
+              ),
+            ],
           ),
-          child: BlurredBox(
+          child: blurredBox(
             alpha: widget.alpha,
             topRad: widget.edgeRad,
             bottomRad: widget.edgeRad,
             horizontalPadding: widget.horizontalPadding,
             verticalPadding: widget.verticalPadding,
             backGroundColor: widget.backGroundColor,
-            child: widget.child
+            child: widget.child,
           ),
         );
       },
     );
   }
 }
-

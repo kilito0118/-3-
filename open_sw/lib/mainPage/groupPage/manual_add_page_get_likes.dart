@@ -23,7 +23,6 @@ class ManualAddPageGetLikes extends StatefulWidget {
 
 class ManualAddPageGetLikesState extends State<ManualAddPageGetLikes> {
   Future<List<String>> updateLikes(List likes, String uid) async {
-    print("likes: $likes");
     int number = await getCollectionCount("users") + 10046;
     List<Map<String, dynamic>> data = createActivityListFromSet(
       likes.toSet().cast<int>(),

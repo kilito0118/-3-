@@ -22,12 +22,12 @@ Future<void> main() async {
     clientId: naverMapApi,
     onAuthFailed:
         (ex) => switch (ex) {
-          NQuotaExceededException(:final message) => print(
+          NQuotaExceededException(:final message) => debugPrint(
             "사용량 초과 (message: $message)",
           ),
           NUnauthorizedClientException() ||
           NClientUnspecifiedException() ||
-          NAnotherAuthFailedException() => print("인증 실패: $ex"),
+          NAnotherAuthFailedException() => debugPrint("인증 실패: $ex"),
         },
   );
 

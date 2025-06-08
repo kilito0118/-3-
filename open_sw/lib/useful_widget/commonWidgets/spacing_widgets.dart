@@ -5,38 +5,38 @@ Widget topAppBarSpacer(BuildContext context) {
 }
 
 Widget topSearchAppBarSpacer(BuildContext context) {
-  return SizedBox(height: MediaQuery.of(context).padding.top + kToolbarHeight + 80);
+  return SizedBox(
+    height: MediaQuery.of(context).padding.top + kToolbarHeight + 80,
+  );
 }
 
 Widget bottomNavigationBarSpacer(BuildContext context) {
   return SizedBox(height: MediaQuery.of(context).padding.bottom);
 }
 
-Widget spacingBox(){
-  return SizedBox(height: 14, width: 14,);
+Widget spacingBox() {
+  return SizedBox(height: 14, width: 14);
 }
 
-Widget spacingBox_mini(){
-  return SizedBox(height: 6, width: 6,);
+Widget spacingBoxMini() {
+  return SizedBox(height: 6, width: 6);
 }
 
-Widget spacingBox_devider(){
+Widget spacingBoxDevider() {
   return Column(
     children: [
       spacingBox(),
       Container(
         width: double.infinity,
         height: 1,
-        decoration: BoxDecoration(
-          color: Colors.black.withAlpha(40),
-        )
+        decoration: BoxDecoration(color: Colors.black.withAlpha(40)),
       ),
       spacingBox(),
     ],
   );
 }
 
-Widget spacingBox_withComment(String title){
+Widget spacingBoxWithComment(String title) {
   return Padding(
     padding: EdgeInsets.only(left: 20, right: 20, top: 6, bottom: 14),
     child: Text(
@@ -52,7 +52,7 @@ Widget spacingBox_withComment(String title){
   );
 }
 
-Widget gestureBar(){
+Widget gestureBar() {
   return Center(
     child: Container(
       width: 72,
@@ -62,6 +62,6 @@ Widget gestureBar(){
         borderRadius: BorderRadius.circular(2),
         color: Colors.black.withAlpha(40),
       ),
-    )
+    ),
   );
 }

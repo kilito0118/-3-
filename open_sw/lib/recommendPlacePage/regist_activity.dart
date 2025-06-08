@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:open_sw/mypage/recent_activity.dart';
 
 Future<String> registActivity(Activity act) async {
@@ -14,7 +13,7 @@ Future<String> registActivity(Activity act) async {
     "type": act.type,
     "userId": act.userId,
   };
-  print(act.userId);
+
   try {
     DocumentReference activityRef = await FirebaseFirestore.instance
         .collection('activities')
@@ -36,7 +35,7 @@ Future<String> registActivity(Activity act) async {
             });
       }
     }
-    print(act.groupId);
+
     await FirebaseFirestore.instance
         .collection('groups')
         .doc(act.groupId)

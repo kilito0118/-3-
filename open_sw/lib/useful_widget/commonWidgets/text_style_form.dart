@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-Widget mainTitle(String title){
+Widget mainTitle(String title) {
   return Padding(
     padding: EdgeInsets.only(left: 6, right: 6, top: 14),
     child: Text(
@@ -18,7 +16,7 @@ Widget mainTitle(String title){
   );
 }
 
-Widget subTitle(String title){
+Widget subTitle(String title) {
   return Padding(
     padding: EdgeInsets.only(left: 8, right: 8, top: 14),
     child: Text(
@@ -34,8 +32,10 @@ Widget subTitle(String title){
   );
 }
 
-
-TextStyle contentsNormal({Color color = Colors.black, FontWeight fontWeight = FontWeight.normal}){
+TextStyle contentsNormal({
+  Color color = Colors.black,
+  FontWeight fontWeight = FontWeight.normal,
+}) {
   return TextStyle(
     color: color,
     fontSize: 16,
@@ -45,7 +45,7 @@ TextStyle contentsNormal({Color color = Colors.black, FontWeight fontWeight = Fo
   );
 }
 
-TextStyle contentsTitle({Color color = Colors.black}){
+TextStyle contentsTitle({Color color = Colors.black}) {
   return TextStyle(
     color: color,
     fontSize: 26,
@@ -55,7 +55,10 @@ TextStyle contentsTitle({Color color = Colors.black}){
   );
 }
 
-TextStyle contentsBig({Color color = Colors.black, FontWeight fontWeight = FontWeight.normal}){
+TextStyle contentsBig({
+  Color color = Colors.black,
+  FontWeight fontWeight = FontWeight.normal,
+}) {
   return TextStyle(
     color: color,
     fontSize: 20,

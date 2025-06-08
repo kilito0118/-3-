@@ -68,7 +68,6 @@ class _RecommendActPageState extends State<RecommendActPage> {
     setState(() => isLoading = true);
 
     final requestData = {"row_numbers": widget.rowNumbers};
-    print(requestData);
 
     try {
       final response = await http.post(
@@ -87,10 +86,10 @@ class _RecommendActPageState extends State<RecommendActPage> {
           activityList = sample.map((e) => e.toString()).toList();
         });
       } else {
-        print("요청 실패: ${response.statusCode}");
+        debugPrint("요청 실패: ${response.statusCode}");
       }
     } catch (e) {
-      print("오류 발생: $e");
+      debugPrint("오류 발생: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -138,7 +137,7 @@ class _RecommendActPageState extends State<RecommendActPage> {
               Center(
                 child: TextButton(
                   onPressed: refreshList,
-                  style: btn_transparent(),
+                  style: btnTransparent(),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: const [

@@ -1,16 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
+
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
-import 'package:open_sw/useful_widget/commonWidgets/app_bar_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/boxes_styles.dart';
-import 'package:open_sw/useful_widget/commonWidgets/buttons_styles.dart';
-import 'package:open_sw/useful_widget/commonWidgets/colors/theme_colors.dart';
-import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/text_style_form.dart';
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupDatailPageMember extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -65,7 +60,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       // UI 업데이트
       if (mounted) setState(() {});
     } catch (e) {
-      print('문서 조회 오류: $e');
+      debugPrint('문서 조회 오류: $e');
     }
   }
 
@@ -215,7 +210,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                       }
                     },
                   )
-                  : ContentsBox(
+                  : contentsBox(
                     width: double.infinity,
                     child: Row(
                       children: [
@@ -270,12 +265,12 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                         _loadGroupData();
                       });
                     },
-                    style: btn_big(),
+                    style: btnBig(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('그룹원 추가하기'),
-                        spacingBox_mini(),
+                        spacingBoxMini(),
                         Icon(Icons.add),
                       ],
                     ),

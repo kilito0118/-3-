@@ -19,7 +19,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
     String newUid,
   ) async {
     if (documentSnapshot == null) {
-      print('documentSnapshot이 null입니다!');
+      debugPrint('documentSnapshot이 null입니다!');
       return;
     }
 
@@ -82,7 +82,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
       });
       //print(friendDetails);
     } else {
-      print('로그인된 사용자가 없습니다.');
+      debugPrint('로그인된 사용자가 없습니다.');
     }
 
     super.initState();
@@ -154,6 +154,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                       leading: CircleAvatar(
                         backgroundColor: Color(
                           name['uid']!.hashCode % 0xFFFFFF,
+                          // ignore: deprecated_member_use
                         ).withOpacity(1.0), // uid 해시값으로 색상 생성
                         child: Text(
                           name['nickName'] == null
@@ -178,10 +179,10 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                           Navigator.pop(context);
                           Navigator.pop(context);
                         },
-                        child: Text("그룹에 추가하기"),
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.deepOrange,
                         ),
+                        child: Text("그룹에 추가하기"),
                       ),
                     ),
                   );

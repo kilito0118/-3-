@@ -172,10 +172,10 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       // }
 
       if (response.statusCode != 200) {
-        print("오류 발생: ${response.statusCode}");
+        debugPrint("오류 발생: ${response.statusCode}");
       }
     } catch (e) {
-      print(e);
+      debugPrint(e as String?);
     }
   }
 
@@ -190,8 +190,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
 
   Future<List<String>> updateLikes(List likes) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-    print("uid: $uid");
-    print("likes: $likes");
+
     int number = await getCollectionCount("users") + 10046;
     List<Map<String, dynamic>> data = createActivityListFromSet(
       likes.toSet().cast<int>(),
@@ -226,6 +225,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
     // 전체 후보 중 선택된 활동을 제외한 나머지
     final remainingCandidates =
         widget.selectedActivityNumbers
+            // ignore: avoid_types_as_parameter_names
             .where((num) => !selectedActivities.contains(num))
             .toList();
 

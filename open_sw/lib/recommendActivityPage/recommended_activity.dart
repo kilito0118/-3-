@@ -64,7 +64,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                           activityList[widget.type]['name'],
                           style: contentsBig(fontWeight: FontWeight.bold),
                         ),
-                        spacingBox_mini(),
+                        spacingBoxMini(),
                         TextButton(
                           onPressed: () {
                             Navigator.push(
@@ -79,7 +79,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                               ),
                             );
                           },
-                          style: btn_small(),
+                          style: btnSmall(),
                           child: Text('장소 검색하기'),
                         ),
                       ],

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/services/map_api_services.dart';
-import 'dart:ui';
 import 'recommended_places_page.dart';
 import 'package:open_sw/services/current_location_service.dart';
 
@@ -36,7 +35,11 @@ class _SetPlacePageState extends State<SetPlacePage> {
       final results = await findPlaces(query);
       setState(() => places = results);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('$e')));
+      }
     }
   }
 

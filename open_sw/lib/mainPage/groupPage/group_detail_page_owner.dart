@@ -2,17 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
+
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
-import 'package:open_sw/useful_widget/commonWidgets/app_bar_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/boxes_styles.dart';
-import 'package:open_sw/useful_widget/commonWidgets/buttons_styles.dart';
-import 'package:open_sw/useful_widget/commonWidgets/colors/theme_colors.dart';
-import 'package:open_sw/useful_widget/commonWidgets/custom_dialog.dart';
-import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/text_style_form.dart';
+
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupDetailPageOwner extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -31,6 +26,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   bool isLoading = true;
   Map<String, dynamic>? data;
   DocumentSnapshot? docSnapshot;
+  List<DocumentSnapshot> activityDatas = [];
 
   String leaderName = '그룹장2 이름';
   @override
@@ -39,7 +35,34 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
     setState(() {
       _loadGroupData();
+      loadActivities();
     });
+  }
+
+  Future<void> loadActivities() async {
+    try {
+      final activityIds = (data!['activities'] as List<dynamic>).cast<String>();
+
+      // 병렬 요청 생성
+      final futures =
+          activityIds
+              .map(
+                (id) =>
+                    FirebaseFirestore.instance
+                        .collection('activities')
+                        .doc(id)
+                        .get(),
+              )
+              .toList();
+
+      // 모든 요청 동시 실행
+      activityDatas = await Future.wait(futures);
+
+      // UI 업데이트
+      if (mounted) setState(() {});
+    } catch (e) {
+      debugPrint('문서 조회 오류: $e');
+    }
   }
 
   void kickout(String uid, String groupId, String name) async {
@@ -57,9 +80,6 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
           .doc(uid)
           .delete();
     } else {
-      Map<String, dynamic> userData =
-          userSnapshot.data() as Map<String, dynamic>;
-
       try {
         await FirebaseFirestore.instance.collection('users').doc(uid).update({
           'groups': FieldValue.arrayRemove([groupId]),
@@ -105,13 +125,9 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
-      docSnapshot =
-          await FirebaseFirestore.instance
-              .collection('groups')
-              .doc(widget.group!.id)
-              .get();
+      data = widget.group!.data() as Map<String, dynamic>?;
       groupId = widget.group!.id;
-      data = docSnapshot!.data() as Map<String, dynamic>?;
+      docSnapshot = widget.group;
     } else if (widget.groupId != null) {
       docSnapshot =
           await FirebaseFirestore.instance
@@ -153,7 +169,6 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                   .get();
 
           if (k.exists) {
-            print(k);
             return k;
           } else {
             return FirebaseFirestore.instance
@@ -171,7 +186,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
             return {};
           }
         }).toList();
-    print(memberDataList);
+
     return memberDataList;
   }
 
@@ -245,7 +260,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      style: btn_normal(),
+                                      style: btnNormal(),
                                       child: Text("취소"),
                                     ),
                                   ),
@@ -264,9 +279,12 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                             groupData!['groupName'] = newName;
                                           });
                                         }
-                                        Navigator.of(context).pop();
+                                        if (mounted) {
+                                          // ignore: use_build_context_synchronously
+                                          Navigator.of(context).pop();
+                                        }
                                       },
-                                      style: btn_normal(
+                                      style: btnNormal(
                                         themeColor: Colors.blueAccent,
                                       ),
                                       child: Text("저장"),
@@ -290,7 +308,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               subTitle("예정된 활동"),
               spacingBox(),
               // 활동 카드 리스트
-              data!["activities"].length > 0
+              activityDatas.isNotEmpty
                   ? ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     primary: false,
@@ -298,17 +316,22 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     padding: const EdgeInsets.only(bottom: 10),
                     itemCount: data!["activities"].length,
                     itemBuilder: (BuildContext context, int index) {
-                      var activity = data!["activities"][index];
-                      return ActivityCard(
-                        date: (activity['date'] as Timestamp)
-                            .toDate()
-                            .toString()
-                            .substring(0, 10),
-                        place: activity['place'] ?? "장소 이름",
-                      );
+                      if (activityDatas[index].exists) {
+                        var activityData =
+                            activityDatas[index].data() as Map<String, dynamic>;
+                        return ActivityCard(
+                          date: (activityData['date'] as Timestamp)
+                              .toDate()
+                              .toString()
+                              .substring(0, 10),
+                          place: activityData['place']['name'] ?? "장소 이름",
+                        );
+                      } else {
+                        return Text("활동 데이터를 불러올 수 없습니다.");
+                      }
                     },
                   )
-                  : ContentsBox(
+                  : contentsBox(
                     width: double.infinity,
                     child: Row(
                       children: [
@@ -368,12 +391,12 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                         _loadGroupData();
                       }); // 필요하다면 UI 갱신
                     },
-                    style: btn_big(),
+                    style: btnBig(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text('그룹원 추가하기'),
-                        spacingBox_mini(),
+                        spacingBoxMini(),
                         Icon(Icons.add),
                       ],
                     ),
@@ -394,7 +417,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                style: btn_normal(),
+                                style: btnNormal(),
                                 child: Text('확인'),
                               ),
                             ),
@@ -411,7 +434,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    style: btn_normal(),
+                                    style: btnNormal(),
                                     child: Text('취소'),
                                   ),
                                 ),
@@ -438,18 +461,24 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                                         });
                                       } else {
                                         // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
-                                        print('로그인이 필요하거나 groupId가 잘못되었습니다.');
+                                        debugPrint(
+                                          '로그인이 필요하거나 groupId가 잘못되었습니다.',
+                                        );
                                       }
                                       await FirebaseFirestore.instance
                                           .collection('groups')
                                           .doc(groupId)
                                           .delete();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(
-                                        context,
-                                      ).pop(true); // 이전 페이지로 돌아가기
+                                      if (mounted) {
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.of(context).pop();
+                                        Navigator.of(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                        ).pop(true); // 이전 페이지로 돌아가기
+                                      }
                                     },
-                                    style: btn_normal(themeColor: themeRed),
+                                    style: btnNormal(themeColor: themeRed),
                                     child: Text('삭제'),
                                   ),
                                 ),
@@ -458,7 +487,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                           );
                         }
                       }, // 그룹 삭제 로직 추가
-                      style: btn_big(themeColor: themeRed, alpha: 0),
+                      style: btnBig(themeColor: themeRed, alpha: 0),
                       child: Text("그룹 삭제"),
                     ),
                   ),
@@ -534,9 +563,8 @@ class MemberSection extends StatelessWidget {
             name: members[index]['nickName'] ?? 'member_name',
             uid: members[index]['uid'] ?? 'member_uid',
             child: TextButton(
-              style: btn_small(themeColor: themeRed),
+              style: btnSmall(themeColor: themeRed),
               onPressed: () async {
-                //print("닉네임은 : ${members.length}");
                 onKickout(
                   members[index]['uid'] ?? 'member_uid',
                   groupId,
@@ -560,7 +588,6 @@ class OwnerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

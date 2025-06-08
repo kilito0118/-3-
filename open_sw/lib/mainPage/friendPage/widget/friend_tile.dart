@@ -26,7 +26,7 @@ class FriendTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ContentsBox(
+        contentsBox(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -45,6 +45,7 @@ class FriendTile extends StatelessWidget {
                         radius: 22,
                         backgroundColor: Color(
                           friend.uid.hashCode % 0xFFFFFF,
+                          // ignore: deprecated_member_use
                         ).withOpacity(1.0), // 이름 해시값으로 색상 생성
                         child: Text(
                           friend.name[0],
@@ -82,7 +83,7 @@ class FriendTile extends StatelessWidget {
                         children: [
                           Expanded(
                             child: TextButton(
-                              style: btn_normal(),
+                              style: btnNormal(),
                               onPressed: () {
                                 Navigator.of(context).pop(); // 그냥 닫기
                               },
@@ -92,7 +93,7 @@ class FriendTile extends StatelessWidget {
                           spacingBox(),
                           Expanded(
                             child: TextButton(
-                              style: btn_normal(themeColor: themeRed),
+                              style: btnNormal(themeColor: themeRed),
                               child: Text('삭제'),
                               onPressed: () {
                                 final currentUser =
@@ -122,13 +123,13 @@ class FriendTile extends StatelessWidget {
                                               .doc(currentUid)
                                               .update({'friends': friends});
                                         } else {
-                                          print(
+                                          debugPrint(
                                             'Document does not exist on the database',
                                           );
                                         }
                                       })
                                       .catchError((error) {
-                                        print(
+                                        debugPrint(
                                           'Error fetching document: $error',
                                         );
                                       });
@@ -141,7 +142,7 @@ class FriendTile extends StatelessWidget {
                                     child: SizedBox(
                                       width: double.infinity,
                                       child: TextButton(
-                                        style: btn_normal(),
+                                        style: btnNormal(),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           onTap();
@@ -158,7 +159,7 @@ class FriendTile extends StatelessWidget {
                       ),
                     );
                   },
-                  style: btn_small(themeColor: themeRed),
+                  style: btnSmall(themeColor: themeRed),
                   child: Text('팔로워 삭제'),
                 ), // 상세 버튼 (점3개 아이콘)
             ],

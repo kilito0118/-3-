@@ -47,11 +47,11 @@ class _FriendPageState extends State<FriendPage> {
                   if (friendDoc.exists) {
                     String nickName =
                         friendDoc.data()?['nickName'] ?? 'Unknown';
-                    String Email = friendDoc.data()?['email'] ?? 'Unknown';
+                    String email = friendDoc.data()?['email'] ?? 'Unknown';
                     friendDetails.add({
                       'uid': friendUid,
                       'nickName': nickName,
-                      'email': Email,
+                      'email': email,
                     });
 
                     setState(() {
@@ -72,7 +72,7 @@ class _FriendPageState extends State<FriendPage> {
         }
       });
     } else {
-      print('로그인된 사용자가 없습니다.');
+      debugPrint('로그인된 사용자가 없습니다.');
     }
   }
 
@@ -91,7 +91,7 @@ class _FriendPageState extends State<FriendPage> {
     Map<String, dynamic>? userData =
         userSnapshot.data() as Map<String, dynamic>;
 
-    if (email == userData!['email']) {
+    if (email == userData['email']) {
       return null; // 현재 로그인한 사용자의 uid 반환
     }
     final querySnapshot =
@@ -111,7 +111,7 @@ class _FriendPageState extends State<FriendPage> {
     // 현재 로그인한 사용자의 uid 가져오기
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
-      print('로그인된 사용자가 없습니다.');
+      debugPrint('로그인된 사용자가 없습니다.');
       return;
     }
     final myUid = currentUser.uid;
@@ -163,10 +163,9 @@ class _FriendPageState extends State<FriendPage> {
                           String? uid = await getUid(controller.text);
 
                           if (uid != null) {
-                            print('해당 이메일의 uid: $uid');
                             addFriend(uid);
                           } else {
-                            print('해당 이메일을 가진 사용자가 없습니다.');
+                            debugPrint('해당 이메일을 가진 사용자가 없습니다.');
                           }
                           setState(() {
                             controller.clear(); // 입력 필드 초기화

@@ -97,9 +97,11 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('장소 검색 실패: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('장소 검색 실패: $e')));
+      }
     }
   }
 
@@ -179,7 +181,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
               Center(
                 child: Padding(
                   padding: EdgeInsets.all(14),
-                  child: BlurredBox(
+                  child: blurredBox(
                     child: Text(
                       textAlign: TextAlign.center,
                       '"${widget.posName}" 주변 장소들이에요',

@@ -41,7 +41,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
             onPressed: () {
               Navigator.pop(context);
             },
-            style: btn_normal(),
+            style: btnNormal(),
             child: Text('확인'),
           ),
         ),
@@ -57,7 +57,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
         .then((doc) => doc.exists ? doc.data() : null);
     Map<String, dynamic> groupData = groupDoc as Map<String, dynamic>;
     List<String> members = [...groupData['members'], groupData['leader']];
-    print(widget.place);
+
     registActivity(
       Activity(
         type: widget.type,
@@ -90,7 +90,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
               Navigator.pop(context);
               setState(() {});
             },
-            style: btn_normal(),
+            style: btnNormal(),
             child: Text('확인'),
           ),
         ),
@@ -105,7 +105,6 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
     _selectedDate = widget.selectedDate;
     _selectedHour = _selectedDate.hour;
     _selectedMinute = _selectedDate.minute;
-    print(widget.groupId);
   }
 
   // 날짜 선택창
@@ -160,7 +159,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
 
   @override
   Widget build(BuildContext context) {
-    return BlurredBox(
+    return blurredBox(
       width: double.infinity,
       topRad: 20,
       horizontalPadding: 14.0,
@@ -172,29 +171,29 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
           mainTitle('언제 모이나요?'),
           subTitle(widget.place['name'] ?? ''),
           spacingBox(),
-          ContentsBox(
+          contentsBox(
             child: Column(
               children: [
                 Row(
                   children: [
-                    IconBox(icon: Icons.today, color: Colors.deepPurpleAccent),
-                    spacingBox_mini(),
+                    iconBox(icon: Icons.today, color: Colors.deepPurpleAccent),
+                    spacingBoxMini(),
                     Text('날짜', style: contentsNormal()),
                     spacingBox(),
                     Expanded(
                       child: TextButton(
                         onPressed: _pickDate,
-                        style: btn_normal(),
+                        style: btnNormal(),
                         child: Text(dateText),
                       ),
                     ),
                   ],
                 ),
-                spacingBox_devider(),
+                spacingBoxDevider(),
                 Row(
                   children: [
-                    IconBox(icon: Icons.timer, color: themeOrange),
-                    spacingBox_mini(),
+                    iconBox(icon: Icons.timer, color: themeOrange),
+                    spacingBoxMini(),
                     Text('시간', style: contentsNormal()),
                     spacingBox(),
                     // 시간 선택 버튼
@@ -295,7 +294,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
           ),
           spacingBox(),
           SubmitButtonBig(text: '그룹 일정에 추가', onTap: () => submit()),
-          spacingBox_withComment('그룹 일정에 추가하면 그룹원들이 만날 장소와 시간을 볼 수 있어요.'),
+          spacingBoxWithComment('그룹 일정에 추가하면 그룹원들이 만날 장소와 시간을 볼 수 있어요.'),
           bottomNavigationBarSpacer(context),
         ],
       ),

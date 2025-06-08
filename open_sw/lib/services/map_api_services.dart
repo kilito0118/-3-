@@ -1,5 +1,6 @@
 // json 파일 변환
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,8 +63,8 @@ Future<List<Map<String, String>>> findNearbyPlaces({
   final List<Map<String, String>> allResults = [];
 
   // 키워드 집합 검색
-  for (String keyword_and_category in keywords) {
-    final parts = keyword_and_category.split('/');
+  for (String keywordaAndCategory in keywords) {
+    final parts = keywordaAndCategory.split('/');
     final String keyword;
     final String categoryfilter;
 
@@ -76,7 +77,7 @@ Future<List<Map<String, String>>> findNearbyPlaces({
     }
 
     try {
-      final results = await findNearbyPlaces_keyword(
+      final results = await findNearbyPlacesKeyword(
         latitude: latitude,
         longitude: longitude,
         keyword: keyword,
@@ -90,14 +91,14 @@ Future<List<Map<String, String>>> findNearbyPlaces({
         }
       }
     } catch (e) {
-      print('Error while fetching "$keyword": $e');
+      debugPrint('Error while fetching "$keyword": $e');
     }
   }
 
   // 카테고리 집합 검색
   for (String categoryCode in categoryCodes) {
     try {
-      final results = await findNearbyPlaces_category(
+      final results = await findNearbyPlacesCategory(
         latitude: latitude,
         longitude: longitude,
         categoryCode: categoryCode,
@@ -110,7 +111,7 @@ Future<List<Map<String, String>>> findNearbyPlaces({
         }
       }
     } catch (e) {
-      print('Error while fetching "$categoryCode": $e');
+      debugPrint('Error while fetching "$categoryCode": $e');
     }
   }
 
@@ -126,7 +127,7 @@ Future<List<Map<String, String>>> findNearbyPlaces({
 }
 
 // 키워드를 받아 기준좌표 주변의 장소탐색
-Future<List<Map<String, String>>> findNearbyPlaces_keyword({
+Future<List<Map<String, String>>> findNearbyPlacesKeyword({
   required double latitude,
   required double longitude,
   required String keyword,
@@ -169,11 +170,11 @@ Future<List<Map<String, String>>> findNearbyPlaces_keyword({
 
       if (categoryFilter.trim().isNotEmpty &&
           !categoryName.contains(categoryFilter)) {
-        print('필터링됨');
+        debugPrint('필터링됨');
         continue;
       }
 
-      print('필터 통과');
+      debugPrint('필터 통과');
 
       results.add({
         'id': doc['id'],
@@ -194,7 +195,7 @@ Future<List<Map<String, String>>> findNearbyPlaces_keyword({
 }
 
 // 카테고리를 받아 기준좌표 주변의 장소탐색
-Future<List<Map<String, String>>> findNearbyPlaces_category({
+Future<List<Map<String, String>>> findNearbyPlacesCategory({
   required double latitude,
   required double longitude,
   required String categoryCode,

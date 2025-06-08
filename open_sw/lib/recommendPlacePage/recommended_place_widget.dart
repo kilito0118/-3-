@@ -55,17 +55,17 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final _phone = widget.place['phone'] ?? '';
+    final phone = widget.place['phone'] ?? '';
 
     return Padding(
       padding: EdgeInsets.only(right: 7, left: 7, top: 24),
-      child: BlurredBox(
+      child: blurredBox(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(widget.place['name'] ?? '', style: contentsTitle()),
-            spacingBox_mini(),
+            spacingBoxMini(),
             Text(widget.place['address'] ?? '', style: contentsDetail),
             spacingBox(),
             Row(
@@ -74,8 +74,8 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                   // 전화버튼
                   child: TextButton(
                     onPressed: () {
-                      if (_phone.isNotEmpty) {
-                        _launchUrl('tel:$_phone');
+                      if (phone.isNotEmpty) {
+                        _launchUrl('tel:$phone');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('전화번호가 없습니다.')),
@@ -83,9 +83,9 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                       }
                     },
                     style:
-                        _phone.isNotEmpty
-                            ? btn_normal(themeColor: themeGreen)
-                            : btn_normal(themeColor: Colors.grey),
+                        phone.isNotEmpty
+                            ? btnNormal(themeColor: themeGreen)
+                            : btnNormal(themeColor: Colors.grey),
                     child: Text('전화걸기'),
                   ),
                 ),
@@ -97,13 +97,13 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
                           "https://place.map.kakao.com/${widget.place['id']}";
                       _launchUrl(url);
                     },
-                    style: btn_normal(),
+                    style: btnNormal(),
                     child: Text('지도에서 보기'),
                   ),
                 ),
               ],
             ),
-            spacingBox_devider(),
+            spacingBoxDevider(),
             SubmitButtonNormal(
               text: '그룹 일정에 추가하기',
               onTap: openTimeSelectScreen,

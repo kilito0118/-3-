@@ -39,16 +39,17 @@ class _GroupPageState extends State<GroupPage> {
           .collection('groups')
           .doc(groupId)
           .get(GetOptions(source: Source.server));
-
-      Navigator.pop(context); // 로딩 창 닫기
-
+      if (mounted) {
+        Navigator.pop(context); // 로딩 창 닫기
+      }
       final result = await Navigator.push(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(
           builder: (context) => GroupDetailPageOwner(groupId: groupId),
         ),
       );
-      print(result);
+
       if (result == true) {
         // 새로고침 (예: setState, 데이터 재요청 등)
         setState(() {
@@ -56,8 +57,12 @@ class _GroupPageState extends State<GroupPage> {
         });
       }
     } catch (e) {
-      Navigator.pop(context);
-      print(e);
+      if (mounted) {
+        // 로딩 창 닫기
+        Navigator.pop(context);
+      }
+
+      debugPrint(e.toString());
     }
     setState(() {
       _futureGroups = fetchUserGroups();

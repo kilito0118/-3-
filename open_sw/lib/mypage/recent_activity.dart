@@ -131,7 +131,7 @@ class _ActivityBoxState extends State<ActivityBox> {
           SizedBox(height: 10),
 
           // 활동 이름 및 장소
-          Container(
+          SizedBox(
             width: double.infinity,
             child: Column(
               children: [

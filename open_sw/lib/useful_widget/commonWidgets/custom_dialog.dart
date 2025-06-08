@@ -31,7 +31,7 @@ void showCustomAlert({
         child: Dialog(
           insetPadding: const EdgeInsets.symmetric(horizontal: 26),
           backgroundColor: Colors.transparent,
-          child: BlurredBox(
+          child: blurredBox(
             width: double.infinity,
             topRad: 20,
             bottomRad: 20,
@@ -39,9 +39,17 @@ void showCustomAlert({
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(title, style: contentsTitle(), textAlign: TextAlign.center,),
-                spacingBox_mini(),
-                Text(message, style: contentsDetail, textAlign: TextAlign.center,),
+                Text(
+                  title,
+                  style: contentsTitle(),
+                  textAlign: TextAlign.center,
+                ),
+                spacingBoxMini(),
+                Text(
+                  message,
+                  style: contentsDetail,
+                  textAlign: TextAlign.center,
+                ),
                 spacingBox(),
                 child,
               ],
@@ -81,17 +89,21 @@ void showCustomDialog({
         child: Dialog(
           insetPadding: const EdgeInsets.symmetric(horizontal: 26),
           backgroundColor: Colors.transparent,
-          child: BlurredBox(
+          child: blurredBox(
             width: double.infinity,
             topRad: 20,
             bottomRad: 20,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedBlinkingIcon(icon: icon, color: color.withAlpha(20), size: 120),
+                AnimatedBlinkingIcon(
+                  icon: icon,
+                  color: color.withAlpha(20),
+                  size: 120,
+                ),
                 spacingBox(),
                 Text(title, style: contentsTitle()),
-                spacingBox_mini(),
+                spacingBoxMini(),
                 Text(message, style: contentsDetail),
                 spacingBox(),
                 child,

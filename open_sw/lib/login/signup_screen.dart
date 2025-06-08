@@ -106,6 +106,7 @@ class SignupScreenState extends State<SignupScreen> {
           // 3. 성공 후 화면 전환
           if (!mounted) return;
           Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
             context,
             MaterialPageRoute(builder: (context) => QuestionsPage1()),
           );
@@ -113,12 +114,14 @@ class SignupScreenState extends State<SignupScreen> {
           // 에러 메시지를 스낵바로 출력
           if (!mounted) return;
           ScaffoldMessenger.of(
+            // ignore: use_build_context_synchronously
             context,
           ).showSnackBar(SnackBar(content: Text(e.code)));
           debugPrint('Sign Up Error: ${e.code}');
         } catch (e) {
           if (!mounted) return;
           ScaffoldMessenger.of(
+            // ignore: use_build_context_synchronously
             context,
           ).showSnackBar(SnackBar(content: Text(e.toString())));
         }

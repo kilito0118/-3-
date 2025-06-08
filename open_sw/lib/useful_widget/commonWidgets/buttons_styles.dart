@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'text_style_form.dart';
 import 'colors/theme_colors.dart';
 
-ButtonStyle btn_big({
-  Color? themeColor,
-  int alpha = 40,
-}){
+ButtonStyle btnBig({Color? themeColor, int alpha = 40}) {
   Color foregroundColor;
   Color backgroundColor;
 
-  if (themeColor == null){
+  if (themeColor == null) {
     foregroundColor = Colors.black;
     backgroundColor = Colors.white;
-  }
-  else{
+  } else {
     foregroundColor = themeColor;
     backgroundColor = themeColor.withAlpha(alpha);
   }
@@ -21,9 +17,7 @@ ButtonStyle btn_big({
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20)
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
@@ -31,17 +25,14 @@ ButtonStyle btn_big({
   );
 }
 
-ButtonStyle btn_normal({
-  Color? themeColor,
-}){
+ButtonStyle btnNormal({Color? themeColor}) {
   Color foregroundColor;
   Color backgroundColor;
 
-  if (themeColor == null){
+  if (themeColor == null) {
     foregroundColor = Colors.black;
     backgroundColor = Colors.black.withAlpha(20);
-  }
-  else{
+  } else {
     foregroundColor = themeColor;
     backgroundColor = themeColor.withAlpha(40);
   }
@@ -49,9 +40,7 @@ ButtonStyle btn_normal({
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(14)
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
@@ -59,17 +48,14 @@ ButtonStyle btn_normal({
   );
 }
 
-ButtonStyle btn_transparent({
-  Color? themeColor,
-}){
+ButtonStyle btnTransparent({Color? themeColor}) {
   Color foregroundColor;
   Color backgroundColor;
 
-  if (themeColor == null){
+  if (themeColor == null) {
     foregroundColor = Colors.black;
     backgroundColor = Colors.transparent;
-  }
-  else{
+  } else {
     foregroundColor = themeColor;
     backgroundColor = Colors.transparent;
   }
@@ -77,9 +63,7 @@ ButtonStyle btn_transparent({
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(14)
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
@@ -87,17 +71,14 @@ ButtonStyle btn_transparent({
   );
 }
 
-ButtonStyle btn_small({
-  Color? themeColor,
-}){
+ButtonStyle btnSmall({Color? themeColor}) {
   Color foregroundColor;
   Color backgroundColor;
 
-  if (themeColor == null){
+  if (themeColor == null) {
     foregroundColor = Colors.black;
     backgroundColor = Colors.black.withAlpha(20);
-  }
-  else{
+  } else {
     foregroundColor = themeColor;
     backgroundColor = themeColor.withAlpha(40);
   }
@@ -105,9 +86,7 @@ ButtonStyle btn_small({
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12)
-    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     textStyle: contentsDetail,
     alignment: Alignment.center,
     minimumSize: Size(0, 0),
@@ -136,10 +115,12 @@ class _SubmitButtonNormalState extends State<SubmitButtonNormal> {
   void _onTapDown(TapDownDetails details) {
     setState(() => _scale = 0.95);
   }
+
   void _onTapUp(TapUpDetails details) {
     setState(() => _scale = 1.0);
     widget.onTap();
   }
+
   void _onTapCancel() {
     setState(() => _scale = 1.0);
   }
@@ -191,11 +172,7 @@ class SubmitButtonBig extends StatefulWidget {
   final String text;
   final VoidCallback onTap;
 
-  const SubmitButtonBig({
-    super.key,
-    required this.text,
-    required this.onTap,
-  });
+  const SubmitButtonBig({super.key, required this.text, required this.onTap});
 
   @override
   State<SubmitButtonBig> createState() => _SubmitButtonBigState();
@@ -207,10 +184,12 @@ class _SubmitButtonBigState extends State<SubmitButtonBig> {
   void _onTapDown(TapDownDetails details) {
     setState(() => _scale = 0.95);
   }
+
   void _onTapUp(TapUpDetails details) {
     setState(() => _scale = 1.0);
     widget.onTap();
   }
+
   void _onTapCancel() {
     setState(() => _scale = 1.0);
   }
@@ -258,30 +237,28 @@ class _SubmitButtonBigState extends State<SubmitButtonBig> {
 }
 
 // async 지원 버튼
-class SubmitButton_async extends StatefulWidget {
+class SubmitButtonAsync extends StatefulWidget {
   final String text;
   final Future<void> Function() onTap;
 
-  const SubmitButton_async({
-    super.key,
-    required this.text,
-    required this.onTap,
-  });
+  const SubmitButtonAsync({super.key, required this.text, required this.onTap});
 
   @override
-  State<SubmitButton_async> createState() => _SubmitButton_asyncState();
+  State<SubmitButtonAsync> createState() => SubmitButtonAsyncState();
 }
 
-class _SubmitButton_asyncState extends State<SubmitButton_async> {
+class SubmitButtonAsyncState extends State<SubmitButtonAsync> {
   // 눌렀을때 효과
   double _scale = 1.0;
   void _onTapDown(TapDownDetails details) {
     setState(() => _scale = 0.95);
   }
+
   Future<void> _onTapUp(TapUpDetails details) async {
     setState(() => _scale = 1.0);
     await widget.onTap();
   }
+
   void _onTapCancel() {
     setState(() => _scale = 1.0);
   }

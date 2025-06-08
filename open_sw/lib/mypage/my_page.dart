@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
-import 'package:open_sw/recommendPlacePage/regist_activity.dart';
 
 import 'recent_activity.dart';
 
@@ -191,12 +190,13 @@ class _MyPageState extends State<MyPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // 사용자 이미지(현재는 검정 container로 대체하였습니다)
-                  Container(
+                  SizedBox(
                     width: 100,
                     height: 100,
                     child: CircleAvatar(
                       backgroundColor: Color(
                         uid.hashCode % 0xFFFFFF,
+                        // ignore: deprecated_member_use
                       ).withOpacity(1.0), // 이름 해시값으로 색상 생성
                       child: Text(
                         widget.name[0],

@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-Widget BlurredBox({
+Widget blurredBox({
   required Widget child,
   Color backGroundColor = Colors.white,
   double? width,
@@ -11,7 +11,7 @@ Widget BlurredBox({
   double horizontalPadding = 20.0,
   double verticalPadding = 16.0,
   int alpha = 180,
-  int shadowAlpha = 36
+  int shadowAlpha = 36,
 }) {
   return Container(
     clipBehavior: Clip.antiAlias,
@@ -28,10 +28,10 @@ Widget BlurredBox({
           blurRadius: 8,
           offset: Offset(0, 0),
           spreadRadius: 0,
-        )
-      ]
+        ),
+      ],
     ),
-    child: ClipRRect (
+    child: ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 40, sigmaY: 40),
         child: Container(
@@ -48,9 +48,12 @@ Widget BlurredBox({
             border: Border.all(
               color: Colors.white.withAlpha(alpha),
               width: 1.2,
-            )
+            ),
           ),
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: verticalPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: verticalPadding,
+          ),
           child: child,
         ),
       ),
@@ -58,11 +61,7 @@ Widget BlurredBox({
   );
 }
 
-Widget ContentsBox({
-  required Widget child,
-  double? width,
-  double? height,
-}) {
+Widget contentsBox({required Widget child, double? width, double? height}) {
   return Container(
     width: width,
     height: height,

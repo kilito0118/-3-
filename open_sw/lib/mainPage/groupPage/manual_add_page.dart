@@ -87,9 +87,6 @@ class _ManualAddPageState extends State<ManualAddPage> {
                         ),
                   ),
                 );
-                print(
-                  "이름: ${nameController.text}, 나이: ${ageController.text}, 성별: $selectedGender",
-                );
               },
               child: Container(
                 width: double.infinity,
@@ -124,7 +121,7 @@ class InputField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
 
-  const InputField({required this.label, required this.controller});
+  const InputField({super.key, required this.label, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +157,7 @@ class GenderButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const GenderButton({
+    super.key,
     required this.label,
     required this.color,
     required this.selected,
@@ -173,6 +171,7 @@ class GenderButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
+          // ignore: deprecated_member_use
           color: color.withOpacity(selected ? 1.0 : 0.5),
           borderRadius: BorderRadius.circular(25),
         ),
