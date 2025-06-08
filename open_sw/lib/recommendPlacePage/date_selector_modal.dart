@@ -49,6 +49,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
       return;
     }
     // 그룹 데이터 불러오기
+
     final groupDoc = await FirebaseFirestore.instance
         .collection('groups')
         .doc(widget.groupId)
@@ -56,7 +57,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
         .then((doc) => doc.exists ? doc.data() : null);
     Map<String, dynamic> groupData = groupDoc as Map<String, dynamic>;
     List<String> members = [...groupData['members'], groupData['leader']];
-
+    print(widget.place);
     registActivity(
       Activity(
         type: widget.type,
@@ -72,27 +73,29 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
     );
 
     // 팝업 보여주고 확인 누르면 모달 닫기
-    showCustomDialog(
-      context: context,
-      title: '일정에 추가됨',
-      message: '일정에 정상적으로 추가되었습니다',
-      icon: Icons.check,
-      child: SizedBox(
-        width: double.infinity,
-        child: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            Navigator.pop(context);
-            setState(() {});
-          },
-          style: btn_normal(),
-          child: Text('확인'),
+    if (mounted) {
+      showCustomDialog(
+        context: context,
+        title: '일정에 추가됨',
+        message: '일정에 정상적으로 추가되었습니다',
+        icon: Icons.check,
+        child: SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              setState(() {});
+            },
+            style: btn_normal(),
+            child: Text('확인'),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   // 초기 날짜를 현재 날짜로 지정
@@ -102,6 +105,7 @@ class _DateSelectorModalState extends State<DateSelectorModal> {
     _selectedDate = widget.selectedDate;
     _selectedHour = _selectedDate.hour;
     _selectedMinute = _selectedDate.minute;
+    print(widget.groupId);
   }
 
   // 날짜 선택창

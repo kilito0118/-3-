@@ -37,27 +37,6 @@ class _SearchButtonState extends State<SearchButton> {
         onTapUp: _onTapUp,
         onTapCancel: _onTapCancel,
         onTap: () async {
-          /*
-            showModalBottomSheet(
-              context: context,
-              //backgroundColor: Colors.transparent,
-              //barrierColor: Colors.transparent,
-              useSafeArea: true,
-              isScrollControlled: true,
-
-              backgroundColor: Colors.transparent,
-              constraints: BoxConstraints(
-                minHeight: 300,
-                maxHeight: MediaQuery.of(context).size.height * 0.8,
-                maxWidth: 320,
-              ),
-              elevation: 800,
-
-              builder: (context) {
-                return PlaceSearchWidget(); // PlaceSearchWidget로 변경
-                // 원하는 위젯 추가
-              },
-            );*/
           List<int> rowNumbers = [];
 
           List<String> membersUid = [];
@@ -79,7 +58,6 @@ class _SearchButtonState extends State<SearchButton> {
             }
 
             for (String uid in membersUid) {
-              print(widget.groupId);
               try {
                 DocumentSnapshot userDoc =
                     await firestore.collection('users').doc(uid).get();
@@ -91,22 +69,26 @@ class _SearchButtonState extends State<SearchButton> {
                 }
                 //print(rowNumbers);
               } catch (e) {
-                print('Error fetching user data for uid $uid: $e');
+                debugPrint('Error fetching user data for uid $uid: $e');
               }
             }
           } catch (e) {
-            print('Error fetching group data: $e');
+            debugPrint('Error fetching group data: $e');
           }
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) => RecommendActPage(
-                    rowNumbers: rowNumbers,
-                    groupId: widget.groupId,
-                  ),
-            ),
-          );
+          if (mounted) {
+            await Navigator.push(
+              // ignore: use_build_context_synchronously
+              context,
+              MaterialPageRoute(
+                builder:
+                    (context) => RecommendActPage(
+                      rowNumbers: rowNumbers,
+                      groupId: widget.groupId,
+                    ),
+              ),
+            );
+            setState(() {});
+          }
         },
         child: AnimatedScale(
           scale: _scale,

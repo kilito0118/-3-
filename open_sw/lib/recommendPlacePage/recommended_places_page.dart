@@ -87,7 +87,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
         setState(() {
           places = nearby;
         });
-
+        //print(nearby);
         // 지도가 준비되어 있으면 바로 마커 추가 및 카메라 이동
         if (_mapReady && _mapController != null) {
           addMarkers();

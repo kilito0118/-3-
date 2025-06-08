@@ -38,7 +38,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                       (context) => SetPlacePage(
                         type: widget.type,
                         activity: '',
-                        groupId: '',
+                        groupId: widget.groupId,
                       ),
                 ),
               );
@@ -74,7 +74,7 @@ class _RecommendedActivityState extends State<RecommendedActivity> {
                                     (context) => SetPlacePage(
                                       type: widget.type,
                                       activity: '',
-                                      groupId: '',
+                                      groupId: widget.groupId,
                                     ),
                               ),
                             );
