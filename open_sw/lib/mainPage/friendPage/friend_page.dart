@@ -135,7 +135,6 @@ class _FriendPageState extends State<FriendPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: kToolbarHeight,),
               mainTitle('팔로우 목록'),
               spacingBox(),
               SubmitButtonBig(

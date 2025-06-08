@@ -111,7 +111,7 @@ class _SearchButtonState extends State<SearchButton> {
           child: AnimatedGradientBox(
               shadowColor1: themeRed,
               shadowColor2: themeLightOrange,
-              edgeRad: 24,
+              edgeRad: 25,
               horizontalPadding: 6,
               verticalPadding: 6,
               child: Row(

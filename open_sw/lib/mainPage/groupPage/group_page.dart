@@ -128,13 +128,14 @@ class _GroupPageState extends State<GroupPage> {
             final groupCounts = groups.length;
 
             return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    topAppBarSpacer(context),
+                    SizedBox(height: MediaQuery.of(context).padding.top),
                     mainTitle('안녕하세요 🖐️\n${widget.userName} 님'),
                     spacingBox(),
                     subTitle('나의 그룹'),

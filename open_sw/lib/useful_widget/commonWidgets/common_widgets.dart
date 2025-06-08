@@ -6,5 +6,6 @@ export 'text_style_form.dart';
 export 'custom_dialog.dart';
 export 'icon_widgets.dart';
 export 'boxes_withAnimations.dart';
+export 'touch_react_box.dart';
 
 export 'colors/theme_colors.dart';

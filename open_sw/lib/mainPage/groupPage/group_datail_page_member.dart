@@ -178,12 +178,12 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                   width: double.infinity,
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_month, size: 60, color: Colors.blueAccent,),
-                      spacingBox(),
+                      Icon(Icons.calendar_month, size: 65, color: Colors.blueAccent,),
+                      SizedBox(width: 20,),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('예정된 활동이 없어요', style: contentsNormal(),),
+                          Text('예정된 활동이 없어요', style: contentsBig(),),
                           Text('활동 검색을 통해 일정을 추가해보세요', style: contentsDetail,)
                         ],
                       )

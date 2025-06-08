@@ -18,8 +18,8 @@ ButtonStyle btn_big({
     backgroundColor = themeColor.withAlpha(alpha);
   }
   return TextButton.styleFrom(
-    foregroundColor: foregroundColor ?? Colors.black,
-    backgroundColor: backgroundColor ?? Colors.white,
+    foregroundColor: foregroundColor,
+    backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20)
@@ -46,8 +46,36 @@ ButtonStyle btn_normal({
     backgroundColor = themeColor.withAlpha(40);
   }
   return TextButton.styleFrom(
-    foregroundColor: foregroundColor ?? Colors.black,
-    backgroundColor: backgroundColor ?? Colors.white,
+    foregroundColor: foregroundColor,
+    backgroundColor: backgroundColor,
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(14)
+    ),
+    textStyle: contentsNormal(),
+    alignment: Alignment.center,
+    minimumSize: Size(0, 0),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
+}
+
+ButtonStyle btn_transparent({
+  Color? themeColor,
+}){
+  Color foregroundColor;
+  Color backgroundColor;
+
+  if (themeColor == null){
+    foregroundColor = Colors.black;
+    backgroundColor = Colors.transparent;
+  }
+  else{
+    foregroundColor = themeColor;
+    backgroundColor = Colors.transparent;
+  }
+  return TextButton.styleFrom(
+    foregroundColor: foregroundColor,
+    backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(14)
@@ -74,8 +102,8 @@ ButtonStyle btn_small({
     backgroundColor = themeColor.withAlpha(40);
   }
   return TextButton.styleFrom(
-    foregroundColor: foregroundColor ?? Colors.black,
-    backgroundColor: backgroundColor ?? Colors.white,
+    foregroundColor: foregroundColor,
+    backgroundColor: backgroundColor,
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12)

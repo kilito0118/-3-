@@ -12,24 +12,7 @@ PreferredSizeWidget defaultAppBar() {
           backgroundColor: themePageColor.withAlpha(200),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
-          leading: const BackButton(),
-        ),
-      ),
-    ),
-  );
-}
-
-PreferredSizeWidget defaultAppBar_withoutBtn() {
-  return PreferredSize(
-    preferredSize: const Size.fromHeight(kToolbarHeight),
-    child: ClipRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-        child: AppBar(
-          backgroundColor: themePageColor.withAlpha(200),
-          surfaceTintColor: Colors.transparent,
-          elevation: 0,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
         ),
       ),
     ),

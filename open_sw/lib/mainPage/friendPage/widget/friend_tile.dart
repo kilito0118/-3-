@@ -46,7 +46,8 @@ class FriendTile extends StatelessWidget {
                           friend.name[0],
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 20,
                           ),
                         ),
                       ),
@@ -58,7 +59,7 @@ class FriendTile extends StatelessWidget {
                       children: [
                         Text(
                           friend.name,
-                          style: contentsNormal()
+                          style: contentsNormal(fontWeight: FontWeight.bold)
                         ),
                         Text(
                           friend.email,

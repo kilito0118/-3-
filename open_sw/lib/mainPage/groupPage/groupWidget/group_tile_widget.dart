@@ -119,7 +119,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                     // 그룹 이름
                     Text(
                       data["groupName"],
-                      style: contentsBig,
+                      style: contentsBig(fontWeight: FontWeight.bold),
                     ),
                     // 그룹장 이름
                     Text(

@@ -19,13 +19,14 @@ Widget memberTile({
                 name[0],
                 style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w500
+                  fontWeight: FontWeight.normal,
+                  fontSize: 20,
                 ),
               ),
             ),
             spacingBox(),
             Expanded(
-              child: Text(name, style: contentsNormal(),),
+              child: Text(name, style: contentsNormal(fontWeight: FontWeight.bold),),
             ),
             child
           ],

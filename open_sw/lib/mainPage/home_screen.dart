@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: themePageColor,
+      appBar: defaultAppBar(),
       body: PageView(
         scrollBehavior: const MaterialScrollBehavior().copyWith(
           dragDevices: {

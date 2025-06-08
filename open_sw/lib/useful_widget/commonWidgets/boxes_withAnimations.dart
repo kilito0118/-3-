@@ -20,7 +20,7 @@ class AnimatedGradientBox extends StatefulWidget {
     this.shadowColor1 = Colors.pinkAccent,
     this.shadowColor2 = Colors.lightBlueAccent,
     this.backGroundColor = Colors.white,
-    this.alpha = 120,
+    this.alpha = 100,
     this.shadowAlpha = 180,
     this.horizontalPadding = 20.0,
     this.verticalPadding = 16.0

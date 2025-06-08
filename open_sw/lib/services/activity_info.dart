@@ -133,8 +133,8 @@ const List<Map<String, dynamic>> activityList = [
   // 스포츠 활동 참여 (스포츠맨)
   {
     // 20
-    'name': '농구, 배구, 야구, 축구, 족구',
-    'keywords': ['체육관'],
+    'name': '농구/배구/야구/축구/족구',
+    'keywords': ['체육관', '풋살장', '농구장'],
     'categoryCodes': ['']
   },
   {
@@ -239,7 +239,7 @@ const List<Map<String, dynamic>> activityList = [
     'keywords': ['승마장', '실내 클라이밍장', '서바이벌 게임장'],
     'categoryCodes': ['']
   },
-  // 자연 (자연 탐험가)
+  // 관광 (자연 탐험가)
   {
     // 38
     'name': '문화유적 방문',
