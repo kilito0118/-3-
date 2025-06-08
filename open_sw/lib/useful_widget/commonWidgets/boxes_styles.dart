@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 
 Widget BlurredBox({
   required Widget child,
-  Color backGroundColor = Colors.white,
   double? width,
   double? height,
-  double topRad = 20.0,
-  double bottomRad = 20.0,
+  double topRad = 0.0,
+  double bottomRad = 0.0,
   double horizontalPadding = 20.0,
   double verticalPadding = 16.0,
-  int alpha = 180,
-  int shadowAlpha = 36
+  int alpha = 180
 }) {
   return Container(
     clipBehavior: Clip.antiAlias,
@@ -24,7 +22,7 @@ Widget BlurredBox({
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withAlpha(shadowAlpha),
+          color: Colors.black.withAlpha(36),
           blurRadius: 8,
           offset: Offset(0, 0),
           spreadRadius: 0,
@@ -38,7 +36,7 @@ Widget BlurredBox({
           width: width,
           height: height,
           decoration: BoxDecoration(
-            color: backGroundColor.withAlpha(alpha),
+            color: Colors.white.withAlpha(alpha),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(topRad),
               topRight: Radius.circular(topRad),
@@ -60,12 +58,8 @@ Widget BlurredBox({
 
 Widget ContentsBox({
   required Widget child,
-  double? width,
-  double? height,
 }) {
   return Container(
-    width: width,
-    height: height,
     clipBehavior: Clip.antiAlias,
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
     decoration: BoxDecoration(

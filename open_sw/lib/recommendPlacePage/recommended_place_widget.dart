@@ -64,12 +64,7 @@ class _RecommendedPlaceWidgetState extends State<RecommendedPlaceWidget> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            Text(
-              widget.place['name'] ?? '',
-              style: contentsTitle(),
-            ),
-
+            Text(widget.place['name'] ?? '', style: contentsBig),
             spacingBox_mini(),
             Text(widget.place['address'] ?? '', style: contentsDetail),
             spacingBox(),

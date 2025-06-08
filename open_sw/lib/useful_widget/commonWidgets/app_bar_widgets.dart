@@ -9,10 +9,10 @@ PreferredSizeWidget defaultAppBar() {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: themePageColor.withAlpha(200),
+          backgroundColor: const Color(0xB0F2F2F2), // 반투명 회색
           surfaceTintColor: Colors.transparent,
           elevation: 0,
-          automaticallyImplyLeading: true,
+          leading: const BackButton(),
         ),
       ),
     ),
@@ -39,7 +39,7 @@ PreferredSizeWidget searchAppBar({
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(20),
+                  color: Colors.black.withAlpha(16),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(

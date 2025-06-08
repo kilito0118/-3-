@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/group_datail_page_member.dart';
 import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
-import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
-
 /*
 class Group {
   String name;
@@ -94,7 +92,21 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
             }
             widget.onTap();
           },
-          child: ContentsBox(
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x19000000),
+                  blurRadius: 10,
+                  offset: Offset(0, 0),
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +122,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
-                spacingBox(),
+                SizedBox(width: 10),
                 // 그룹 정보
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -119,12 +131,12 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                     // 그룹 이름
                     Text(
                       data["groupName"],
-                      style: contentsBig(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     // 그룹장 이름
                     Text(
                       "$leaderName 님의 그룹",
-                      style: contentsDetail,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -133,7 +145,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
           ),
         ),
         // 다음 타일과 거리두기
-        SizedBox(height: 14),
+        SizedBox(height: 10),
       ],
     );
   }

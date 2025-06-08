@@ -1,16 +1,15 @@
 // matarial.dart, map_api_services.dart, dart:ui, recommended_places_page 임포트 필요
 import 'package:flutter/material.dart';
+import 'package:open_sw/mypage/recent_activity.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/services/map_api_services.dart';
-import 'dart:ui';
 import 'recommended_places_page.dart';
 import 'package:open_sw/services/current_location_service.dart';
 
 class SetPlacePage extends StatefulWidget {
-
   // 활동 명으로 작성해놔서 추후 활동 번호를 전달받고 그대로 전달하는 방식으로 고쳐야 합니다.
   // 활동별로 검색 잘되는 키워드들 찾아서 Map으로 저장한 다음에 불러오면 어떨까 생각하긴 합니다.
-  final String activity;
+  final Activity activity;
   final String groupId;
   final int type;
 
@@ -19,7 +18,6 @@ class SetPlacePage extends StatefulWidget {
     required this.activity,
     required this.groupId,
     required this.type,
-
   });
 
   @override
@@ -78,7 +76,6 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                   activity: widget.activity,
                                   groupId: widget.groupId,
                                   type: widget.type,
-
                                 ),
                           ),
                         );
@@ -179,78 +176,93 @@ class _SetPlacePageState extends State<SetPlacePage> {
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
-                            ],
 
-                          )
-                      ),
-                    ),
-                    spacingBox(),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-
-                      child: Column(
-                        children: List.generate(places.length, (index) {
-                          final place = places[index];
-                          return SizedBox(
-                            width: double.infinity,
-                            child: TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => RecommendedPlacesPage(
-                                        posName: place['name']!,
-                                        lat: double.parse(place['y']!),
-                                        lng: double.parse(place['x']!),
-                                        activityNum: widget.activityNum,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                style: TextButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  alignment: Alignment.centerLeft,
+                              spacingBox(),
+                              Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      place['name'] ?? '',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.normal
-                                      ),
-                                    ),
-                                    Text(
-                                      place['address'] ?? '',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[500],
-                                          fontWeight: FontWeight.normal
-                                      ),
-                                    )
-                                  ],
-                                )
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                    SizedBox(height: 80,)
-                  ],
+                                clipBehavior: Clip.antiAlias,
 
+                                child: Column(
+                                  children: List.generate(places.length, (
+                                    index,
+                                  ) {
+                                    final place = places[index];
+                                    return SizedBox(
+                                      width: double.infinity,
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (_) => RecommendedPlacesPage(
+                                                    posName: place['name']!,
+                                                    lat: double.parse(
+                                                      place['y']!,
+                                                    ),
+                                                    lng: double.parse(
+                                                      place['x']!,
+                                                    ),
+                                                    activity: widget.activity,
+                                                    groupId: widget.groupId,
+                                                    type: widget.type,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.black,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 20,
+                                            vertical: 16,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              0,
+                                            ),
+                                          ),
+                                          alignment: Alignment.centerLeft,
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              place['name'] ?? '',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            Text(
+                                              place['address'] ?? '',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey[500],
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ),
+                              SizedBox(height: 80),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
                 ),
-                SizedBox(height: 80),
               ],
             ),
           ),

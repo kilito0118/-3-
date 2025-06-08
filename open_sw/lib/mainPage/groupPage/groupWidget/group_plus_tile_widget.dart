@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupPlusTileWidget extends StatelessWidget {
   final void Function() onTap;
@@ -19,7 +18,7 @@ class GroupPlusTileWidget extends StatelessWidget {
               radius: Radius.circular(20),
               dashPattern: [10, 5],
               strokeWidth: 2,
-              color: Colors.black.withAlpha(80),
+              color: Color(0xff585858),
               padding: EdgeInsets.all(16),
             ),
 
@@ -30,10 +29,14 @@ class GroupPlusTileWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsets.all(14),
+                      padding: EdgeInsets.all(20),
                       child: Text(
                         "새 그룹 추가하기",
-                        style: contentsNormal(color: Colors.black.withAlpha(80))
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff585858),
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
