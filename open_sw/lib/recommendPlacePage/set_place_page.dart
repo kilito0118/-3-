@@ -63,9 +63,19 @@ class _SetPlacePageState extends State<SetPlacePage> {
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () async {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Center(child: CircularProgressIndicator());
+                        },
+                      );
+
                       final current = await getCurrentLocation();
 
                       if (!context.mounted) return;
+
+                      Navigator.pop(context); // Close the loading dialog
 
                       if (current['success']) {
                         Navigator.push(
