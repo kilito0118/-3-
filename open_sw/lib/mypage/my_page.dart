@@ -6,6 +6,7 @@ import 'package:open_sw/login/login_screen.dart';
 
 import '../useful_widget/commonWidgets/common_widgets.dart';
 import 'recent_activity.dart';
+import 'package:open_sw/useful_widget/profile_circle_widget.dart';
 
 class MyPage extends StatefulWidget {
   final String name;
@@ -160,8 +161,8 @@ class _MyPageState extends State<MyPage> {
               child: Column(
                 children: [
                   spacingBox(),
-                  CircleAvatar(
-                    radius: 50,
+                  profileCircle(
+                    radius: 60,
                     backgroundColor: Color(
                       uid.hashCode % 0xFFFFFF,
                     ).withAlpha(255),
@@ -169,7 +170,7 @@ class _MyPageState extends State<MyPage> {
                       widget.name[0],
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 50,
+                        fontSize: 60,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

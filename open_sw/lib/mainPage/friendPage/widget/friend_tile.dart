@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+import 'package:open_sw/useful_widget/profile_circle_widget.dart';
 
 class Friend {
   final String name;
@@ -35,13 +36,13 @@ class FriendTile extends StatelessWidget {
                   children: [
                     // 친구 프로필 (지금은 그냥 이름 첫글자로 해둠)
                     if (friend.name == "팔로우 목록이 없어요.")
-                      CircleAvatar(
+                      profileCircle(
                         radius: 20,
                         backgroundColor: Colors.grey,
                         child: Icon(Icons.question_mark, color: Colors.white),
                       )
                     else
-                      CircleAvatar(
+                      profileCircle(
                         radius: 20,
                         backgroundColor: Color(
                           friend.uid.hashCode % 0xFFFFFF,

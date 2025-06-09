@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+import 'package:open_sw/useful_widget/profile_circle_widget.dart';
 
 Widget memberTile({
   required String name,
   required String uid,
+  String email = 'example@gmail.com',
   required Widget child,
 }) {
   return Column(
@@ -12,7 +14,7 @@ Widget memberTile({
         child: Row(
           children: [
             // 프로필 사진
-            CircleAvatar(
+            profileCircle(
               radius: 20,
               // ignore: deprecated_member_use
               backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
@@ -27,9 +29,15 @@ Widget memberTile({
             ),
             spacingBox(),
             Expanded(
-              child: Text(
-                name,
-                style: contentsNormal(fontWeight: FontWeight.bold),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: contentsNormal(fontWeight: FontWeight.bold),
+                  ),
+                  Text(email, style: contentsDetail,)
+                ],
               ),
             ),
             child,

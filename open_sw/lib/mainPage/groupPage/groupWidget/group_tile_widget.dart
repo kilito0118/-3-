@@ -5,6 +5,7 @@ import 'package:open_sw/mainPage/groupPage/group_datail_page_member.dart';
 import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+import 'package:open_sw/useful_widget/profile_circle_widget.dart';
 
 /*
 class Group {
@@ -101,7 +102,7 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
                 children: [
                   // 그룹 프로필 사진
                   // 현재는 그룹명 첫글자 표시로 대체
-                  CircleAvatar(
+                  profileCircle(
                     radius: 22,
                     backgroundColor: Colors.orangeAccent,
                     child: Text(
