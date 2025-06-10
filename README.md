@@ -62,30 +62,34 @@
 
 > - 팔로우 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/bb32e26f-032f-456e-a5f7-61b623a193b4" height="250"/>
-  <img src="https://github.com/user-attachments/assets/ad97d739-5a3f-417a-999a-421109604fe7" height="250"/>
-  <img src="https://github.com/user-attachments/assets/26446088-e373-4d1e-8b27-c5fbfaf69fcf" height="250"/>
-  <img src="https://github.com/user-attachments/assets/b9d78405-de67-4bdb-a4e0-0a47dc55b69c" height="250"/>
+  <img src="https://github.com/user-attachments/assets/9f6442c6-e713-484d-8447-d56ab10ab869" height="250"/>
+  <img src="![팔로우](https://github.com/user-attachments/assets/087356ef-909b-495d-a88a-d178c0c35927)" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
 </div>
 
 > - 그룹 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/3e8e2275-453f-413f-8744-9fe35a9b6744" height="250"/>
-  <img src="https://github.com/user-attachments/assets/3a9391e7-e27e-400f-bacb-b2ea65e4b23e" height="250"/>
-  <img src="https://github.com/user-attachments/assets/7c127d22-127f-454d-9b5b-ac22ce38823f" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
 </div>
 
 > - 내 정보 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/e52ba33d-38dd-49d4-92af-f2c2ddfc3fe7" height="250"/>
-  <img src="https://github.com/user-attachments/assets/bcf2728e-4614-4aba-be83-1af4b9145f5a" height="250"/>
-  <img src="https://github.com/user-attachments/assets/99398bc6-233b-4697-b1a2-3d88abbfe1aa" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
 </div>
 
 > - 활동 추천/ 장소 추천 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/71f00fdf-4a76-4d13-9376-2e24f519b2fe" height="250"/>
-  <img src="https://github.com/user-attachments/assets/43cbcb0d-560a-4b86-b932-09a24b76fc48" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
+  <img src="" height="250"/>
 </div>
 ---
 
