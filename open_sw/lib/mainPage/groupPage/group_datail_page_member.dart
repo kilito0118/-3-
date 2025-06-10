@@ -41,7 +41,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
     memberDetails = [];
     isLoading = true;
     data = null;
-    docSnapshot = null;
+    //docSnapshot = null;
     activityDatas = [];
     await _loadGroupData();
     await loadActivities();

@@ -24,7 +24,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
     String newUid,
   ) async {
     if (documentSnapshot == null) {
-      debugPrint('documentSnapshot이 null입니다!');
+      debugPrint('documentSnapshot이 null입니다!!!!');
       return;
     }
 
@@ -177,13 +177,15 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
                               ? Text(name['nickName']!)
                               : Text(""),
                       trailing: TextButton(
-                        onPressed: () {
-                          addMemberToSnapshot(
+                        onPressed: () async {
+                          await addMemberToSnapshot(
                             widget.groupDocument,
                             name['uid']!,
                           );
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                          if (mounted) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
                         },
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.deepOrange,
