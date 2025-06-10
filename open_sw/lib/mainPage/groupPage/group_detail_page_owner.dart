@@ -43,7 +43,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
     memberDetails = [];
     isLoading = true;
     data = null;
-    docSnapshot = null;
+    //docSnapshot = null;
     activityDatas = [];
     await _loadGroupData();
     await loadActivities();
@@ -339,6 +339,9 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                     padding: const EdgeInsets.only(bottom: 10),
                     itemCount: data!["activities"].length,
                     itemBuilder: (BuildContext context, int index) {
+                      if (activityDatas.length <= index) {
+                        return SizedBox.shrink(); // 인덱스가 범위를 벗어나면 빈 위젯 반환
+                      }
                       if (activityDatas[index].exists) {
                         var activityData =
                             activityDatas[index].data() as Map<String, dynamic>;
