@@ -47,6 +47,8 @@
 ---
 
 ## 📱 설치 및 실행 방법
+[다운로드 링크](https://appdistribution.firebase.google.com/testerapps/1:194295087383:android:83acc4d4a7749daf62b752/releases/550u2hl1kqfb0?utm_source=firebase-console)
+
 
 1. 안드로이드 기기에 앱 설치  
 2. 회원가입 후 바로 사용 가능  
