@@ -377,6 +377,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
 
               spacingBox(),
               OwnerSection(
+                rebuild: rebuild,
                 title: "그룹장",
                 members: [
                   {
@@ -624,11 +625,18 @@ class _MemberSectionState extends State<MemberSection> {
 class OwnerSection extends StatelessWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
+  final void Function() rebuild;
 
-  const OwnerSection({super.key, required this.title, required this.members});
+  const OwnerSection({
+    super.key,
+    required this.title,
+    required this.members,
+    required this.rebuild,
+  });
 
   @override
   Widget build(BuildContext context) {
+    rebuild();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

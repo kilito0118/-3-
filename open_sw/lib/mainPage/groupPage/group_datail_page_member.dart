@@ -383,7 +383,7 @@ class ActivityCard extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         subtitle: Text(place, style: TextStyle(color: Colors.white)),
-        trailing: Icon(Icons.more_vert, color: Colors.white),
+        //trailing: Icon(Icons.more_vert, color: Colors.white),
       ),
     );
   }
