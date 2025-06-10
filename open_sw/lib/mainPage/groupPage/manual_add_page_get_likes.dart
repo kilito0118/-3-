@@ -8,6 +8,7 @@ class ManualAddPageGetLikes extends StatefulWidget {
   final int age;
   final String gender;
   final String groupId;
+  final void Function() logic;
 
   const ManualAddPageGetLikes({
     super.key,
@@ -15,6 +16,7 @@ class ManualAddPageGetLikes extends StatefulWidget {
     required this.age,
     required this.gender,
     required this.groupId,
+    required this.logic,
   });
 
   @override
@@ -188,8 +190,19 @@ class ManualAddPageGetLikesState extends State<ManualAddPageGetLikes> {
                                 .update({
                                   'members': FieldValue.arrayUnion([uid]),
                                 });
+                            if (mounted) {
+                              widget.logic();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              widget.logic();
+                            }
                           }
                           : null,
+
                   label: const Text('다음으로 →', style: TextStyle(fontSize: 16)),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,

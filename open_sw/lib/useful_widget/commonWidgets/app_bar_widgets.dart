@@ -36,7 +36,10 @@ PreferredSizeWidget searchAppBar({
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(76),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: padding_small, vertical: padding_small),
+              padding: const EdgeInsets.symmetric(
+                horizontal: paddingSmall,
+                vertical: paddingSmall,
+              ),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black.withAlpha(20),
@@ -52,7 +55,10 @@ PreferredSizeWidget searchAppBar({
                         decoration: const InputDecoration(
                           hintText: '모일 장소를 알려주세요',
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
                         ),
                         onSubmitted: (_) => onSearch(),
                       ),
@@ -73,5 +79,3 @@ PreferredSizeWidget searchAppBar({
     ),
   );
 }
-
-

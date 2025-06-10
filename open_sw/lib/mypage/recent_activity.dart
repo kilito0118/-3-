@@ -101,7 +101,7 @@ class _ActivityBoxState extends State<ActivityBox> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: padding_small),
+      margin: const EdgeInsets.only(bottom: paddingSmall),
       decoration: ShapeDecoration(
         color: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

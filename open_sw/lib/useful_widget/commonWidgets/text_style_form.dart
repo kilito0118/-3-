@@ -3,7 +3,7 @@ import 'spacing_widgets.dart';
 
 Widget mainTitle(String title) {
   return Padding(
-    padding: EdgeInsets.only(left: 5, right: 5, top: padding_small),
+    padding: EdgeInsets.only(left: 5, right: 5, top: paddingSmall),
     child: Text(
       title,
       style: TextStyle(
@@ -19,7 +19,7 @@ Widget mainTitle(String title) {
 
 Widget subTitle(String title) {
   return Padding(
-    padding: EdgeInsets.only(left: 6, right: 6, top: padding_small),
+    padding: EdgeInsets.only(left: 6, right: 6, top: paddingSmall),
     child: Text(
       title,
       style: TextStyle(

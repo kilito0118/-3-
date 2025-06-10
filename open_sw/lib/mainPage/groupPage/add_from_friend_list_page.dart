@@ -5,8 +5,13 @@ import 'package:open_sw/mainPage/friendPage/widget/friend_tile.dart';
 
 class AddFromFriendListPage extends StatefulWidget {
   final DocumentSnapshot<Object?>? groupDocument;
+  final void Function() logic;
 
-  const AddFromFriendListPage({super.key, this.groupDocument});
+  const AddFromFriendListPage({
+    super.key,
+    this.groupDocument,
+    required this.logic,
+  });
 
   @override
   State<AddFromFriendListPage> createState() => _AddFromFriendListPageState();
@@ -86,6 +91,7 @@ class _AddFromFriendListPageState extends State<AddFromFriendListPage> {
     }
 
     super.initState();
+    widget.logic();
   }
 
   void _filterFriends(String keyword) {

@@ -113,7 +113,7 @@ class _RecommendActPageState extends State<RecommendActPage> {
       backgroundColor: themePageColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: padding_small),
+          padding: EdgeInsets.symmetric(horizontal: paddingSmall),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

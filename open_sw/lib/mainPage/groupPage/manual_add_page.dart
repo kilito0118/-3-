@@ -3,7 +3,8 @@ import 'package:open_sw/mainPage/groupPage/manual_add_page_get_likes.dart';
 
 class ManualAddPage extends StatefulWidget {
   final String groupId;
-  const ManualAddPage({super.key, required this.groupId});
+  final void Function() logic;
+  const ManualAddPage({super.key, required this.groupId, required this.logic});
 
   @override
   State<ManualAddPage> createState() => _ManualAddPageState();
@@ -84,6 +85,7 @@ class _ManualAddPageState extends State<ManualAddPage> {
                           age: int.parse(ageController.text),
                           gender: selectedGender!,
                           groupId: widget.groupId,
+                          logic: widget.logic,
                         ),
                   ),
                 );

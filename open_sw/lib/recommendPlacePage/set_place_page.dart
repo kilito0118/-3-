@@ -55,7 +55,7 @@ class _SetPlacePageState extends State<SetPlacePage> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_small),
+            padding: EdgeInsets.symmetric(horizontal: paddingSmall),
             child: Column(
               children: [
                 topSearchAppBarSpacer(context),

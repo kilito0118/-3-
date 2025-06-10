@@ -180,7 +180,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
               topAppBarSpacer(context),
               Center(
                 child: Padding(
-                  padding: EdgeInsets.all(padding_small),
+                  padding: EdgeInsets.all(paddingSmall),
                   child: blurredBox(
                     child: Text(
                       textAlign: TextAlign.center,

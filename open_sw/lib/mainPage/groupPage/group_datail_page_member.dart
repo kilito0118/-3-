@@ -32,10 +32,25 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   void initState() {
     super.initState();
 
-    setState(() {
-      _loadGroupData();
-      loadActivities();
-    });
+    rebuild();
+  }
+
+  void rebuild() async {
+    groupData;
+    groupId = '';
+    memberDetails = [];
+    isLoading = true;
+    data = null;
+    docSnapshot = null;
+    activityDatas = [];
+    await _loadGroupData();
+    await loadActivities();
+    if (mounted) {
+      //print(memberDetails);
+      setState(() {
+        // 상태를 갱신하여 UI를 다시 빌드합니다.
+      });
+    }
   }
 
   Future<void> loadActivities() async {
@@ -58,7 +73,6 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       activityDatas = await Future.wait(futures);
 
       // UI 업데이트
-      if (mounted) setState(() {});
     } catch (e) {
       debugPrint('문서 조회 오류: $e');
     }
@@ -68,24 +82,24 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
     DocumentSnapshot nameSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(id).get();
 
-    if (nameSnapshot.exists) {
+    if (nameSnapshot.exists && mounted) {
       if (type == 0) {
-        setState(() {
-          leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
-        });
+        leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
       } else {
-        setState(() {
-          leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
-        });
+        leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
       }
     }
   }
 
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
-      data = widget.group!.data() as Map<String, dynamic>?;
       groupId = widget.group!.id;
-      docSnapshot = widget.group;
+      docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(groupId)
+              .get();
+      data = docSnapshot!.data() as Map<String, dynamic>?;
     } else if (widget.groupId != null) {
       docSnapshot =
           await FirebaseFirestore.instance
@@ -102,22 +116,21 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       getName(data!["leader"], 0);
       List<dynamic> members = data?['members'] ?? [];
       List<Map> details = await fetchMemberDetails(members);
-      setState(() {
-        groupData = data;
-        memberDetails = details;
-        isLoading = false;
-      });
+      if (!mounted) return;
+
+      groupData = data;
+      memberDetails = details;
+      isLoading = false;
     } else {
-      setState(() {
-        groupData = null;
-        memberDetails = [];
-        isLoading = false;
-      });
+      groupData = null;
+      memberDetails = [];
+      isLoading = false;
     }
   }
 
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
+
     List<Future<DocumentSnapshot>> futures =
         memberIds.map((uid) async {
           final k =
@@ -129,7 +142,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
           if (k.exists) {
             return k;
           } else {
-            return FirebaseFirestore.instance
+            return await FirebaseFirestore.instance
                 .collection('tempUsers')
                 .doc(uid)
                 .get();
@@ -144,6 +157,13 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
             return {};
           }
         }).toList();
+    // 필터링: uid가 비어있지 않은 멤버만 포함
+    memberDataList =
+        memberDataList
+            .where(
+              (member) => member['uid'] != null && member['uid'].isNotEmpty,
+            )
+            .toList();
 
     return memberDataList;
   }
@@ -171,7 +191,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: padding_small),
+          padding: const EdgeInsets.symmetric(horizontal: paddingSmall),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -221,7 +241,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                           size: 60,
                           color: Colors.blueAccent,
                         ),
-                        SizedBox(width: padding_big),
+                        SizedBox(width: paddingBig),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -250,7 +270,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                 children: [
                   TextButton(
                     onPressed: () async {
-                      showModalBottomSheet(
+                      await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
                         barrierColor: Colors.transparent,
@@ -258,6 +278,11 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                           return SizedBox(
                             height: 200,
                             child: FriendPlusAtGroupWidget(
+                              logic: () {
+                                setState(() {
+                                  _loadGroupData();
+                                });
+                              },
                               groupDocument: docSnapshot,
                             ),
                           );
@@ -309,9 +334,12 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                             });
 
                         Navigator.pop(context); // Optionally navigate back
-                      }, // 그룹 나가기 로직 추가
+                      },
+                      style: btnBig(
+                        themeColor: themeRed,
+                        alpha: 0,
+                      ), // 그룹 나가기 로직 추가
                       child: Text("그룹 나가기"),
-                      style: btnBig(themeColor: themeRed, alpha: 0),
                     ),
                   ),
                   SizedBox(height: 120),
@@ -324,8 +352,8 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 0,),
-          child: SearchButton(groupId: docSnapshot!.id),
+          padding: EdgeInsets.symmetric(horizontal: 0),
+          child: SearchButton(groupId: docSnapshot!.id, logic: rebuild),
         ),
       ),
     );
@@ -435,26 +463,38 @@ class OwnerSection extends StatelessWidget {
   }
 }
 
-class MemberSection extends StatelessWidget {
+class MemberSection extends StatefulWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
 
   const MemberSection({super.key, required this.title, required this.members});
 
   @override
+  State<MemberSection> createState() => _MemberSectionState();
+}
+
+class _MemberSectionState extends State<MemberSection> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        subTitle(title),
+        subTitle(widget.title),
         spacingBox(),
-        ...List.generate(members.length, (index) {
-          return memberTile(
-            name: members[index]['nickName'] ?? 'member_name',
-            uid: members[index]["uid"] ?? "",
-            child: Text(''),
-          );
-        }),
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: widget.members.length,
+          itemBuilder: (context, index) {
+            return memberTile(
+              name: widget.members[index]['nickName'] ?? 'member_name',
+              uid: widget.members[index]['uid'] ?? 'member_uid',
+              child: Text(""),
+            );
+          },
+        ),
       ],
     );
   }

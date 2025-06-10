@@ -17,7 +17,10 @@ ButtonStyle btnBig({Color? themeColor, int alpha = 40}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_mid),
+    padding: const EdgeInsets.symmetric(
+      horizontal: paddingBig,
+      vertical: paddingMid,
+    ),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -40,7 +43,10 @@ ButtonStyle btnNormal({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_small),
+    padding: const EdgeInsets.symmetric(
+      horizontal: paddingBig,
+      vertical: paddingSmall,
+    ),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -63,7 +69,10 @@ ButtonStyle btnTransparent({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: padding_big, vertical: padding_small),
+    padding: const EdgeInsets.symmetric(
+      horizontal: paddingBig,
+      vertical: paddingSmall,
+    ),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     textStyle: contentsNormal(),
     alignment: Alignment.center,
@@ -86,7 +95,7 @@ ButtonStyle btnSmall({Color? themeColor}) {
   return TextButton.styleFrom(
     foregroundColor: foregroundColor,
     backgroundColor: backgroundColor,
-    padding: const EdgeInsets.symmetric(horizontal: padding_small, vertical: 8),
+    padding: const EdgeInsets.symmetric(horizontal: paddingSmall, vertical: 8),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     textStyle: contentsDetail,
     alignment: Alignment.center,

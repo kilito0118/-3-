@@ -131,7 +131,7 @@ class _FriendPageState extends State<FriendPage> {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: padding_small),
+          padding: EdgeInsets.symmetric(horizontal: paddingSmall),
           width: double.infinity,
           height: double.infinity,
           decoration: BoxDecoration(color: themePageColor),

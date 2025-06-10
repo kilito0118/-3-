@@ -7,8 +7,9 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class SearchButton extends StatefulWidget {
   final String groupId;
+  final void Function() logic;
 
-  const SearchButton({super.key, required this.groupId});
+  const SearchButton({super.key, required this.groupId, required this.logic});
 
   @override
   State<SearchButton> createState() => _SearchButtonState();
@@ -31,7 +32,7 @@ class _SearchButtonState extends State<SearchButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(padding_small),
+      padding: EdgeInsets.all(paddingSmall),
       child: GestureDetector(
         onTapDown: _onTapDown,
         onTapUp: _onTapUp,
@@ -87,7 +88,7 @@ class _SearchButtonState extends State<SearchButton> {
                     ),
               ),
             );
-            setState(() {});
+            widget.logic();
           }
         },
         child: AnimatedScale(

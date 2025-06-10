@@ -151,7 +151,7 @@ class _MyPageState extends State<MyPage> {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: padding_small),
+        padding: const EdgeInsets.symmetric(horizontal: paddingSmall),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -190,7 +190,7 @@ class _MyPageState extends State<MyPage> {
                     },
                     style: btnBig(),
                     child: Text('이메일: ${widget.email}'),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -198,32 +198,39 @@ class _MyPageState extends State<MyPage> {
             subTitle('최근 활동'),
             recentActivities.isEmpty
                 ? Column(
-              children: [
-                spacingBox(),
-                contentsBox(
-                    child: Row(
-                      children: [
-                        Icon(Icons.history_toggle_off, size: 60, color: Colors.grey,),
-                        SizedBox(width: padding_big,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('최근 활동 내역이 없어요.',style: contentsBig(),),
-                            spacingBoxMini(),
-                            Text('그룹에서 한 활동들이 이곳에 추가돼요', style: contentsDetail,),
-                          ],
-                        )
-                      ],
-                    )
-                ),
-                spacingBox()
-              ],
-            )
+                  children: [
+                    spacingBox(),
+                    contentsBox(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.history_toggle_off,
+                            size: 60,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(width: paddingBig),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('최근 활동 내역이 없어요.', style: contentsBig()),
+                              spacingBoxMini(),
+                              Text(
+                                '그룹에서 한 활동들이 이곳에 추가돼요',
+                                style: contentsDetail,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    spacingBox(),
+                  ],
+                )
                 : spacingBox(),
             ...List.generate(recentActivities.length, (index) {
               return ActivityBox(
-                  recentAct: recentActivities[index],
-                  actId: recentActivityIds[index]
+                recentAct: recentActivities[index],
+                actId: recentActivityIds[index],
               );
             }),
             spacingBox(),
@@ -235,7 +242,7 @@ class _MyPageState extends State<MyPage> {
                     MaterialPageRoute(
                       builder: (context) => const LoginScreen(),
                     ),
-                        (Route<dynamic> route) => false,
+                    (Route<dynamic> route) => false,
                   );
                 },
                 style: btnTransparent(themeColor: themeRed),

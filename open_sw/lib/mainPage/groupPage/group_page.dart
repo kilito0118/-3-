@@ -136,7 +136,7 @@ class _GroupPageState extends State<GroupPage> {
             return SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: padding_small),
+                padding: const EdgeInsets.symmetric(horizontal: paddingSmall),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +151,7 @@ class _GroupPageState extends State<GroupPage> {
                       physics: NeverScrollableScrollPhysics(),
                       primary: false,
                       shrinkWrap: true,
-                      padding: const EdgeInsets.only(bottom: padding_small),
+                      padding: const EdgeInsets.only(bottom: paddingSmall),
                       itemCount: groupCounts + 1,
                       itemBuilder: (BuildContext context, int index) {
                         if (index < groupCounts) {
