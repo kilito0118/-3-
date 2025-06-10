@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'recommended_activity.dart';
 
 //const String flaskUrl = 'http://127.0.0.1:5000/group/recommendations';
@@ -10,8 +11,13 @@ const String flaskUrl = 'http://43.203.239.150:8000/group/recommendations';
 
 class RecommendActPage extends StatefulWidget {
   final List<int> rowNumbers;
+  final String groupId;
 
-  const RecommendActPage({super.key, required this.rowNumbers});
+  const RecommendActPage({
+    super.key,
+    required this.rowNumbers,
+    required this.groupId,
+  });
 
   @override
   State<RecommendActPage> createState() => _RecommendActPageState();
@@ -62,7 +68,6 @@ class _RecommendActPageState extends State<RecommendActPage> {
     setState(() => isLoading = true);
 
     final requestData = {"row_numbers": widget.rowNumbers};
-    print(requestData);
 
     try {
       final response = await http.post(
@@ -81,10 +86,10 @@ class _RecommendActPageState extends State<RecommendActPage> {
           activityList = sample.map((e) => e.toString()).toList();
         });
       } else {
-        print("요청 실패: ${response.statusCode}");
+        debugPrint("요청 실패: ${response.statusCode}");
       }
     } catch (e) {
-      print("오류 발생: $e");
+      debugPrint("오류 발생: $e");
     } finally {
       setState(() => isLoading = false);
     }
@@ -104,57 +109,43 @@ class _RecommendActPageState extends State<RecommendActPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.black, size: 32),
-        ),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 26),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFF2F2F2), Color(0xFFD9D9D9)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: SingleChildScrollView(
+      appBar: defaultAppBar(),
+      backgroundColor: themePageColor,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: paddingSmall),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 80),
-              const Text(
-                '이런 활동, 어떠신가요?',
-                style: TextStyle(color: Colors.black, fontSize: 32),
-              ),
-              const SizedBox(height: 40),
+              topAppBarSpacer(context),
+              mainTitle('좋아하실만한 활동을 \n찾았어요'),
+              spacingBox(),
+              subTitle('추천 활동'),
+              spacingBox(),
               if (isLoading)
                 const CircularProgressIndicator()
               else if (activityList.isEmpty)
                 const Text('추천 결과가 없습니다.')
               else
-                ...activityList
-                    .map((activity) => RecommendedActivity(activity: activity))
-                    .toList(),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: refreshList,
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.grey[600],
-                  padding: EdgeInsets.zero,
+                ...activityList.map(
+                  (activity) => RecommendedActivity(
+                    activity: activity,
+                    groupId: widget.groupId,
+                    type: int.parse(activity),
+                  ),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text('새로 고침', style: TextStyle(fontSize: 16)),
-                    SizedBox(width: 4),
-                    Icon(Icons.refresh, size: 20),
-                  ],
+              Center(
+                child: TextButton(
+                  onPressed: refreshList,
+                  style: btnTransparent(),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('새로 고침'),
+                      spacingBoxMini(),
+                      Icon(Icons.refresh, size: 20),
+                    ],
+                  ),
                 ),
               ),
             ],

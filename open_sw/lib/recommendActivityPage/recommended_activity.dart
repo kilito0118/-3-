@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:open_sw/recommendPlacePage/set_place_page.dart';
+import 'package:open_sw/services/activity_info.dart';
+import 'package:open_sw/services/category_info.dart';
+import 'package:open_sw/useful_widget/commonWidgets/buttons_styles.dart';
+import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
+import 'package:open_sw/useful_widget/commonWidgets/text_style_form.dart';
+import 'package:open_sw/useful_widget/commonWidgets/touch_react_box.dart';
 
 class RecommendedActivity extends StatefulWidget {
   final String activity;
+  final String groupId;
+  final int type;
 
-  const RecommendedActivity({super.key, required this.activity});
+  const RecommendedActivity({
+    super.key,
+    required this.activity,
+    required this.groupId,
+    required this.type,
+  });
 
   @override
   State<RecommendedActivity> createState() => _RecommendedActivityState();
@@ -13,58 +26,76 @@ class RecommendedActivity extends StatefulWidget {
 class _RecommendedActivityState extends State<RecommendedActivity> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: 14),
-      decoration: ShapeDecoration(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // 활동명
-          Text(
-            widget.activity,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          // 장소 검색버 튼
-          TextButton(
-            // 함수 구현 필요함
-            onPressed: () {
+    return Column(
+      children: [
+        TouchReactBox(
+          child: GestureDetector(
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder:
                       (context) => SetPlacePage(
-                        activity: widget.activity,
+                        type: widget.type,
+                        activity: '',
+                        groupId: widget.groupId,
                       ),
                 ),
               );
             },
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.black,
-              padding: EdgeInsets.all(0),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '장소 검색하기',
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
-                SizedBox(width: 4),
-                Icon(Icons.search, size: 20),
-              ],
+
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(
+                horizontal: paddingBig,
+                vertical: paddingMid,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+                boxShadow: [],
+              ),
+              child: Row(
+                children: [
+                  getPrimeIcon(widget.type, 60),
+                  SizedBox(width: paddingBig),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          activityList[widget.type]['name'],
+                          style: contentsBig(fontWeight: FontWeight.bold),
+                        ),
+                        spacingBoxMini(),
+                        spacingBoxMini(),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => SetPlacePage(
+                                      type: widget.type,
+                                      activity: '',
+                                      groupId: widget.groupId,
+                                    ),
+                              ),
+                            );
+                          },
+                          style: btnSmall(),
+                          child: Text('장소 검색하기'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+        spacingBox(),
+      ],
     );
   }
 }

@@ -55,6 +55,7 @@ class _FriendPlusWidgetState extends State<FriendPlusWidget> {
                 ),
                 boxShadow: [
                   BoxShadow(
+                    // ignore: deprecated_member_use
                     color: Colors.black.withOpacity(0.08),
                     blurRadius: 16,
                     offset: Offset(0, 8),

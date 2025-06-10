@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:open_sw/mainPage/groupPage/manual_add_page_get_likes.dart';
 
 class ManualAddPage extends StatefulWidget {
-  const ManualAddPage({super.key});
+  final String groupId;
+  final void Function() logic;
+  const ManualAddPage({super.key, required this.groupId, required this.logic});
 
   @override
   State<ManualAddPage> createState() => _ManualAddPageState();
@@ -58,8 +61,33 @@ class _ManualAddPageState extends State<ManualAddPage> {
             Spacer(),
             GestureDetector(
               onTap: () {
-                print(
-                  "이름: ${nameController.text}, 나이: ${ageController.text}, 성별: $selectedGender",
+                if (nameController.text.isEmpty ||
+                    ageController.text.isEmpty ||
+                    selectedGender == null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("모든 필드를 입력해주세요.")));
+                  return;
+                }
+                if (ageController.text.isNotEmpty &&
+                    int.tryParse(ageController.text) == null) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text("나이는 숫자로 입력해주세요.")));
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ManualAddPageGetLikes(
+                          name: nameController.text,
+                          age: int.parse(ageController.text),
+                          gender: selectedGender!,
+                          groupId: widget.groupId,
+                          logic: widget.logic,
+                        ),
+                  ),
                 );
               },
               child: Container(
@@ -95,7 +123,7 @@ class InputField extends StatelessWidget {
   final String label;
   final TextEditingController controller;
 
-  const InputField({required this.label, required this.controller});
+  const InputField({super.key, required this.label, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +159,7 @@ class GenderButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const GenderButton({
+    super.key,
     required this.label,
     required this.color,
     required this.selected,
@@ -144,6 +173,7 @@ class GenderButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
+          // ignore: deprecated_member_use
           color: color.withOpacity(selected ? 1.0 : 0.5),
           borderRadius: BorderRadius.circular(25),
         ),

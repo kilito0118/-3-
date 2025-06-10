@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
+
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
+import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
+
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
 class GroupDetailPageOwner extends StatefulWidget {
   final DocumentSnapshot? group;
@@ -23,81 +26,129 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   bool isLoading = true;
   Map<String, dynamic>? data;
   DocumentSnapshot? docSnapshot;
+  List<DocumentSnapshot> activityDatas = [];
+  String leaderEmail = '그룹장 이메일';
 
-  String leaderName = '그룹장2 이름';
+  String leaderName = '그룹장 이름';
   @override
   void initState() {
     super.initState();
 
-    setState(() {
-      _loadGroupData();
-    });
+    rebuild();
+  }
+
+  void rebuild() async {
+    groupData;
+    groupId = '';
+    memberDetails = [];
+    isLoading = true;
+    data = null;
+    docSnapshot = null;
+    activityDatas = [];
+    await _loadGroupData();
+    await loadActivities();
+    if (mounted) {
+      //print(memberDetails);
+      setState(() {
+        // 상태를 갱신하여 UI를 다시 빌드합니다.
+      });
+    }
+  }
+
+  Future<void> loadActivities() async {
+    try {
+      final activityIds = (data!['activities'] as List<dynamic>).cast<String>();
+
+      // 병렬 요청 생성
+      final futures =
+          activityIds
+              .map(
+                (id) =>
+                    FirebaseFirestore.instance
+                        .collection('activities')
+                        .doc(id)
+                        .get(),
+              )
+              .toList();
+
+      // 모든 요청 동시 실행
+      activityDatas = await Future.wait(futures);
+
+      // UI 업데이트
+    } catch (e) {
+      debugPrint('문서 조회 오류: $e');
+    }
   }
 
   void kickout(String uid, String groupId, String name) async {
     // 1. 비동기 작업 먼저 처리
+
     await FirebaseFirestore.instance.collection('groups').doc(groupId).update({
       'members': FieldValue.arrayRemove([uid]),
     });
+    DocumentSnapshot userSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
-    try {
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'groups': FieldValue.arrayRemove([groupId]),
-      });
-
-      // 2. 상태 변경이 필요하면 setState로 감싸기
-      if (mounted) {
-        setState(() {
-          // 예: 목록에서 멤버를 직접 삭제하는 등의 UI 갱신
-          //members.remove(uid);  // 예시
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('$name has been removed from the group.')),
-          );
-          _loadGroupData();
+    if (userSnapshot.exists == false) {
+      await FirebaseFirestore.instance
+          .collection('tempUsers')
+          .doc(uid)
+          .delete();
+    } else {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(uid).update({
+          'groups': FieldValue.arrayRemove([groupId]),
         });
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Failed to remove $name: $e')));
+        }
       }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Failed to remove $name: $e')));
-      }
+    }
+
+    // 2. 상태 변경이 필요하면 setState로 감싸기
+    if (mounted) {
+      // 예: 목록에서 멤버를 직접 삭제하는 등의 UI 갱신
+      //members.remove(uid);  // 예시
+
+      rebuild();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$name has been removed from the group.')),
+      );
     }
   }
 
   Future<void> getName(String id, int type) async {
     DocumentSnapshot nameSnapshot =
-    await FirebaseFirestore.instance.collection('users').doc(id).get();
+        await FirebaseFirestore.instance.collection('users').doc(id).get();
 
-    if (nameSnapshot.exists) {
+    if (nameSnapshot.exists && mounted) {
       if (type == 0) {
-        setState(() {
-          leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
-        });
+        leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
+        leaderEmail = nameSnapshot['email'] ?? '그룹장1 이메일';
       } else {
-        setState(() {
-          leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
-        });
+        leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
       }
     }
   }
 
   Future<void> _loadGroupData() async {
     if (widget.group != null && widget.group!.exists) {
-      docSnapshot =
-      await FirebaseFirestore.instance
-          .collection('groups')
-          .doc(widget.group!.id)
-          .get();
       groupId = widget.group!.id;
+      docSnapshot =
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(groupId)
+              .get();
       data = docSnapshot!.data() as Map<String, dynamic>?;
     } else if (widget.groupId != null) {
       docSnapshot =
-      await FirebaseFirestore.instance
-          .collection('groups')
-          .doc(widget.groupId)
-          .get();
+          await FirebaseFirestore.instance
+              .collection('groups')
+              .doc(widget.groupId)
+              .get();
       groupId = widget.groupId!;
       data = docSnapshot!.data() as Map<String, dynamic>?;
       if (docSnapshot!.exists) {
@@ -108,35 +159,54 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       getName(data!["leader"], 0);
       List<dynamic> members = data?['members'] ?? [];
       List<Map> details = await fetchMemberDetails(members);
-      setState(() {
-        groupData = data;
-        memberDetails = details;
-        isLoading = false;
-      });
+      if (!mounted) return;
+
+      groupData = data;
+      memberDetails = details;
+      isLoading = false;
     } else {
-      setState(() {
-        groupData = null;
-        memberDetails = [];
-        isLoading = false;
-      });
+      groupData = null;
+      memberDetails = [];
+      isLoading = false;
     }
   }
 
   Future<List<Map>> fetchMemberDetails(List<dynamic> members) async {
     List<String> memberIds = List<String>.from(members);
+
     List<Future<DocumentSnapshot>> futures =
-    memberIds.map((uid) {
-      return FirebaseFirestore.instance.collection('users').doc(uid).get();
-    }).toList();
+        memberIds.map((uid) async {
+          final k =
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(uid)
+                  .get();
+
+          if (k.exists) {
+            return k;
+          } else {
+            return await FirebaseFirestore.instance
+                .collection('tempUsers')
+                .doc(uid)
+                .get();
+          }
+        }).toList();
     List<DocumentSnapshot> snapshots = await Future.wait(futures);
     List<Map> memberDataList =
-    snapshots.map((snapshot) {
-      if (snapshot.exists) {
-        return snapshot.data() as Map<String, dynamic>;
-      } else {
-        return {};
-      }
-    }).toList();
+        snapshots.map((snapshot) {
+          if (snapshot.exists) {
+            return snapshot.data() as Map<String, dynamic>;
+          } else {
+            return {};
+          }
+        }).toList();
+    // 필터링: uid가 비어있지 않은 멤버만 포함
+    memberDataList =
+        memberDataList
+            .where(
+              (member) => member['uid'] != null && member['uid'].isNotEmpty,
+            )
+            .toList();
 
     return memberDataList;
   }
@@ -145,84 +215,108 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Widget build(BuildContext context) {
     if (groupData == null || isLoading) {
       return Scaffold(
+        backgroundColor: themePageColor,
         body: Center(child: Text('데이터를 불러올 수 없습니다.')),
         floatingActionButton: FloatingActionButton(
-          onPressed: _loadGroupData, // 새로고침
+          onPressed: rebuild, // 새로고침
+          backgroundColor: Colors.white,
           child: Icon(Icons.refresh),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: BackButton(color: Colors.black),
-        title: Text("그룹 페이지", style: TextStyle(color: Colors.black)),
-      ),
+      backgroundColor: themePageColor,
+      extendBodyBehindAppBar: true,
+      extendBody: true,
+      appBar: defaultAppBar(),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: paddingSmall),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              topAppBarSpacer(context),
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      groupData!['groupName'] ?? "Group_name",
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    SizedBox(width: 5),
+                    mainTitle(groupData!['groupName'] ?? "Group_name"),
                     InkWell(
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            TextEditingController nameController =
+                        TextEditingController nameController =
                             TextEditingController(
                               text: groupData!['groupName'] ?? "Group_name",
                             );
-                            return AlertDialog(
-                              title: Text("그룹 이름 편집"),
-                              content: TextField(
-                                controller: nameController,
-                                decoration: InputDecoration(
-                                  labelText: "그룹 이름",
-                                  border: OutlineInputBorder(),
+                        showCustomAlert(
+                          context: context,
+                          title: '그룹 이름 편집',
+                          message: '변경하실 이름을 입력해주세요',
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withAlpha(20),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: TextField(
+                                  cursorColor: Colors.orangeAccent,
+                                  controller: nameController,
+                                  style: contentsNormal(),
+                                  decoration: const InputDecoration(
+                                    hintText: '그룹 이름을 입력해주세요',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 16,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("취소"),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    String newName = nameController.text.trim();
-                                    if (newName.isNotEmpty) {
-                                      await FirebaseFirestore.instance
-                                          .collection('groups')
-                                          .doc(groupId)
-                                          .update({'groupName': newName});
-                                      setState(() {
-                                        groupData!['groupName'] = newName;
-                                      });
-                                    }
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("저장"),
-                                ),
-                              ],
-                            );
-                          },
+                              spacingBox(),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: btnNormal(),
+                                      child: Text("취소"),
+                                    ),
+                                  ),
+                                  spacingBox(),
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        String newName =
+                                            nameController.text.trim();
+                                        if (newName.isNotEmpty) {
+                                          await FirebaseFirestore.instance
+                                              .collection('groups')
+                                              .doc(groupId)
+                                              .update({'groupName': newName});
+                                          setState(() {
+                                            groupData!['groupName'] = newName;
+                                          });
+                                        }
+                                        if (mounted) {
+                                          // ignore: use_build_context_synchronously
+                                          Navigator.of(context).pop();
+                                        }
+                                      },
+                                      style: btnNormal(
+                                        themeColor: Colors.blueAccent,
+                                      ),
+                                      child: Text("저장"),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         );
                       },
                       child: Text(
@@ -233,65 +327,79 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
-              Text(
-                "예정된 활동",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              data!["activities"].length > 0
+              spacingBox(),
+              subTitle("예정된 활동"),
+              spacingBox(),
+              // 활동 카드 리스트
+              activityDatas.isNotEmpty
                   ? ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 10),
-                itemCount: data!["activities"].length,
-                itemBuilder: (BuildContext context, int index) {
-                  var activity = data!["activities"][index];
-                  return ActivityCard(
-                    date: activity['date'] ?? "00.00(화)",
-                    place: activity['place'] ?? "장소 이름",
-                  );
-                },
-              )
-                  : Text("예정된 활동이 없습니다."),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 10),
-                itemCount: 0,
-                itemBuilder: (BuildContext context, int index) {
-                  return ActivityCard(date: "00.00(화)", place: "장소 이름");
-                },
-              ),
+                    physics: NeverScrollableScrollPhysics(),
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    itemCount: data!["activities"].length,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (activityDatas[index].exists) {
+                        var activityData =
+                            activityDatas[index].data() as Map<String, dynamic>;
+                        return ActivityCard(
+                          date: (activityData['date'] as Timestamp)
+                              .toDate()
+                              .toString()
+                              .substring(0, 10),
+                          place: activityData['place']['name'] ?? "장소 이름",
+                        );
+                      } else {
+                        return Text("활동 데이터를 불러올 수 없습니다.");
+                      }
+                    },
+                  )
+                  : contentsBox(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.event_busy,
+                          size: 60,
+                          color: Colors.blueAccent,
+                        ),
+                        SizedBox(width: paddingBig),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('예정된 활동이 없어요', style: contentsBig()),
+                            Text('활동 검색을 통해 일정을 추가해보세요', style: contentsDetail),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
 
-              SizedBox(height: 20),
+              spacingBox(),
               OwnerSection(
                 title: "그룹장",
                 members: [
-                  {'nickName': leaderName, 'uid': data!['leader'] ?? '그룹장 UID'},
+                  {
+                    'nickName': leaderName,
+                    'uid': data!['leader'] ?? '그룹장 UID',
+                    'email': leaderEmail,
+                  },
                 ],
               ),
 
               memberDetails.isNotEmpty
                   ? MemberSection(
-                title: "그룹원",
-                members: memberDetails,
-                groupId: groupId,
-                onKickout:
-                    () => kickout(
-                  memberDetails[0]['uid'] ?? 'uid',
-                  groupId,
-                  memberDetails[0]['nickName'] ?? '그룹원 이름',
-                ),
-              )
-                  : Text(""),
+                    title: "그룹원",
+                    members: memberDetails,
+                    groupId: groupId,
+                    onKickout: kickout,
+                  )
+                  : Column(children: [subTitle('그룹원을 추가하세요'), spacingBox()]),
 
               Column(
                 children: [
-                  GestureDetector(
-                    onTap: () async {
+                  TextButton(
+                    onPressed: () async {
                       await showModalBottomSheet(
                         context: context,
                         backgroundColor: Colors.transparent,
@@ -300,135 +408,128 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                           return SizedBox(
                             height: 200,
                             child: FriendPlusAtGroupWidget(
+                              logic: rebuild,
                               groupDocument: docSnapshot,
                             ),
                           );
                         },
                       );
 
-                      setState(() {
-                        _loadGroupData();
-                      }); // 필요하다면 UI 갱신
+                      rebuild();
                     },
-                    child: DottedBorder(
-                      options: RoundedRectDottedBorderOptions(
-                        radius: Radius.circular(20),
-                        dashPattern: [10, 5],
-                        strokeWidth: 2,
-                        color: Color(0xff585858),
-                        padding: EdgeInsets.all(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(20),
-                                child: Text(
-                                  "그룹원 추가하기",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xff585858),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    style: btnBig(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('그룹원 추가하기'),
+                        spacingBoxMini(),
+                        Icon(Icons.add),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  TextButton(
-                    onPressed: () {
-                      // 그룹 삭제 로직 추가
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          //print(groupId);
-                          if (memberDetails.isNotEmpty) {
-                            return AlertDialog(
-                              title: Text("그룹 삭제"),
-                              content: Text("그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다."),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("확인"),
-                                ),
-                              ],
-                            );
-                          }
-                          return AlertDialog(
-                            title: Text("그룹 삭제"),
-                            content: Text("정말로 이 그룹을 삭제하시겠습니까?"),
-                            actions: [
-                              TextButton(
+                  spacingBox(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: () {
+                        if (memberDetails.isNotEmpty) {
+                          showCustomAlert(
+                            context: context,
+                            title: '삭제 불가',
+                            message: '그룹을 삭제하기 전에 모든 그룹원을 내보내야 합니다.',
+                            child: SizedBox(
+                              width: double.infinity,
+                              child: TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text("취소"),
+                                style: btnNormal(),
+                                child: Text('확인'),
                               ),
-                              TextButton(
-                                onPressed: () async {
-                                  final user =
-                                      FirebaseAuth.instance.currentUser;
-
-                                  if (groupId.isEmpty) {}
-                                  if (user != null && groupId.isNotEmpty) {
-                                    // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
-                                    final userDocRef = FirebaseFirestore
-                                        .instance
-                                        .collection('users')
-                                        .doc(user.uid);
-
-                                    // groups 배열에서 groupId 삭제
-                                    await userDocRef.update({
-                                      'groups': FieldValue.arrayRemove([
-                                        groupId,
-                                      ]),
-                                    });
-                                  } else {
-                                    // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
-                                    print('로그인이 필요하거나 groupId가 잘못되었습니다.');
-                                  }
-                                  await FirebaseFirestore.instance
-                                      .collection('groups')
-                                      .doc(groupId)
-                                      .delete();
-                                  Navigator.of(context).pop();
-                                  Navigator.of(
-                                    context,
-                                  ).pop(true); // 이전 페이지로 돌아가기
-                                },
-                                child: Text("삭제"),
-                              ),
-                            ],
+                            ),
                           );
-                        },
-                      );
-                    }, // 그룹 삭제 로직 추가
-                    child: Text(
-                      "그룹 삭제",
-                      style: TextStyle(color: Colors.red, fontSize: 18),
+                        } else {
+                          showCustomAlert(
+                            context: context,
+                            title: '그룹 삭제',
+                            message: '정말로 이 그룹을 삭제하시겠습니까?',
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    style: btnNormal(),
+                                    child: Text('취소'),
+                                  ),
+                                ),
+                                spacingBox(),
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      final user =
+                                          FirebaseAuth.instance.currentUser;
+
+                                      if (groupId.isEmpty) {}
+                                      if (user != null && groupId.isNotEmpty) {
+                                        // users 컬렉션에서 현재 로그인한 사용자의 문서 참조
+                                        final userDocRef = FirebaseFirestore
+                                            .instance
+                                            .collection('users')
+                                            .doc(user.uid);
+
+                                        // groups 배열에서 groupId 삭제
+                                        await userDocRef.update({
+                                          'groups': FieldValue.arrayRemove([
+                                            groupId,
+                                          ]),
+                                        });
+                                      } else {
+                                        // 예외 처리: 로그인 안 되어 있거나 groupId가 비어있을 때
+                                        debugPrint(
+                                          '로그인이 필요하거나 groupId가 잘못되었습니다.',
+                                        );
+                                      }
+                                      await FirebaseFirestore.instance
+                                          .collection('groups')
+                                          .doc(groupId)
+                                          .delete();
+                                      if (mounted) {
+                                        // ignore: use_build_context_synchronously
+                                        Navigator.of(context).pop();
+                                        Navigator.of(
+                                          // ignore: use_build_context_synchronously
+                                          context,
+                                        ).pop(true); // 이전 페이지로 돌아가기
+                                      }
+                                      rebuild();
+                                    },
+                                    style: btnNormal(themeColor: themeRed),
+                                    child: Text('삭제'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      }, // 그룹 삭제 로직 추가
+                      style: btnBig(themeColor: themeRed, alpha: 0),
+                      child: Text("그룹 삭제"),
                     ),
                   ),
-                  SizedBox(height: 10),
                 ],
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 120),
+              bottomNavigationBarSpacer(context),
             ],
           ),
         ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: SearchButton(groupId: groupId),
+          padding: EdgeInsets.symmetric(horizontal: 0),
+          child: SearchButton(groupId: groupId, logic: rebuild),
         ),
       ),
     );
@@ -463,11 +564,11 @@ class ActivityCard extends StatelessWidget {
   }
 }
 
-class MemberSection extends StatelessWidget {
+class MemberSection extends StatefulWidget {
   final String title;
   final List<Map<dynamic, dynamic>> members;
   final String groupId;
-  final VoidCallback onKickout;
+  final void Function(String, String, String) onKickout;
 
   const MemberSection({
     super.key,
@@ -478,73 +579,44 @@ class MemberSection extends StatelessWidget {
   });
 
   @override
+  State<MemberSection> createState() => _MemberSectionState();
+}
+
+class _MemberSectionState extends State<MemberSection> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        subTitle(widget.title),
+        spacingBox(),
+
         ListView.builder(
+          padding: EdgeInsets.zero,
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: members.length,
+          itemCount: widget.members.length,
           itemBuilder: (context, index) {
-            return MemberTile(
-              name: members[index]['nickName'] ?? 'member_name',
-              uid: members[index]['uid'] ?? 'member_uid',
-              groupId: groupId,
-              onKickout: () => onKickout(),
+            return memberTile(
+              name: widget.members[index]['nickName'] ?? 'member_name',
+              uid: widget.members[index]['uid'] ?? 'member_uid',
+              email: widget.members[index]['email'] ?? 'member_email',
+              child: TextButton(
+                style: btnSmall(themeColor: themeRed),
+                onPressed: () {
+                  widget.onKickout(
+                    widget.members[index]['uid'] ?? 'member_uid',
+                    widget.groupId,
+                    widget.members[index]['nickName'] ?? 'member_name',
+                  );
+                  setState(() {});
+                },
+                child: Text('내보내기'),
+              ),
             );
           },
         ),
-        SizedBox(height: 10),
       ],
-    );
-  }
-}
-
-class MemberTile extends StatelessWidget {
-  final String name;
-  final String uid;
-  final String groupId;
-  final VoidCallback onKickout;
-
-  const MemberTile({
-    super.key,
-    required this.name,
-    required this.uid,
-    required this.groupId,
-    required this.onKickout,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Colors.white,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-          child: Text(
-            name[0],
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-          ),
-        ),
-        title: Text(name),
-        trailing: TextButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(Colors.white),
-            shape: WidgetStateProperty.all(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-          ),
-          onPressed: () async {
-            onKickout();
-          },
-
-          child: Text("내보내기", style: TextStyle(color: Colors.red)),
-        ),
-      ),
     );
   }
 }
@@ -557,50 +629,20 @@ class OwnerSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(members);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-        ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: members.length,
-          itemBuilder: (context, index) {
-            return OwnerTile(
-              name: members[index]['nickName'] ?? 'member_name',
-              uid: members[index]["uid"] ?? "",
-            );
-          },
-        ),
-        SizedBox(height: 10),
+        subTitle(title),
+        spacingBox(),
+        ...List.generate(members.length, (index) {
+          return memberTile(
+            email: members[index]['email'] ?? 'member_email',
+            name: members[index]['nickName'] ?? 'member_name',
+            uid: members[index]["uid"] ?? "",
+            child: Icon(Icons.star, color: themeYellow, size: 28),
+          );
+        }),
       ],
-    );
-  }
-}
-
-class OwnerTile extends StatelessWidget {
-  final String name;
-  final String uid;
-
-  const OwnerTile({super.key, required this.name, required this.uid});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: Colors.white,
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Color(uid.hashCode % 0xFFFFFF).withOpacity(1.0),
-          child: Text(
-            name[0],
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-          ),
-        ),
-        title: Text(name),
-      ),
     );
   }
 }

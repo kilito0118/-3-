@@ -109,7 +109,7 @@ class InputField extends StatelessWidget {
             borderRadius: BorderRadius.circular(25),
           ),
           child: TextField(
-            obscureText: isPassword ?? false,
+            obscureText: isPassword,
             focusNode: nowfocus,
             controller: controller,
             onSubmitted: (_) => FocusScope.of(context).requestFocus(nextfocus),

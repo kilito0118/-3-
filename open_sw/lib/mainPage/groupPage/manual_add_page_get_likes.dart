@@ -1,16 +1,55 @@
-import 'dart:math';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:open_sw/login/logic/regist_users.dart';
 import 'package:open_sw/login/questions_page2.dart';
 
-class QuestionsPage1 extends StatefulWidget {
-  const QuestionsPage1({super.key});
+class ManualAddPageGetLikes extends StatefulWidget {
+  final String name;
+  final int age;
+  final String gender;
+  final String groupId;
+  final void Function() logic;
+
+  const ManualAddPageGetLikes({
+    super.key,
+    required this.name,
+    required this.age,
+    required this.gender,
+    required this.groupId,
+    required this.logic,
+  });
 
   @override
-  QuestionsPage1State createState() => QuestionsPage1State();
+  ManualAddPageGetLikesState createState() => ManualAddPageGetLikesState();
 }
 
-class QuestionsPage1State extends State<QuestionsPage1> {
+class ManualAddPageGetLikesState extends State<ManualAddPageGetLikes> {
+  Future<List<String>> updateLikes(List likes, String uid) async {
+    int number = await getCollectionCount("users") + 10046;
+    List<Map<String, dynamic>> data = createActivityListFromSet(
+      likes.toSet().cast<int>(),
+    );
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      "likes": data,
+      "number": number,
+    });
+
+    DocumentSnapshot docSnapshot =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    Map<String, dynamic> userData = docSnapshot.data() as Map<String, dynamic>;
+    Map<String, dynamic> data1 = {
+      "gender": userData["gender"] == "남" ? 1 : 2, // 1: 남자, 2: 여자
+      "age": userData["age"],
+      "liked_activities": likes,
+    };
+    debugPrint("Data1: $data1");
+    debugPrint("Likes: $likes");
+    //sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+
+    return [];
+  }
+
   final List<String> categories = [
     '🎭 감성충전러',
     '✍️ 감성 크리에이터',
@@ -32,25 +71,6 @@ class QuestionsPage1State extends State<QuestionsPage1> {
     (80, 91, '8'),
   ];
 
-  List<int> getRandomValuesInRange((int, int, String) range, int count) {
-    final random = Random();
-    final start = range.$1;
-    final end = range.$2;
-
-    if (end - start + 1 < count) {
-      throw ArgumentError(
-        'Range is too small to generate $count unique values.',
-      );
-    }
-
-    final values = <int>{};
-    while (values.length < count) {
-      values.add(random.nextInt(end - start + 1) + start);
-    }
-
-    return values.toList();
-  }
-
   Set<int> selectedIndexes = {};
   List<int> selectedActivityNumbers = [];
 
@@ -59,7 +79,7 @@ class QuestionsPage1State extends State<QuestionsPage1> {
       if (selectedIndexes.contains(index)) {
         selectedIndexes.remove(index);
       } else {
-        if (selectedIndexes.length < 2) {
+        if (selectedIndexes.isEmpty) {
           selectedIndexes.add(index);
         }
       }
@@ -98,7 +118,7 @@ class QuestionsPage1State extends State<QuestionsPage1> {
               ),
               const SizedBox(height: 8),
               Text(
-                '${selectedIndexes.length}/2',
+                '${selectedIndexes.length}/1',
                 style: TextStyle(color: Color(0x66000000), fontSize: 22),
               ),
               const SizedBox(height: 24),
@@ -140,8 +160,8 @@ class QuestionsPage1State extends State<QuestionsPage1> {
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
                   onPressed:
-                      selectedIndexes.length == 2
-                          ? () {
+                      selectedIndexes.length == 1
+                          ? () async {
                             // 다음 페이지로 이동 로직
 
                             selectedActivityNumbers.clear();
@@ -155,19 +175,34 @@ class QuestionsPage1State extends State<QuestionsPage1> {
                               );
                             }
                             //print(selectedActivityNumbers);
-
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => QuestionsPage2(
-                                      selectedActivityNumbers:
-                                          selectedActivityNumbers,
-                                    ),
-                              ),
+                            String? uid = await registUsers(
+                              widget.name,
+                              null,
+                              null,
+                              widget.age,
+                              widget.gender,
+                              true,
                             );
+                            //이 uid에 해당하는 유저의 활동 번호를 likes에 추가
+                            await FirebaseFirestore.instance
+                                .collection('groups')
+                                .doc(widget.groupId)
+                                .update({
+                                  'members': FieldValue.arrayUnion([uid]),
+                                });
+                            if (mounted) {
+                              widget.logic();
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pop(context);
+                              widget.logic();
+                            }
                           }
                           : null,
+
                   label: const Text('다음으로 →', style: TextStyle(fontSize: 16)),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.black,

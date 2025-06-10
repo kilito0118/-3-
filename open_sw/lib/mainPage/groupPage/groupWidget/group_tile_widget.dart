@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/group_datail_page_member.dart';
 import 'package:open_sw/mainPage/groupPage/group_detail_page_owner.dart';
 
+import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
+import 'package:open_sw/useful_widget/profile_circle_widget.dart';
+
 /*
 class Group {
   String name;
@@ -57,96 +60,80 @@ class _GroupTileWidgetState extends State<GroupTileWidget> {
         });
       }
     } catch (e) {
-      print("그룹장 정보 불러오기 실패: $e");
+      debugPrint("그룹장 정보 불러오기 실패: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final data = widget.group.data() as Map<String, dynamic>;
-
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () async {
-            widget.onTap(); // 탭 이벤트 핸들러 호출
-            final user = FirebaseAuth.instance.currentUser;
-            if (user != null && user.uid == widget.group["leader"]) {
-              // 그룹장이면 그룹 상세 페이지로 이동
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => GroupDetailPageOwner(group: widget.group),
-                ),
-              );
-              widget.onTap();
-            } else {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => GroupDatailPageMember(group: widget.group),
-                ),
-              );
-            }
-            widget.onTap();
-          },
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x19000000),
-                  blurRadius: 10,
-                  offset: Offset(0, 0),
-                  spreadRadius: 0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // 그룹 프로필 사진
-                // 현재는 그룹명 첫글자 표시로 대체
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: Colors.orangeAccent,
-                  child: Text(
-                    data["groupName"][0], // 첫 글자 표시
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+    return TouchReactBox(
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () async {
+              widget.onTap(); // 탭 이벤트 핸들러 호출
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null && user.uid == widget.group["leader"]) {
+                // 그룹장이면 그룹 상세 페이지로 이동
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => GroupDetailPageOwner(group: widget.group),
                   ),
-                ),
-                SizedBox(width: 10),
-                // 그룹 정보
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 그룹 이름
-                    Text(
-                      data["groupName"],
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                );
+                widget.onTap();
+              } else {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => GroupDatailPageMember(group: widget.group),
+                  ),
+                );
+              }
+              widget.onTap();
+            },
+            child: contentsBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 그룹 프로필 사진
+                  // 현재는 그룹명 첫글자 표시로 대체
+                  profileCircle(
+                    radius: 22,
+                    backgroundColor: Colors.orangeAccent,
+                    child: Text(
+                      data["groupName"][0], // 첫 글자 표시
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white, fontSize: 22),
                     ),
-                    // 그룹장 이름
-                    Text(
-                      "$leaderName 님의 그룹",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  spacingBox(),
+                  // 그룹 정보
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 그룹 이름
+                      Text(
+                        data["groupName"],
+                        style: contentsBig(fontWeight: FontWeight.bold),
+                      ),
+                      // 그룹장 이름
+                      Text("$leaderName 님의 그룹", style: contentsDetail),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        // 다음 타일과 거리두기
-        SizedBox(height: 10),
-      ],
+          // 다음 타일과 거리두기
+          spacingBox()
+        ],
+      ),
     );
   }
 }

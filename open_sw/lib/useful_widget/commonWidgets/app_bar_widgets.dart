@@ -9,10 +9,10 @@ PreferredSizeWidget defaultAppBar() {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: const Color(0xB0F2F2F2), // 반투명 회색
+          backgroundColor: themePageColor.withAlpha(200),
           surfaceTintColor: Colors.transparent,
           elevation: 0,
-          leading: const BackButton(),
+          automaticallyImplyLeading: true,
         ),
       ),
     ),
@@ -24,22 +24,25 @@ PreferredSizeWidget searchAppBar({
   required Future<void> Function() onSearch,
 }) {
   return PreferredSize(
-    preferredSize: const Size.fromHeight(kToolbarHeight + 80),
+    preferredSize: const Size.fromHeight(kToolbarHeight + 76),
     child: ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
         child: AppBar(
-          backgroundColor: const Color(0xB0F2F2F2),
+          backgroundColor: themePageColor,
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           leading: const BackButton(),
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(80),
+            preferredSize: const Size.fromHeight(76),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                horizontal: paddingSmall,
+                vertical: paddingSmall,
+              ),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.black.withAlpha(16),
+                  color: Colors.black.withAlpha(20),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -48,11 +51,14 @@ PreferredSizeWidget searchAppBar({
                       child: TextField(
                         cursorColor: Colors.orangeAccent,
                         controller: controller,
-                        style: contentsNormal,
+                        style: contentsNormal(),
                         decoration: const InputDecoration(
                           hintText: '모일 장소를 알려주세요',
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
                         ),
                         onSubmitted: (_) => onSearch(),
                       ),
@@ -73,5 +79,3 @@ PreferredSizeWidget searchAppBar({
     ),
   );
 }
-
-

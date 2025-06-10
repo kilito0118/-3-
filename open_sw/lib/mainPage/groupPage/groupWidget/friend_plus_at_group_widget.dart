@@ -4,10 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/add_from_friend_list_page.dart';
 import 'package:open_sw/mainPage/groupPage/manual_add_page.dart';
 
-class FriendPlusAtGroupWidget extends StatelessWidget {
+class FriendPlusAtGroupWidget extends StatefulWidget {
   final DocumentSnapshot<Object?>? groupDocument;
-  const FriendPlusAtGroupWidget({super.key, required this.groupDocument});
+  final void Function() logic;
+  const FriendPlusAtGroupWidget({
+    super.key,
+    required this.groupDocument,
+    required this.logic,
+  });
 
+  @override
+  State<FriendPlusAtGroupWidget> createState() =>
+      _FriendPlusAtGroupWidgetState();
+}
+
+class _FriendPlusAtGroupWidgetState extends State<FriendPlusAtGroupWidget> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -32,27 +43,37 @@ class FriendPlusAtGroupWidget extends StatelessWidget {
             _AddFriendButton(
               icon: Icons.person_outline,
               label: '팔로우 목록에서\n추가하기',
-              onTap: () {
-                //print(groupDocument);
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder:
-                        (context) =>
-                            AddFromFriendListPage(groupDocument: groupDocument),
+                        (context) => AddFromFriendListPage(
+                          logic: widget.logic,
+                          groupDocument: widget.groupDocument,
+                        ),
                   ),
                 );
+
+                widget.logic();
               },
             ),
             const SizedBox(width: 32),
             _AddFriendButton(
               icon: Icons.edit_outlined,
               label: '직접 추가하기',
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ManualAddPage()),
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ManualAddPage(
+                          groupId: widget.groupDocument!.id,
+                          logic: widget.logic,
+                        ),
+                  ),
                 );
+                widget.logic();
               },
             ),
           ],

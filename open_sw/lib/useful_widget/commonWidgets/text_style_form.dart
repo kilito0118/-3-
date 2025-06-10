@@ -1,10 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'spacing_widgets.dart';
 
-Widget mainTitle(String title){
+Widget mainTitle(String title) {
   return Padding(
-    padding: EdgeInsets.only(left: 8, right: 8, top: 14),
+    padding: EdgeInsets.only(left: 5, right: 5, top: paddingSmall),
     child: Text(
       title,
       style: TextStyle(
@@ -18,15 +17,15 @@ Widget mainTitle(String title){
   );
 }
 
-Widget subTitle(String title){
+Widget subTitle(String title) {
   return Padding(
-    padding: EdgeInsets.only(left: 8, right: 8, top: 14),
+    padding: EdgeInsets.only(left: 6, right: 6, top: paddingSmall),
     child: Text(
       title,
       style: TextStyle(
-        color: Colors.black.withAlpha(140),
-        fontSize: 16,
-        fontWeight: FontWeight.normal,
+        color: Colors.black.withAlpha(100),
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
         height: 1.1,
         letterSpacing: 0.0,
       ),
@@ -34,29 +33,41 @@ Widget subTitle(String title){
   );
 }
 
-const TextStyle contentsBig = TextStyle(
-  color: Colors.black,
-  fontSize: 28,
-  fontWeight: FontWeight.normal,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
+TextStyle contentsNormal({
+  Color color = Colors.black,
+  FontWeight fontWeight = FontWeight.normal,
+}) {
+  return TextStyle(
+    color: color,
+    fontSize: 16,
+    fontWeight: fontWeight,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
 
-const TextStyle contentsNormal = TextStyle(
-  color: Colors.black,
-  fontSize: 16,
-  fontWeight: FontWeight.normal,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
+TextStyle contentsTitle({Color color = Colors.black}) {
+  return TextStyle(
+    color: color,
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
 
-TextStyle contentsNormal_light = TextStyle(
-  color: Colors.black.withAlpha(140),
-  fontSize: 16,
-  fontWeight: FontWeight.normal,
-  height: 1.1,
-  letterSpacing: 0.0,
-);
+TextStyle contentsBig({
+  Color color = Colors.black,
+  FontWeight fontWeight = FontWeight.normal,
+}) {
+  return TextStyle(
+    color: color,
+    fontSize: 18,
+    fontWeight: fontWeight,
+    height: 1.1,
+    letterSpacing: 0.0,
+  );
+}
 
 TextStyle contentsDetail = TextStyle(
   color: Colors.black.withAlpha(140),

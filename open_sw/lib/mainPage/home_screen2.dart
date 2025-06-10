@@ -64,7 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      extendBody: true,
       backgroundColor: themePageColor,
       appBar: defaultAppBar(),
       body: PageView(
@@ -91,48 +90,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ], // 각 탭의 화면
       ),
-      bottomNavigationBar: blurredBox(
-          topRad: 32,
-          bottomRad: 0.0,
-          horizontalPadding: 14.0,
-          verticalPadding: 6.0,
-          shadowAlpha: 36,
-          alpha: 160,
-          blurRadius: 16,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              splashFactory: NoSplash.splashFactory, // 퍼짐 효과 제거
-              highlightColor: Colors.transparent,    // 터치 시 강조 효과 제거
-            ),
-            child:BottomNavigationBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              selectedItemColor: Colors.black.withAlpha(200),
-              unselectedItemColor: Colors.black.withAlpha(100),
-              currentIndex: _currentIndex,
-              onTap: handleNavTap,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              selectedFontSize: 14,
-              unselectedFontSize: 14,
-              iconSize: 32,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.view_list_rounded),
-                  label: '팔로우 목록',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.groups),
-                  label: '그룹 목록',
-                  //activeIcon: Text("하이라이트"),
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    label: '내 정보'
-                ),
-              ],
-            ),
-          )
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        selectedItemColor: Colors.black,
+        //mouseCursor: MouseCursor.defer,
+        selectedFontSize: 20,
+        selectedIconTheme: IconThemeData(size: 35, color: Colors.black),
+        currentIndex: _currentIndex,
+        onTap: handleNavTap,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.contacts), label: '팔로우 목록'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.diversity_3),
+            label: '그룹 목록',
+            //activeIcon: Text("하이라이트"),
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
+        ],
       ),
     );
   }
