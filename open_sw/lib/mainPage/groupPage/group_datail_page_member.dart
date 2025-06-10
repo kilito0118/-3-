@@ -283,11 +283,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
                           return SizedBox(
                             height: 200,
                             child: FriendPlusAtGroupWidget(
-                              logic: () {
-                                setState(() {
-                                  _loadGroupData();
-                                });
-                              },
+                              logic: rebuild,
                               groupDocument: docSnapshot,
                             ),
                           );
