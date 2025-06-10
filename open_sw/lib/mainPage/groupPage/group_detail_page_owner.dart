@@ -27,8 +27,9 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
   Map<String, dynamic>? data;
   DocumentSnapshot? docSnapshot;
   List<DocumentSnapshot> activityDatas = [];
+  String leaderEmail = '그룹장 이메일';
 
-  String leaderName = '그룹장2 이름';
+  String leaderName = '그룹장 이름';
   @override
   void initState() {
     super.initState();
@@ -126,6 +127,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
     if (nameSnapshot.exists && mounted) {
       if (type == 0) {
         leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
+        leaderEmail = nameSnapshot['email'] ?? '그룹장1 이메일';
       } else {
         leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
       }
@@ -377,7 +379,11 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               OwnerSection(
                 title: "그룹장",
                 members: [
-                  {'nickName': leaderName, 'uid': data!['leader'] ?? '그룹장 UID'},
+                  {
+                    'nickName': leaderName,
+                    'uid': data!['leader'] ?? '그룹장 UID',
+                    'email': leaderEmail,
+                  },
                 ],
               ),
 
@@ -594,6 +600,7 @@ class _MemberSectionState extends State<MemberSection> {
             return memberTile(
               name: widget.members[index]['nickName'] ?? 'member_name',
               uid: widget.members[index]['uid'] ?? 'member_uid',
+              email: widget.members[index]['email'] ?? 'member_email',
               child: TextButton(
                 style: btnSmall(themeColor: themeRed),
                 onPressed: () {
@@ -629,6 +636,7 @@ class OwnerSection extends StatelessWidget {
         spacingBox(),
         ...List.generate(members.length, (index) {
           return memberTile(
+            email: members[index]['email'] ?? 'member_email',
             name: members[index]['nickName'] ?? 'member_name',
             uid: members[index]["uid"] ?? "",
             child: Icon(Icons.star, color: themeYellow, size: 28),

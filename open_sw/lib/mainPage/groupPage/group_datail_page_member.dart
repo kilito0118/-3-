@@ -26,8 +26,8 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
   Map<String, dynamic>? data;
   DocumentSnapshot? docSnapshot;
   List<DocumentSnapshot> activityDatas = [];
-
-  String leaderName = '그룹장2 이름';
+  String leaderEmail = '그룹장 이메일';
+  String leaderName = '그룹장 이름';
   @override
   void initState() {
     super.initState();
@@ -84,7 +84,8 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
     if (nameSnapshot.exists && mounted) {
       if (type == 0) {
-        leaderName = nameSnapshot['nickName'] ?? '그룹장1 이름';
+        leaderName = nameSnapshot['nickName'] ?? '그룹장 이름';
+        leaderEmail = nameSnapshot['email'] ?? '그룹장 이메일';
       } else {
         leaderName = nameSnapshot['nickName'] ?? '그룹원 이름';
       }
@@ -258,7 +259,11 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
               OwnerSection(
                 title: "그룹장",
                 members: [
-                  {'nickName': leaderName, 'uid': data!['leader'] ?? '그룹장 UID'},
+                  {
+                    'nickName': leaderName,
+                    'uid': data!['leader'] ?? '그룹장 UID',
+                    'email': leaderEmail,
+                  },
                 ],
               ),
 
@@ -454,6 +459,7 @@ class OwnerSection extends StatelessWidget {
         ...List.generate(members.length, (index) {
           return memberTile(
             name: members[index]['nickName'] ?? 'member_name',
+            email: members[index]['email'] ?? 'member_email',
             uid: members[index]["uid"] ?? "",
             child: Icon(Icons.star, color: themeYellow, size: 28),
           );
@@ -490,6 +496,7 @@ class _MemberSectionState extends State<MemberSection> {
           itemBuilder: (context, index) {
             return memberTile(
               name: widget.members[index]['nickName'] ?? 'member_name',
+              email: widget.members[index]['email'] ?? 'member_email',
               uid: widget.members[index]['uid'] ?? 'member_uid',
               child: Text(""),
             );

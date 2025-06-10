@@ -5,7 +5,7 @@ import 'package:open_sw/useful_widget/profile_circle_widget.dart';
 Widget memberTile({
   required String name,
   required String uid,
-  String email = 'example@gmail.com',
+  required String email,
   required Widget child,
 }) {
   return Column(
@@ -36,7 +36,7 @@ Widget memberTile({
                     name,
                     style: contentsNormal(fontWeight: FontWeight.bold),
                   ),
-                  Text(email, style: contentsDetail,)
+                  Text(email, style: contentsDetail),
                 ],
               ),
             ),
