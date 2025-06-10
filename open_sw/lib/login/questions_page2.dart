@@ -152,6 +152,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
   Future<void> sendJsonToFlask(Map<String, Object> data) async {
     const url =
         'http://43.203.239.150:8000/user/create'; // Flask 서버 주소 (필요시 수정)
+    debugPrint("Sending data to Flask: $data");
 
     try {
       final response = await http.post(
@@ -171,6 +172,10 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       //   });
       // }
 
+      print("Response status: ${jsonDecode(response.body)["row_index"]}");
+      final data2 = jsonDecode(response.body);
+      number = int.parse(data2["row_index"].toString());
+
       if (response.statusCode != 200) {
         debugPrint("오류 발생: ${response.statusCode}");
       }
@@ -179,6 +184,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
     }
   }
 
+  int number = 10045; // 초기값 설정
   List<int> currentActivities = [];
   Set<int> selectedActivities = {};
 
@@ -190,16 +196,6 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
 
   Future<List<String>> updateLikes(List likes) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    int number = await getCollectionCount("users") + 10046;
-    List<Map<String, dynamic>> data = createActivityListFromSet(
-      likes.toSet().cast<int>(),
-    );
-    await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      "likes": data,
-      "number": number,
-    });
-
     DocumentSnapshot docSnapshot =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
@@ -209,9 +205,19 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       "age": userData["age"],
       "liked_activities": likes,
     };
+    sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+
+    //int number = await getCollectionCount("users") + 10046;
+    List<Map<String, dynamic>> data = createActivityListFromSet(
+      likes.toSet().cast<int>(),
+    );
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      "likes": data,
+      "number": number,
+    });
+
     debugPrint("Data1: $data1");
     debugPrint("Likes: $likes");
-    sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
 
     return [];
   }
