@@ -63,33 +63,34 @@
 > - 팔로우 목록 화면
 <div align="center">
   <img src="https://github.com/user-attachments/assets/9f6442c6-e713-484d-8447-d56ab10ab869" height="250"/>
-  <img src="![팔로우](https://github.com/user-attachments/assets/087356ef-909b-495d-a88a-d178c0c35927)" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
+  <img src="https://github.com/user-attachments/assets/087356ef-909b-495d-a88a-d178c0c35927" height="250"/>
+  <img src="https://github.com/user-attachments/assets/1b80e9fb-8b79-4780-bc8f-064930099541" height="250"/>
+  <img src="https://github.com/user-attachments/assets/4d06ea73-9df1-4a0d-9575-47155097a4b9" height="250"/>
 </div>
 
 > - 그룹 목록 화면
 <div align="center">
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
+  <img src="https://github.com/user-attachments/assets/735ca2c2-8362-4e1d-bb75-ae2fd03ab041" height="250"/>
+  <img src="https://github.com/user-attachments/assets/638c2e33-d7a9-45f2-bd6b-3bc11d01a656" height="250"/>
+  <img src="https://github.com/user-attachments/assets/86ee4f1c-01c3-4cdb-ba27-c2dfa6ff3606" height="250"/>
+  <img src="https://github.com/user-attachments/assets/fef2caf6-77fc-4899-ab64-473404a3ece3" height="250"/>
+  <img src="https://github.com/user-attachments/assets/af3b177a-7fd2-44cc-9107-cd6a90d06f53" height="250"/>
+  <img src="https://github.com/user-attachments/assets/ba0014a6-2f81-4ed8-bcc9-93da018fff9e" height="250"/>
 </div>
 
 > - 내 정보 화면
 <div align="center">
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
+  <img src="https://github.com/user-attachments/assets/be0fcb5c-b3fe-475f-9bad-ded56af50b00" height="250"/>
+  <img src="https://github.com/user-attachments/assets/81894357-d829-4f94-ab78-c4a938c3085e" height="250"/>
 </div>
 
 > - 활동 추천/ 장소 추천 화면
 <div align="center">
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
-  <img src="" height="250"/>
+  <img src="https://github.com/user-attachments/assets/aca702e1-f134-43f0-8b7d-0f6afcda0ec7" height="250"/>
+  <img src="https://github.com/user-attachments/assets/07fece79-f0ea-42ef-ad0f-c51c5beaae52" height="250"/>
+  <img src="https://github.com/user-attachments/assets/c718aad7-1ebb-4dc5-a374-e481c0297458" height="250"/>
+  <img src="https://github.com/user-attachments/assets/386ef662-d119-488e-a162-826d2fa86d6c" height="250"/>
+  <img src="https://github.com/user-attachments/assets/0066c2c4-59d9-4a20-9619-45915328d3cf" height="250"/>
 </div>
 ---
 
