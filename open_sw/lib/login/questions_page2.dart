@@ -205,7 +205,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       "age": userData["age"],
       "liked_activities": likes,
     };
-    sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+    await sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
 
     //int number = await getCollectionCount("users") + 10046;
     List<Map<String, dynamic>> data = createActivityListFromSet(
