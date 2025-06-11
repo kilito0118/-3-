@@ -88,53 +88,55 @@ class _UpcomingActivityTileState extends State<UpcomingActivityTile> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        TouchReactBox(
-          child: Container(
-            margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
-            width: 300,
-            padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
-            decoration: BoxDecoration(
-              gradient: themeGradient(),
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: themeLightOrange.withAlpha(140),
-                  blurRadius: 8,
-                  offset: Offset(0, 6)
-                )
-              ]
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        timeToText(widget.recentAct.date),
-                        style: contentsNormal(color: Colors.white,),
-                      ),
-                      spacingBoxMini(),
-                      Text(
-                        widget.recentAct.place['name'] ?? '장소정보 없음',
-                        style: contentsTitle(color: Colors.white),
-                        overflow: TextOverflow.fade,
-                        softWrap: false,
-                      ),
-                    ],
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
-                    openUrl(url);
-                  },
-                  style: btnSmall(themeColor: Colors.white),
-                  child: Text('지도열기'),
-                )
-              ],
-            )
+        Container(
+          margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
+          width: 320,
+          padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
+          decoration: BoxDecoration(
+            gradient: themeGradient(),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: themeLightOrange.withAlpha(140),
+                blurRadius: 8,
+                offset: Offset(0, 6)
+              )
+            ]
           ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      timeToText(widget.recentAct.date),
+                      style: contentsDetailWhite,
+                    ),
+                    Text(
+                      '${widget.recentAct.date.hour.toString().padLeft(2, '0')}시 ${widget.recentAct.date.minute.toString().padLeft(2, '0')}분',
+                      style: contentsDetailWhite,
+                    ),
+                    spacingBoxMini(),
+                    Text(
+                      widget.recentAct.place['name'] ?? '장소정보 없음',
+                      style: contentsBig(color: Colors.white, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
+                    ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
+                  openUrl(url);
+                },
+                style: btnSmall(themeColor: Colors.white),
+                child: Text('지도열기'),
+              )
+            ],
+          )
         ),
         spacingBox(),
       ],

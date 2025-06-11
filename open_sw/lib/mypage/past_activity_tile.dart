@@ -90,7 +90,7 @@ class _PastActivityTileState extends State<PastActivityTile> {
       children: [
         Container(
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
-          width: 300,
+          width: 320,
           padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -118,10 +118,14 @@ class _PastActivityTileState extends State<PastActivityTile> {
                         Text(
                           activityList[widget.recentAct.type]['name'],
                           style: contentsDetail,
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
                         ),
                         Text(
                           widget.recentAct.place['name'] ?? '장소정보 없음',
                           style: contentsTitle(),
+                          overflow: TextOverflow.fade,
+                          softWrap: false,
                         ),
                       ],
                     ),
