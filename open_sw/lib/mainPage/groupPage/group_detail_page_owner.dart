@@ -351,7 +351,7 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               // 활동 카드 리스트
               upcomingActivities.isNotEmpty
                   ? SizedBox(
-                    height: 140,
+                    height: 130,
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,

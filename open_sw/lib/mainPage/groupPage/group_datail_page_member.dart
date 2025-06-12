@@ -229,7 +229,7 @@ class _GroupDatailPageMemberState extends State<GroupDatailPageMember> {
 
               upcomingActivities.isNotEmpty
                   ? SizedBox(
-                    height: 140,
+                    height: 130,
                     child: ListView.builder(
                       physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
