@@ -98,12 +98,12 @@ class _MyPageState extends State<MyPage> {
                 place: (activityData['place'] as Map<String, dynamic>)
                     .map<String, String>(
                       (key, value) => MapEntry(key, value.toString()),
-                ),
+                    ),
                 date:
-                activityData['date'] != null &&
-                    activityData['date'] is Timestamp
-                    ? (activityData['date'] as Timestamp).toDate()
-                    : DateTime.now(),
+                    activityData['date'] != null &&
+                            activityData['date'] is Timestamp
+                        ? (activityData['date'] as Timestamp).toDate()
+                        : DateTime.now(),
 
                 groupId: activityData['groupId'] ?? '그룹 ID 없음',
                 score: activityData['score'] ?? 0,
@@ -151,7 +151,9 @@ class _MyPageState extends State<MyPage> {
             }
           }
 
-          upcomingActivities.sort((a, b) => a.value.date.compareTo(b.value.date));
+          upcomingActivities.sort(
+            (a, b) => a.value.date.compareTo(b.value.date),
+          );
           pastActivities.sort((a, b) => b.value.date.compareTo(a.value.date));
 
           debugPrint('past Activities: $pastActivities');
@@ -289,6 +291,8 @@ class _MyPageState extends State<MyPage> {
                 spacingBox(),
                 ...List.generate(upcomingActivities.length, (index) {
                   return UpcomingActivityTile(
+                    logic: () {},
+                    type: 1,
                     recentAct: upcomingActivities[index].value,
                     actId: upcomingActivities[index].key,
                   );
@@ -303,37 +307,37 @@ class _MyPageState extends State<MyPage> {
           ),
           pastActivities.isEmpty
               ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSmall),
-            child: Column(
-              children: [
-                spacingBox(),
-                contentsBox(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.history_toggle_off,
-                        size: 60,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(width: paddingBig),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                padding: EdgeInsets.symmetric(horizontal: paddingSmall),
+                child: Column(
+                  children: [
+                    spacingBox(),
+                    contentsBox(
+                      child: Row(
                         children: [
-                          Text('최근 활동 내역이 없어요.', style: contentsBig()),
-                          spacingBoxMini(),
-                          Text(
-                            '그룹에서 한 활동들이 이곳에 추가돼요',
-                            style: contentsDetail,
+                          Icon(
+                            Icons.history_toggle_off,
+                            size: 60,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(width: paddingBig),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('최근 활동 내역이 없어요.', style: contentsBig()),
+                              spacingBoxMini(),
+                              Text(
+                                '그룹에서 한 활동들이 이곳에 추가돼요',
+                                style: contentsDetail,
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    spacingBox(),
+                  ],
                 ),
-                spacingBox(),
-              ],
-            ),
-          )
+              )
               : SizedBox.shrink(),
           SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -358,9 +362,7 @@ class _MyPageState extends State<MyPage> {
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (Route<dynamic> route) => false,
                 );
               },

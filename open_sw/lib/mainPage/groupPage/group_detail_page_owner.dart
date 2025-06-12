@@ -370,6 +370,8 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                         final activityData = rawData as Map<String, dynamic>;
 
                         return UpcomingActivityTile(
+                          logic: rebuild,
+                          type: 0,
                           recentAct: Activity(
                             type: activityData['type'] ?? 0,
                             date:
