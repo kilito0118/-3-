@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/friend_plus_at_group_widget.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/member_tile.dart';
 import 'package:open_sw/mainPage/groupPage/groupWidget/search_button_widget.dart';
+import 'package:open_sw/mypage/recent_activity.dart';
+import 'package:open_sw/mypage/upcoming_activity_tile.dart';
 
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 
@@ -345,13 +347,30 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
                       if (activityDatas[index].exists) {
                         var activityData =
                             activityDatas[index].data() as Map<String, dynamic>;
-                        return ActivityCard(
+                        return UpcomingActivityTile(
+                          recentAct: Activity(
+                            type: activityData['type'] ?? 0,
+                            date:
+                                activityData['date'] is Timestamp
+                                    ? (activityData['date'] as Timestamp)
+                                        .toDate()
+                                    : DateTime.now(),
+                            place:
+                                activityData['place'] ?? {'name': '장소 정보 없음'},
+                            groupId: groupId,
+                            score: activityData['score'] ?? 0,
+                            userId: activityData['userId'] ?? '',
+                          ),
+                          actId: activityDatas[index].id,
+                        );
+
+                        /*ActivityCard(
                           date: (activityData['date'] as Timestamp)
                               .toDate()
                               .toString()
                               .substring(0, 10),
                           place: activityData['place']['name'] ?? "장소 이름",
-                        );
+                        );*/
                       } else {
                         return Text("활동 데이터를 불러올 수 없습니다.");
                       }

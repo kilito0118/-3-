@@ -3,18 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/services/activity_info.dart';
 import 'package:open_sw/services/category_info.dart';
-import 'package:open_sw/useful_widget/commonWidgets/boxes_styles.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
-import 'package:open_sw/utils/open_url.dart';
-import 'package:open_sw/utils/time_to_text.dart';
 import 'recent_activity.dart';
 
 class PastActivityTile extends StatefulWidget {
   final Activity recentAct;
   final String actId; // 그룹 ID가 필요할 경우 추가
 
-  const PastActivityTile({super.key, required this.recentAct, required this.actId});
+  const PastActivityTile({
+    super.key,
+    required this.recentAct,
+    required this.actId,
+  });
 
   @override
   State<PastActivityTile> createState() => _PastActivityTileState();
@@ -91,7 +91,10 @@ class _PastActivityTileState extends State<PastActivityTile> {
         Container(
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
           width: 320,
-          padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
+          padding: EdgeInsets.symmetric(
+            horizontal: paddingBig,
+            vertical: paddingMid,
+          ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -99,9 +102,9 @@ class _PastActivityTileState extends State<PastActivityTile> {
               BoxShadow(
                 color: Colors.black.withAlpha(10),
                 blurRadius: 8,
-                offset: Offset(0, 6)
-              )
-            ]
+                offset: Offset(0, 6),
+              ),
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +112,7 @@ class _PastActivityTileState extends State<PastActivityTile> {
               Row(
                 children: [
                   getPrimeIcon(widget.recentAct.type, 60),
-                  SizedBox(width: paddingBig,),
+                  SizedBox(width: paddingBig),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +132,7 @@ class _PastActivityTileState extends State<PastActivityTile> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               Column(
@@ -145,13 +148,16 @@ class _PastActivityTileState extends State<PastActivityTile> {
                             });
                           },
                           style: btnSmall(
-                            themeColor: disliked ? Colors.blueAccent : Colors.grey
+                            themeColor:
+                                disliked ? Colors.blueAccent : Colors.grey,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+                                disliked
+                                    ? Icons.thumb_down
+                                    : Icons.thumb_down_outlined,
                                 size: 18,
                               ),
                               Text('  나빴어요'),
@@ -168,7 +174,7 @@ class _PastActivityTileState extends State<PastActivityTile> {
                             });
                           },
                           style: btnSmall(
-                            themeColor: liked ? themeRed : Colors.grey
+                            themeColor: liked ? themeRed : Colors.grey,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -185,9 +191,9 @@ class _PastActivityTileState extends State<PastActivityTile> {
                     ],
                   ),
                 ],
-              )
+              ),
             ],
-          )
+          ),
         ),
         spacingBox(),
       ],

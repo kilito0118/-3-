@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:open_sw/services/activity_info.dart';
 import 'package:open_sw/services/category_info.dart';
-import 'package:open_sw/useful_widget/commonWidgets/boxes_styles.dart';
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
-import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
 import 'package:open_sw/utils/open_url.dart';
 import 'package:open_sw/utils/time_to_text.dart';
 
@@ -109,7 +107,10 @@ class _ActivityBoxState extends State<ActivityBox> {
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
           width: 300,
           height: 200,
-          padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
+          padding: EdgeInsets.symmetric(
+            horizontal: paddingBig,
+            vertical: paddingMid,
+          ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -117,14 +118,14 @@ class _ActivityBoxState extends State<ActivityBox> {
               BoxShadow(
                 color: Colors.black.withAlpha(10),
                 blurRadius: 8,
-                offset: Offset(0, 6)
-              )
-            ]
+                offset: Offset(0, 6),
+              ),
+            ],
           ),
           child: Row(
             children: [
               getPrimeIcon(widget.recentAct.type, 60),
-              SizedBox(width: paddingBig,),
+              SizedBox(width: paddingBig),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,19 +160,20 @@ class _ActivityBoxState extends State<ActivityBox> {
                         spacingBoxMini(),
                         TextButton(
                           onPressed: () {
-                            final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
+                            final url =
+                                "https://place.map.kakao.com/${widget.recentAct.place['id']}";
                             openUrl(url);
                           },
                           style: btnSmall(),
                           child: Text('지도에서 보기'),
-                        )
+                        ),
                       ],
                     ),
                   ],
                 ),
-              )
+              ),
             ],
-          )
+          ),
         ),
         spacingBox(),
       ],
