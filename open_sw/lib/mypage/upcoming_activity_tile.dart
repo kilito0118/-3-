@@ -83,7 +83,7 @@ class _UpcomingActivityTileState extends State<UpcomingActivityTile> {
         final memberData = memberDoc.data() as Map<String, dynamic>;
         final activities = List.from(memberData['activities'] ?? []);
         activities.removeWhere((activity) => activity == actId);
-        print('Removing activity $actId from member $memberId,$actId');
+        //print('Removing activity $actId from member $memberId,$actId');
         await FirebaseFirestore.instance
             .collection('users')
             .doc(memberId)
