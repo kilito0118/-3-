@@ -41,11 +41,12 @@
 ---
 
 ## 📱 설치 및 실행 방법
-[다운로드 링크](https://appdistribution.firebase.google.com/testerapps/1:194295087383:android:83acc4d4a7749daf62b752/releases/550u2hl1kqfb0?utm_source=firebase-console)
+[다운로드 링크](https://appdistribution.firebase.google.com/testerapps/1:194295087383:android:83acc4d4a7749daf62b752/releases/615kloo71nra0?utm_source=firebase-console)
 
 
-1. 안드로이드 기기에 앱 설치  
-2. 회원가입 후 바로 사용 가능  
+1. 위 링크 접속 후 구글 아이디로 로그인하여 apk 다운로드
+2. 안드로이드 기기에 앱 설치
+3. 회원가입 후 바로 사용 가능  
 
 ---
 
