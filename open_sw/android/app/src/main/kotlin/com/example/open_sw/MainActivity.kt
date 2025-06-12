@@ -1,4 +1,4 @@
-package com.example.open_sw
+package com.example.play_or_not
 
 import io.flutter.embedding.android.FlutterActivity
 

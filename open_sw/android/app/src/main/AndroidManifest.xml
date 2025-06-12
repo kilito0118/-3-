@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:label="open_sw"
+        android:label="놀래 말래?"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_play_or_not">
         <activity
