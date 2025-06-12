@@ -47,8 +47,10 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
     data = null;
     //docSnapshot = null;
     activityDatas = [];
+    upcomingActivities = [];
     await _loadGroupData();
     await loadActivities();
+    await getUpcomingActivities();
     if (mounted) {
       //print(memberDetails);
       setState(() {
@@ -170,6 +172,19 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
       groupData = null;
       memberDetails = [];
       isLoading = false;
+    }
+  }
+
+  List<DocumentSnapshot> upcomingActivities = [];
+  Future<void> getUpcomingActivities() async {
+    final activities = activityDatas;
+    for (int i = 0; i < activities.length; i++) {
+      if (activities[i].exists) {
+        var activityData = activities[i];
+        if (activityData['date'].toDate().isAfter(DateTime.now())) {
+          upcomingActivities.add(activityData);
+        }
+      }
     }
   }
 
@@ -332,49 +347,49 @@ class _GroupDetailPageOwnerState extends State<GroupDetailPageOwner> {
               spacingBox(),
               subTitle("예정된 활동"),
               spacingBox(),
+
               // 활동 카드 리스트
-              activityDatas.isNotEmpty
-                  ? ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    primary: false,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.only(bottom: 10),
-                    itemCount: data!["activities"].length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (activityDatas.length <= index) {
-                        return SizedBox.shrink(); // 인덱스가 범위를 벗어나면 빈 위젯 반환
-                      }
-                      if (activityDatas[index].exists) {
-                        var activityData =
-                            activityDatas[index].data() as Map<String, dynamic>;
+              upcomingActivities.isNotEmpty
+                  ? SizedBox(
+                    height: 140,
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      primary: false,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 10),
+                      itemCount: upcomingActivities.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index >= upcomingActivities.length) {
+                          return SizedBox.shrink(); // 인덱스가 범위를 벗어나면 빈 위젯 반환
+                        }
+                        final rawData = upcomingActivities[index].data();
+                        if (rawData == null) {
+                          return SizedBox.shrink(); // 데이터가 없으면 빈 위젯 반환
+                        }
+                        final activityData = rawData as Map<String, dynamic>;
+
                         return UpcomingActivityTile(
                           recentAct: Activity(
                             type: activityData['type'] ?? 0,
                             date:
                                 activityData['date'] is Timestamp
-                                    ? (activityData['date'] as Timestamp)
+                                    ? (upcomingActivities[index]['date']
+                                            as Timestamp)
                                         .toDate()
                                     : DateTime.now(),
-                            place:
-                                activityData['place'] ?? {'name': '장소 정보 없음'},
+                            place: Map<String, String>.from(
+                              activityData['place'],
+                            ),
+
                             groupId: groupId,
                             score: activityData['score'] ?? 0,
                             userId: activityData['userId'] ?? '',
                           ),
-                          actId: activityDatas[index].id,
+                          actId: upcomingActivities[index].id,
                         );
-
-                        /*ActivityCard(
-                          date: (activityData['date'] as Timestamp)
-                              .toDate()
-                              .toString()
-                              .substring(0, 10),
-                          place: activityData['place']['name'] ?? "장소 이름",
-                        );*/
-                      } else {
-                        return Text("활동 데이터를 불러올 수 없습니다.");
-                      }
-                    },
+                      },
+                    ),
                   )
                   : contentsBox(
                     width: double.infinity,
