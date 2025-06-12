@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:open_sw/login/login_screen.dart';
-import 'package:open_sw/mypage/past_activity_tile.dart';
-import 'package:open_sw/mypage/upcoming_activity_tile.dart';
 
 import '../useful_widget/commonWidgets/common_widgets.dart';
 import 'recent_activity.dart';
@@ -33,8 +31,8 @@ class _MyPageState extends State<MyPage> {
   List<dynamic> recentActivityIds = [];
 
   List<MapEntry<String, Activity>> allActivities = [];
-  List<MapEntry<String, Activity>> pastActivities = [];
-  List<MapEntry<String, Activity>> upcomingActivities = [];
+  List<Map<String, Activity>> pastActivities = [];
+  List<Map<String, Activity>> upcomingActivities = [];
 
   Map<String, dynamic>? userData;
 
@@ -110,7 +108,6 @@ class _MyPageState extends State<MyPage> {
                 userId: activityData['userId'] ?? '사용자 ID 없음',
               );
 
-              // 정렬 및 분류를 위해 map 형태로 저장
               allActivities.add(MapEntry(activityId, temp));
 
               /*
@@ -138,6 +135,8 @@ class _MyPageState extends State<MyPage> {
             }
           }
 
+          allActivities.sort((a, b) => a.value.date.compareTo(b.value.date));
+
           final now = DateTime.now();
 
           for (final entry in allActivities) {
@@ -145,14 +144,11 @@ class _MyPageState extends State<MyPage> {
             final activity = entry.value;
 
             if (activity.date.isBefore(now)) {
-              pastActivities.add(MapEntry(id, activity));
+              pastActivities.add({id: activity});
             } else {
-              upcomingActivities.add(MapEntry(id, activity));
+              upcomingActivities.add({id: activity});
             }
           }
-
-          upcomingActivities.sort((a, b) => a.value.date.compareTo(b.value.date));
-          pastActivities.sort((a, b) => b.value.date.compareTo(a.value.date));
 
           debugPrint('past Activities: $pastActivities');
           debugPrint('upcoming Activities: $upcomingActivities');
@@ -199,75 +195,72 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: MediaQuery.of(context).padding.top),
-          Center(
-            child: Column(
-              children: [
-                spacingBox(),
-                profileCircle(
-                  radius: 60,
-                  backgroundColor: Color(
-                    uid.hashCode % 0xFFFFFF,
-                  ).withAlpha(255),
-                  child: Text(
-                    widget.name[0],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 60,
-                      fontWeight: FontWeight.normal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: paddingSmall),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top),
+            Center(
+              child: Column(
+                children: [
+                  spacingBox(),
+                  profileCircle(
+                    radius: 60,
+                    backgroundColor: Color(
+                      uid.hashCode % 0xFFFFFF,
+                    ).withAlpha(255),
+                    child: Text(
+                      widget.name[0],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 60,
+                        fontWeight: FontWeight.normal,
+                      ),
                     ),
                   ),
-                ),
-                mainTitle(widget.name),
-                spacingBoxMini(),
-                Text(
-                  '나이: ${widget.age}  성별: ${widget.gender}',
-                  style: contentsNormal(),
-                ),
-                spacingBox(),
-                TextButton(
-                  onPressed: () {
-                    Clipboard.setData(ClipboardData(text: widget.email));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('이메일이 클립보드에 복사되었습니다.')),
-                    );
-                  },
-                  style: btnBig(),
-                  child: Text('이메일: ${widget.email}'),
-                ),
-              ],
+                  mainTitle(widget.name),
+                  spacingBoxMini(),
+                  Text(
+                    '나이: ${widget.age}  성별: ${widget.gender}',
+                    style: contentsNormal(),
+                  ),
+                  spacingBox(),
+                  TextButton(
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: widget.email));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('이메일이 클립보드에 복사되었습니다.')),
+                      );
+                    },
+                    style: btnBig(),
+                    child: Text('이메일: ${widget.email}'),
+                  ),
+                ],
+              ),
             ),
-          ),
-          spacingBox(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSmall),
-            child: subTitle('예정된 활동'),
-          ),
-          upcomingActivities.isEmpty
-              ? Padding(
-                padding: EdgeInsets.symmetric(horizontal: paddingSmall),
-                child: Column(
+            spacingBox(),
+            subTitle('예정된 활동'),
+            upcomingActivities.isEmpty
+                ? Column(
                   children: [
                     spacingBox(),
                     contentsBox(
                       child: Row(
                         children: [
                           Icon(
-                            Icons.event_busy,
+                            Icons.history_toggle_off,
                             size: 60,
-                            color: Colors.blueAccent,
+                            color: Colors.grey,
                           ),
                           SizedBox(width: paddingBig),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('예정된 활동이 없어요.', style: contentsBig()),
+                              Text('최근 활동 내역이 없어요.', style: contentsBig()),
                               spacingBoxMini(),
                               Text(
-                                '그룹에서 추가한 활동이 이곳에 추가돼요',
+                                '그룹에서 한 활동들이 이곳에 추가돼요',
                                 style: contentsDetail,
                               ),
                             ],
@@ -277,99 +270,33 @@ class _MyPageState extends State<MyPage> {
                     ),
                     spacingBox(),
                   ],
-                ),
-              )
-              : SizedBox.shrink(),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                spacingBox(),
-                ...List.generate(upcomingActivities.length, (index) {
-                  return UpcomingActivityTile(
-                    recentAct: upcomingActivities[index].value,
-                    actId: upcomingActivities[index].key,
+                )
+                : spacingBox(),
+            ...List.generate(upcomingActivities.length, (index) {
+              return ActivityBox(
+                recentAct: upcomingActivities[index].values.first,
+                actId: upcomingActivities[index].keys.first,
+              );
+            }),
+            spacingBox(),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (Route<dynamic> route) => false,
                   );
-                }),
-              ],
+                },
+                style: btnTransparent(themeColor: themeRed),
+                child: Text('로그아웃'),
+              ),
             ),
-          ),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSmall),
-            child: subTitle('최근 활동'),
-          ),
-          pastActivities.isEmpty
-              ? Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSmall),
-            child: Column(
-              children: [
-                spacingBox(),
-                contentsBox(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.history_toggle_off,
-                        size: 60,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(width: paddingBig),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('최근 활동 내역이 없어요.', style: contentsBig()),
-                          spacingBoxMini(),
-                          Text(
-                            '그룹에서 한 활동들이 이곳에 추가돼요',
-                            style: contentsDetail,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                spacingBox(),
-              ],
-            ),
-          )
-              : SizedBox.shrink(),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                spacingBox(),
-                ...List.generate(pastActivities.length, (index) {
-                  return PastActivityTile(
-                    recentAct: pastActivities[index].value,
-                    actId: pastActivities[index].key,
-                  );
-                }),
-              ],
-            ),
-          ),
-
-          spacingBox(),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              style: btnTransparent(themeColor: themeRed),
-              child: Text('로그아웃'),
-            ),
-          ),
-          SafeArea(child: SizedBox.shrink()),
-        ],
+            SafeArea(child: SizedBox.shrink()),
+          ],
+        ),
       ),
     );
   }

@@ -8,36 +8,19 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
 import 'package:open_sw/utils/open_url.dart';
 import 'package:open_sw/utils/time_to_text.dart';
+import 'recent_activity.dart';
 
-class Activity {
-  final int type;
-  final Map<String, String> place;
-  final DateTime date;
-  final String groupId;
-  final List<dynamic> score; //1~9?
-  final List<dynamic> userId;
-
-  Activity({
-    required this.type,
-    required this.place,
-    required this.date,
-    required this.groupId,
-    required this.score,
-    required this.userId,
-  });
-}
-
-class ActivityBox extends StatefulWidget {
+class UpcomingActivityTile extends StatefulWidget {
   final Activity recentAct;
   final String actId; // 그룹 ID가 필요할 경우 추가
 
-  const ActivityBox({super.key, required this.recentAct, required this.actId});
+  const UpcomingActivityTile({super.key, required this.recentAct, required this.actId});
 
   @override
-  State<ActivityBox> createState() => _ActivityBoxState();
+  State<UpcomingActivityTile> createState() => _UpcomingActivityTileState();
 }
 
-class _ActivityBoxState extends State<ActivityBox> {
+class _UpcomingActivityTileState extends State<UpcomingActivityTile> {
   bool liked = false;
   bool disliked = false;
 
@@ -107,15 +90,14 @@ class _ActivityBoxState extends State<ActivityBox> {
       children: [
         Container(
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
-          width: 300,
-          height: 200,
+          width: 320,
           padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
           decoration: BoxDecoration(
-            color: Colors.white,
+            gradient: themeGradient(),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(10),
+                color: themeLightOrange.withAlpha(140),
                 blurRadius: 8,
                 offset: Offset(0, 6)
               )
@@ -123,52 +105,35 @@ class _ActivityBoxState extends State<ActivityBox> {
           ),
           child: Row(
             children: [
-              getPrimeIcon(widget.recentAct.type, 60),
-              SizedBox(width: paddingBig,),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       timeToText(widget.recentAct.date),
-                      style: contentsDetail,
+                      style: contentsDetailWhite,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          activityList[widget.recentAct.type]['name'],
-                          style: contentsDetail,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                        Text(
-                          widget.recentAct.place['name'] ?? '장소정보 없음',
-                          style: contentsTitle(),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                        spacingBoxMini(),
-                        Text(
-                          widget.recentAct.place['address'] ?? '주소 없음',
-                          style: contentsDetail,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                        spacingBoxMini(),
-                        TextButton(
-                          onPressed: () {
-                            final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
-                            openUrl(url);
-                          },
-                          style: btnSmall(),
-                          child: Text('지도에서 보기'),
-                        )
-                      ],
+                    Text(
+                      '${widget.recentAct.date.hour.toString().padLeft(2, '0')}시 ${widget.recentAct.date.minute.toString().padLeft(2, '0')}분',
+                      style: contentsDetailWhite,
+                    ),
+                    spacingBoxMini(),
+                    Text(
+                      widget.recentAct.place['name'] ?? '장소정보 없음',
+                      style: contentsBig(color: Colors.white, fontWeight: FontWeight.bold),
+                      overflow: TextOverflow.fade,
+                      softWrap: false,
                     ),
                   ],
                 ),
+              ),
+              TextButton(
+                onPressed: () {
+                  final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
+                  openUrl(url);
+                },
+                style: btnSmall(themeColor: Colors.white),
+                child: Text('지도열기'),
               )
             ],
           )

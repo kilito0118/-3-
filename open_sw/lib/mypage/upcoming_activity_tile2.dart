@@ -8,36 +8,19 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
 import 'package:open_sw/utils/open_url.dart';
 import 'package:open_sw/utils/time_to_text.dart';
+import 'recent_activity.dart';
 
-class Activity {
-  final int type;
-  final Map<String, String> place;
-  final DateTime date;
-  final String groupId;
-  final List<dynamic> score; //1~9?
-  final List<dynamic> userId;
-
-  Activity({
-    required this.type,
-    required this.place,
-    required this.date,
-    required this.groupId,
-    required this.score,
-    required this.userId,
-  });
-}
-
-class ActivityBox extends StatefulWidget {
+class UpcomingActivityTile extends StatefulWidget {
   final Activity recentAct;
   final String actId; // 그룹 ID가 필요할 경우 추가
 
-  const ActivityBox({super.key, required this.recentAct, required this.actId});
+  const UpcomingActivityTile({super.key, required this.recentAct, required this.actId});
 
   @override
-  State<ActivityBox> createState() => _ActivityBoxState();
+  State<UpcomingActivityTile> createState() => _UpcomingActivityTileState();
 }
 
-class _ActivityBoxState extends State<ActivityBox> {
+class _UpcomingActivityTileState extends State<UpcomingActivityTile> {
   bool liked = false;
   bool disliked = false;
 
@@ -108,7 +91,7 @@ class _ActivityBoxState extends State<ActivityBox> {
         Container(
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
           width: 300,
-          height: 200,
+          height: 160,
           padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -138,23 +121,13 @@ class _ActivityBoxState extends State<ActivityBox> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          activityList[widget.recentAct.type]['name'],
-                          style: contentsDetail,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                        Text(
                           widget.recentAct.place['name'] ?? '장소정보 없음',
                           style: contentsTitle(),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
                         ),
                         spacingBoxMini(),
                         Text(
                           widget.recentAct.place['address'] ?? '주소 없음',
                           style: contentsDetail,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
                         ),
                         spacingBoxMini(),
                         TextButton(
