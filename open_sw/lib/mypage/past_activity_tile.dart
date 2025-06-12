@@ -8,36 +8,19 @@ import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
 import 'package:open_sw/useful_widget/commonWidgets/spacing_widgets.dart';
 import 'package:open_sw/utils/open_url.dart';
 import 'package:open_sw/utils/time_to_text.dart';
+import 'recent_activity.dart';
 
-class Activity {
-  final int type;
-  final Map<String, String> place;
-  final DateTime date;
-  final String groupId;
-  final List<dynamic> score; //1~9?
-  final List<dynamic> userId;
-
-  Activity({
-    required this.type,
-    required this.place,
-    required this.date,
-    required this.groupId,
-    required this.score,
-    required this.userId,
-  });
-}
-
-class ActivityBox extends StatefulWidget {
+class PastActivityTile extends StatefulWidget {
   final Activity recentAct;
   final String actId; // 그룹 ID가 필요할 경우 추가
 
-  const ActivityBox({super.key, required this.recentAct, required this.actId});
+  const PastActivityTile({super.key, required this.recentAct, required this.actId});
 
   @override
-  State<ActivityBox> createState() => _ActivityBoxState();
+  State<PastActivityTile> createState() => _PastActivityTileState();
 }
 
-class _ActivityBoxState extends State<ActivityBox> {
+class _PastActivityTileState extends State<PastActivityTile> {
   bool liked = false;
   bool disliked = false;
 
@@ -107,8 +90,7 @@ class _ActivityBoxState extends State<ActivityBox> {
       children: [
         Container(
           margin: EdgeInsets.only(top: paddingSmall, bottom: 14),
-          width: 300,
-          height: 200,
+          width: 320,
           padding: EdgeInsets.symmetric(horizontal: paddingBig, vertical: paddingMid),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -121,21 +103,17 @@ class _ActivityBoxState extends State<ActivityBox> {
               )
             ]
           ),
-          child: Row(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              getPrimeIcon(widget.recentAct.type, 60),
-              SizedBox(width: paddingBig,),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      timeToText(widget.recentAct.date),
-                      style: contentsDetail,
-                    ),
-                    Column(
+              Row(
+                children: [
+                  getPrimeIcon(widget.recentAct.type, 60),
+                  SizedBox(width: paddingBig,),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           activityList[widget.recentAct.type]['name'],
@@ -149,26 +127,64 @@ class _ActivityBoxState extends State<ActivityBox> {
                           overflow: TextOverflow.fade,
                           softWrap: false,
                         ),
-                        spacingBoxMini(),
-                        Text(
-                          widget.recentAct.place['address'] ?? '주소 없음',
-                          style: contentsDetail,
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
-                        ),
-                        spacingBoxMini(),
-                        TextButton(
-                          onPressed: () {
-                            final url = "https://place.map.kakao.com/${widget.recentAct.place['id']}";
-                            openUrl(url);
-                          },
-                          style: btnSmall(),
-                          child: Text('지도에서 보기'),
-                        )
                       ],
                     ),
-                  ],
-                ),
+                  )
+                ],
+              ),
+              Column(
+                children: [
+                  spacingBoxDevider(),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              dislike();
+                            });
+                          },
+                          style: btnSmall(
+                            themeColor: disliked ? Colors.blueAccent : Colors.grey
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                disliked ? Icons.thumb_down : Icons.thumb_down_outlined,
+                                size: 18,
+                              ),
+                              Text('  나빴어요'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      spacingBox(),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              like();
+                            });
+                          },
+                          style: btnSmall(
+                            themeColor: liked ? themeRed : Colors.grey
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                liked ? Icons.favorite : Icons.favorite_outline,
+                                size: 18,
+                              ),
+                              Text('  좋았어요'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               )
             ],
           )

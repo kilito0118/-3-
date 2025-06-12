@@ -62,31 +62,37 @@
 
 > - 팔로우 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/bb32e26f-032f-456e-a5f7-61b623a193b4" height="250"/>
-  <img src="https://github.com/user-attachments/assets/ad97d739-5a3f-417a-999a-421109604fe7" height="250"/>
-  <img src="https://github.com/user-attachments/assets/26446088-e373-4d1e-8b27-c5fbfaf69fcf" height="250"/>
-  <img src="https://github.com/user-attachments/assets/b9d78405-de67-4bdb-a4e0-0a47dc55b69c" height="250"/>
+  <img src="https://github.com/user-attachments/assets/9f6442c6-e713-484d-8447-d56ab10ab869" height="250"/>
+  <img src="https://github.com/user-attachments/assets/087356ef-909b-495d-a88a-d178c0c35927" height="250"/>
+  <img src="https://github.com/user-attachments/assets/1b80e9fb-8b79-4780-bc8f-064930099541" height="250"/>
+  <img src="https://github.com/user-attachments/assets/4d06ea73-9df1-4a0d-9575-47155097a4b9" height="250"/>
 </div>
 
 > - 그룹 목록 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/3e8e2275-453f-413f-8744-9fe35a9b6744" height="250"/>
-  <img src="https://github.com/user-attachments/assets/3a9391e7-e27e-400f-bacb-b2ea65e4b23e" height="250"/>
-  <img src="https://github.com/user-attachments/assets/7c127d22-127f-454d-9b5b-ac22ce38823f" height="250"/>
+  <img src="https://github.com/user-attachments/assets/735ca2c2-8362-4e1d-bb75-ae2fd03ab041" height="250"/>
+  <img src="https://github.com/user-attachments/assets/638c2e33-d7a9-45f2-bd6b-3bc11d01a656" height="250"/>
+  <img src="https://github.com/user-attachments/assets/86ee4f1c-01c3-4cdb-ba27-c2dfa6ff3606" height="250"/>
+  <img src="https://github.com/user-attachments/assets/fef2caf6-77fc-4899-ab64-473404a3ece3" height="250"/>
+  <img src="https://github.com/user-attachments/assets/af3b177a-7fd2-44cc-9107-cd6a90d06f53" height="250"/>
+  <img src="https://github.com/user-attachments/assets/ba0014a6-2f81-4ed8-bcc9-93da018fff9e" height="250"/>
 </div>
 
 > - 내 정보 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/e52ba33d-38dd-49d4-92af-f2c2ddfc3fe7" height="250"/>
-  <img src="https://github.com/user-attachments/assets/bcf2728e-4614-4aba-be83-1af4b9145f5a" height="250"/>
-  <img src="https://github.com/user-attachments/assets/99398bc6-233b-4697-b1a2-3d88abbfe1aa" height="250"/>
+  <img src="https://github.com/user-attachments/assets/be0fcb5c-b3fe-475f-9bad-ded56af50b00" height="250"/>
+  <img src="https://github.com/user-attachments/assets/81894357-d829-4f94-ab78-c4a938c3085e" height="250"/>
 </div>
 
 > - 활동 추천/ 장소 추천 화면
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/71f00fdf-4a76-4d13-9376-2e24f519b2fe" height="250"/>
-  <img src="https://github.com/user-attachments/assets/43cbcb0d-560a-4b86-b932-09a24b76fc48" height="250"/>
+  <img src="https://github.com/user-attachments/assets/aca702e1-f134-43f0-8b7d-0f6afcda0ec7" height="250"/>
+  <img src="https://github.com/user-attachments/assets/07fece79-f0ea-42ef-ad0f-c51c5beaae52" height="250"/>
+  <img src="https://github.com/user-attachments/assets/c718aad7-1ebb-4dc5-a374-e481c0297458" height="250"/>
+  <img src="https://github.com/user-attachments/assets/386ef662-d119-488e-a162-826d2fa86d6c" height="250"/>
+  <img src="https://github.com/user-attachments/assets/0066c2c4-59d9-4a20-9619-45915328d3cf" height="250"/>
 </div>
+
 ---
 
 ## 👨‍💻 개발자 소개

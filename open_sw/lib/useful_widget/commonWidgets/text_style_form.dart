@@ -76,3 +76,12 @@ TextStyle contentsDetail = TextStyle(
   height: 1.1,
   letterSpacing: 0.0,
 );
+
+TextStyle contentsDetailWhite = TextStyle(
+  color: Colors.white.withAlpha(220),
+  fontSize: 14,
+  fontWeight: FontWeight.normal,
+  height: 1.1,
+  letterSpacing: 0.0,
+);
+
