@@ -172,7 +172,7 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       //   });
       // }
 
-      print("Response status: ${jsonDecode(response.body)["row_index"]}");
+      debugPrint("Response status: ${jsonDecode(response.body)["row_index"]}");
       final data2 = jsonDecode(response.body);
       number = int.parse(data2["row_index"].toString());
 
@@ -205,7 +205,9 @@ class _QuestionsPage2State extends State<QuestionsPage2> {
       "age": userData["age"],
       "liked_activities": likes,
     };
-    await sendJsonToFlask(data1.map((key, value) => MapEntry(key, value as Object)));
+    await sendJsonToFlask(
+      data1.map((key, value) => MapEntry(key, value as Object)),
+    );
 
     //int number = await getCollectionCount("users") + 10046;
     List<Map<String, dynamic>> data = createActivityListFromSet(
