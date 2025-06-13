@@ -41,7 +41,7 @@
 ---
 
 ## 📱 설치 및 실행 방법
-[다운로드 링크]([https://appdistribution.firebase.google.com/testerapps/1:194295087383:android:83acc4d4a7749daf62b752/releases/615kloo71nra0?utm_source=firebase-console](https://appdistribution.firebase.dev/i/8265d86567fb9318))
+[다운로드 링크]([https://appdistribution.firebase.google.com/testerapps/1:194295087383:android:83acc4d4a7749daf62b752/releases/615kloo71nra0?utm_source=firebase-console](https://appdistribution.firebase.dev/i/8265d86567fb9318)
 
 
 1. 위 링크 접속 후 구글 아이디로 로그인하여 apk 다운로드
