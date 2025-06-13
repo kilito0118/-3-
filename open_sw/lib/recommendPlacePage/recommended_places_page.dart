@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // common_widgets 임포트
 import 'package:open_sw/useful_widget/commonWidgets/common_widgets.dart';
@@ -36,6 +37,9 @@ final double camZoom = 17.0;
 
 class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
   List<Map<String, String>> places = [];
+
+  // 네이버맵을 사용하지 않는 경우를 대비한 예외 처리
+
   NaverMapController? _mapController;
   NCameraPosition? _initialPosition;
 
@@ -50,6 +54,9 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
   void initState() {
     int pastIndex;
     super.initState();
+
+    // 네이버맵을 사용하지 않는 경우를 대비한 예외 처리
+
     _initialPosition = NCameraPosition(
       target: NLatLng(widget.lat, widget.lng),
       zoom: 13,
@@ -175,6 +182,7 @@ class _RecommendedPlacesPageState extends State<RecommendedPlacesPage> {
               stopGesturesEnable: true,
             ),
           ),
+
           Column(
             children: [
               topAppBarSpacer(context),
